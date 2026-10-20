@@ -1,0 +1,23 @@
+name: Send Discord Notification on Push
+
+on:
+  push:
+  # 如果你也希望在 Pull Request 時收到通知，可以取消下面這行的註解
+  # pull_request:
+
+jobs:
+  discord-notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Discord Notification
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: |
+            🚀 **New Push to Repository!**
+            **Repository:** ${{ github.repository }}
+            **Branch:** ${{ github.ref_name }}
+            **Author:** ${{ github.actor }}
+            **Commit Message:** ${{ github.event.head_commit.message }}
+            [View Commit Changes](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
