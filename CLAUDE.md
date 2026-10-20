@@ -207,8 +207,9 @@
 
 - [01_種樹痛點儀表板.html](01_種樹痛點儀表板.html)：種樹題目相關市民意見的痛點儀表板（單一 HTML 檔，約 650KB）。
 - [docs/system-analysis/](docs/system-analysis/)：MVP 規格與市民優先 User Stories。
-- [docs/team-collaboration/](docs/team-collaboration/)：團隊角色分工與協作備忘。
+- [docs/team-collaboration/](docs/team-collaboration/)：團隊角色分工、協作備忘與招募需求。
 - [docs/discussion-notes/](docs/discussion-notes/)：產品原始構想與討論筆記。
+- [docs/proposal/](docs/proposal/)：Day 1 提案簡報規劃（每頁的重點、內容、講稿與待確認事項）。
 - [docs/design/](docs/design/)：品牌視覺規範與神獸角色設定（草稿）。做介面、插圖、文案時要照這裡的配色、字體和語氣。
 - [data/research/](data/research/)：開放資料清單、背景事件與引用來源。
 - [data/source/](data/source/)：原始資料檔案；題目分類資料已去識別化，只限本活動使用。
