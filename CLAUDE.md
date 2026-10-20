@@ -11,7 +11,7 @@
 
 ### 近期移樹爭議
 
-完整整理和新聞來源在 [rawData/背景事件整理.md](rawData/背景事件整理.md)。內容還沒逐一查證，寫進 README 或簡報前要先點來源確認。
+完整整理和新聞來源在 [data/research/背景事件整理.md](data/research/背景事件整理.md)。內容還沒逐一查證，寫進 README 或簡報前要先點來源確認。
 
 - **數據**：2024 年移除 1,425 棵，2025 年 3,164 棵。市府說八成以上是病蟲害、自然死亡或天災。
 - **美崙公園「民主紀念樹」**：1995 年李登輝、李元簇手植的兩棵榕樹，因褐根病在 2026 年 4 月移除，民眾到 10 月才發現。同一座公園的停車場工程，可能影響 119 棵樹。
@@ -21,7 +21,7 @@
 
 ### 國外參考：新加坡樹蔭平權
 
-沈伯洋提到新加坡的「樹蔭平權（Shade Equity）」，詳細內容和論文在 [rawData/背景事件整理.md](rawData/背景事件整理.md) 第 6 節。
+沈伯洋提到新加坡的「樹蔭平權（Shade Equity）」，詳細內容和論文在 [data/research/背景事件整理.md](data/research/背景事件整理.md) 第 6 節。
 
 - **概念**：把樹蔭當成公共基礎設施，讓不同社經地位的居民都分得到。富裕區樹多，基層社區和工業區比較熱。
 - **每棵樹有「電子身分證」**：約 600 萬棵樹數位化管理，用 GIS 模擬遮蔭範圍，找出樹蔭供需落差最大的鄰里，優先投入綠化預算。
@@ -81,7 +81,7 @@
 
 ### MVP 範圍
 
-完整規格在 [MVP.md](MVP.md)（草稿，等團隊確認）。寫程式時以 MVP.md 為準：
+完整規格在 [docs/system-analysis/MVP.md](docs/system-analysis/MVP.md)（草稿，等團隊確認）。寫程式時以 MVP.md 為準：
 
 - 只做主線：找到樹 → 守護它 → 回報狀態 → 樹出事時大家一起發聲。
 - 先做 P0，P0 都能動了才做 P1，P2 不做（只放進簡報和 README）。
@@ -129,7 +129,7 @@
 
 ### Saori 原本的三個畫面（市府端，現在是輔助角色）
 
-原始構想見 [rawData/SaoriIdea.md](rawData/SaoriIdea.md)。主角改成市民後，這幾個畫面可以當作「市民回報接到市府流程」的延伸，或放進 README 的 100 天落地計畫，不一定要做進 MVP：
+原始構想見 [docs/discussion-notes/SaoriIdea.md](docs/discussion-notes/SaoriIdea.md)。主角改成市民後，這幾個畫面可以當作「市民回報接到市府流程」的延伸，或放進 README 的 100 天落地計畫，不一定要做進 MVP：
 
 1. **工班端**：掃樹號就看到這棵樹的狀態。如果是「保留／移植」，畫面變紅，不能開始移除。
 2. **比對通報**：施工單和樹木狀態對不上時，自動通知監工和承辦，並留下紀錄。
@@ -191,7 +191,7 @@
 
 ## 開放資料
 
-清單也在 [rawData/openDataList.md](rawData/openDataList.md)。
+清單也在 [data/research/openDataList.md](data/research/openDataList.md)。
 
 | 資料集 | 來源 | 用途 |
 |---|---|---|
@@ -206,26 +206,24 @@
 ## Repo 結構
 
 - [01_種樹痛點儀表板.html](01_種樹痛點儀表板.html)：種樹題目相關市民意見的痛點儀表板（單一 HTML 檔，約 650KB）。
-- [MVP.md](MVP.md)：MVP 規格草稿（Demo 故事、畫面優先順序、資料、技術建議）。
-- [團隊角色分工.md](團隊角色分工.md)：角色認領與各階段工作清單。
-- [協作新手備忘.md](協作新手備忘.md)：給 Qmoa 的 git 協作入門與注意事項，最後一節留給 Saori 補她的規則。
-- [rawData/](rawData/)：原始資料與構想。
-  - `市長你給我聽好了_黑客松題目分類.xlsx`：題目分類資料（已去識別化，只限本活動使用）。
-  - `openDataList.md`：開放資料清單。
-  - `SaoriIdea.md`：防誤砍系統的原始構想。
-  - `背景事件整理.md`：近期移樹爭議、市府回應、新加坡樹蔭平權參考與來源。
+- [docs/system-analysis/](docs/system-analysis/)：MVP 規格與市民優先 User Stories。
+- [docs/team-collaboration/](docs/team-collaboration/)：團隊角色分工與協作備忘。
+- [docs/discussion-notes/](docs/discussion-notes/)：產品原始構想與討論筆記。
+- [data/research/](data/research/)：開放資料清單、背景事件與引用來源。
+- [data/source/](data/source/)：原始資料檔案；題目分類資料已去識別化，只限本活動使用。
 
 ## 技術
 
-- **作品必須是 PWA**：要有 `manifest.json`、Service Worker、HTTPS 部署，可以加到手機主畫面。細節見 [MVP.md](MVP.md) 的「技術」一節。
+- **作品必須是 PWA**：要有 `manifest.json`、Service Worker、HTTPS 部署，可以加到手機主畫面。細節見 [docs/system-analysis/MVP.md](docs/system-analysis/MVP.md) 的「技術」一節。
 - Service Worker 快取要加版本號，HTML 用網路優先，避免部署後隊友看到舊版。
 - 其他選型（框架、地圖套件、部署平台）還沒定案。決定後請更新這一節，寫上怎麼安裝、執行和部署。
 
 ## 協作方式
 
 - **團隊分工**：
-  - **Saori**：全端工程師，主導專案和系統。技術選型、架構、git 工作流程都以她的決定為準。
-  - **Qmoa**：負責產品構想、背景整理和文件。Qmoa 是第一次跟別人協作開發，Claude 協助 Qmoa 時，git 操作和程式細節都要用白話解釋，並主動提醒注意事項。
+  - **Saori**：擅長全端工程，主要投入系統架構、技術選型與開發。
+  - **Qmoa**：主要投入產品構想、背景整理與文件。
+  - **Saori 與 Qmoa**：以夥伴方式合作，依專長與認領項目分工；產品方向、技術方案和工作流程透過討論共同確認。Claude 協助任一夥伴時，git 操作與程式細節都要清楚說明，並提醒必要注意事項。
 - 團隊用 GitHub 同步，remote 是 `innerwork-saori/2026-debugWithPuma`。動手前先 `git pull`，改完再 push，避免和隊友衝突。
 - 文件、介面文案和 commit 說明都用**繁體中文與台灣用語**，標點用全形。
 - 現場只有 5.5 小時，只做 Demo 路徑上會用到的功能。12:00 之後原則上不加新功能。
