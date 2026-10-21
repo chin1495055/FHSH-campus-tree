@@ -127,16 +127,50 @@
 .dsh-notif--unread .dsh-notif__time::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--brand); border: var(--stroke-fine) solid var(--outline); box-sizing: border-box; }
 .dsh-notif:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
 
-/* BulletinCard ─ 佈告卡（公告詳情） */
-.dsh-bulletin { display: flex; flex-direction: column; background: var(--surface-raised); border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-sm); overflow: hidden; }
-.dsh-bulletin__band { height: 12px; background: repeating-linear-gradient(-45deg, var(--state-notice) 0 8px, var(--outline) 8px 12px); border-bottom: var(--stroke-fine) solid var(--outline); }
-.dsh-bulletin__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-4) 0; }
-.dsh-bulletin__title { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 24px; line-height: 32px; letter-spacing: 0.1em; }
-.dsh-bulletin__no { font-size: 13px; line-height: 20px; color: var(--text-muted); padding: 0 var(--space-4); margin: 0; }
-.dsh-bulletin__list { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--space-2) var(--space-4); margin: var(--space-3) var(--space-4); padding: var(--space-3) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.dsh-bulletin__list dt { font-size: 14px; line-height: 22px; font-weight: 700; color: var(--text-muted); }
-.dsh-bulletin__list dd { margin: 0; font-size: 16px; line-height: 22px; }
-.dsh-bulletin__foot { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; padding: 0 var(--space-4) var(--space-4); }
+/* OfficialNoticeCard ─ 異動公告卡（市府移除／移植公告詳情；白底、粗墨框、橘黑斜紋） */
+.dsh-official { display: flex; flex-direction: column; background: var(--surface-raised); border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-sm); overflow: hidden; }
+.dsh-official__band { height: 12px; background: repeating-linear-gradient(-45deg, var(--state-notice) 0 8px, var(--outline) 8px 12px); border-bottom: var(--stroke-fine) solid var(--outline); }
+.dsh-official__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-4) 0; }
+.dsh-official__title { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 24px; line-height: 32px; letter-spacing: 0.1em; }
+.dsh-official__no { font-size: 13px; line-height: 20px; color: var(--text-muted); padding: 0 var(--space-4); margin: 0; }
+.dsh-official__list { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--space-2) var(--space-4); margin: var(--space-3) var(--space-4); padding: var(--space-3) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.dsh-official__list dt { font-size: 14px; line-height: 22px; font-weight: 700; color: var(--text-muted); }
+.dsh-official__list dd { margin: 0; font-size: 16px; line-height: 22px; }
+.dsh-official__foot { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; padding: 0 var(--space-4) var(--space-4); }
+
+/* CommunityEventCard ─ 社區活動卡（社區佈告欄；綠色系里民活動海報；三種淺綠輪替；不用斜紋、不用紅色） */
+.dsh-event { position: relative; display: grid; grid-template-columns: 68px minmax(0, 1fr); gap: var(--space-3); padding: var(--space-3); background: var(--event-bg, var(--green-100)); color: var(--text); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm); }
+.dsh-event::before { content: ""; position: absolute; inset: 5px; border: var(--stroke-fine) dashed var(--green-600); border-radius: 2px; pointer-events: none; }
+.dsh-event__date { position: relative; align-self: start; display: flex; flex-direction: column; align-items: center; padding: 6px 0 8px; background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm); font-variant-numeric: tabular-nums; }
+.dsh-event__month { font-size: 12px; line-height: 16px; font-weight: 700; color: var(--green-700); }
+.dsh-event__day { font-family: var(--font-display); font-weight: 900; font-size: 30px; line-height: 34px; }
+.dsh-event__week { font-size: 12px; line-height: 16px; font-weight: 700; }
+.dsh-event__body { position: relative; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.dsh-event__label { align-self: flex-start; padding: 1px 8px; background: var(--green-700); color: var(--ink-50); border-radius: 2px; font-size: 12px; line-height: 18px; font-weight: 900; letter-spacing: 0.2em; }
+.dsh-event__title { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 22px; line-height: 28px; }
+.dsh-event__meta { margin: 0; font-size: 14px; line-height: 21px; }
+.dsh-event__meta b { font-weight: 700; color: var(--green-700); margin-right: 4px; }
+.dsh-event__desc { margin: 0; font-size: 15px; line-height: 23px; }
+.dsh-event__host { margin: 0; font-size: 13px; line-height: 20px; color: var(--green-700); }
+.dsh-event__foot { position: relative; grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding-top: var(--space-2); border-top: var(--stroke-fine) dashed var(--green-600); }
+.dsh-event__count { display: flex; align-items: center; gap: var(--space-2); font-size: 14px; line-height: 20px; font-weight: 700; }
+.dsh-event__dots { display: flex; }
+.dsh-event__dots span { width: 18px; height: 18px; margin-left: -5px; border-radius: 50%; background: var(--honor); border: var(--stroke-fine) solid var(--outline); box-sizing: border-box; }
+.dsh-event__dots span:first-child { margin-left: 0; }
+.dsh-event .dsh-btn { min-height: var(--target-min); padding: 0 var(--space-4); font-size: 16px; }
+.dsh-event .dsh-btn[aria-pressed="true"] { background: var(--brand); color: var(--ink-50); box-shadow: inset 0 0 0 3px var(--brand), inset 0 0 0 5px var(--ink-50); }
+.dsh-event--leaf { --event-bg: var(--green-50); }
+.dsh-event--sprout { --event-bg: var(--green-100); }
+.dsh-event--canopy { --event-bg: var(--green-200); }
+.dsh-event-list { display: flex; flex-direction: column; gap: var(--space-3); }
+.dsh-event-list > .dsh-event:nth-child(3n+1) { --event-bg: var(--green-200); }
+.dsh-event-list > .dsh-event:nth-child(3n+2) { --event-bg: var(--green-100); }
+.dsh-event-list > .dsh-event:nth-child(3n) { --event-bg: var(--green-50); }
+
+/* 發起資格／發起提醒（社區佈告欄共用） */
+.dsh-gate { display: flex; gap: var(--space-3); align-items: flex-start; padding: var(--space-3) var(--space-4); background: var(--surface-sunken); border: var(--stroke-fine) solid var(--outline); border-radius: var(--radius-md); font-size: 14px; line-height: 21px; }
+.dsh-gate b { display: block; font-size: 15px; font-weight: 900; }
+.dsh-reminder { display: flex; gap: var(--space-3); padding: var(--space-3) var(--space-4); background: var(--green-50); border: var(--stroke-fine) solid var(--green-600); border-radius: var(--radius-md); font-size: 14px; line-height: 22px; }
 
 /* BeastCard ─ 神獸卡（一般款／稀有款） */
 .dsh-beast { width: 248px; display: flex; flex-direction: column; background: var(--surface-raised); border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-md); overflow: hidden; }
