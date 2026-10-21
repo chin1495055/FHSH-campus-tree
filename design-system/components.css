@@ -1,0 +1,163 @@
+/* 大樹神獸 components — 方向 B 彩繪・門神線稿。所有值取自 tokens.css 的變數。 */
+
+.dsh-root { font-family: var(--font-sans); color: var(--text); background: var(--surface); }
+
+/* Button ─ 匾額雙框：墨色外框＋內側一圈細線，平面，無陰影；按下只加深底色 */
+.dsh-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: var(--button-height); padding: 0 var(--space-6);
+  font-family: var(--font-sans); font-size: 19px; line-height: 24px; font-weight: 900;
+  border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm);
+  cursor: pointer; transition: background-color 80ms ease, box-shadow 80ms ease;
+}
+.dsh-btn:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+.dsh-btn--primary { background: var(--action); color: var(--on-action); box-shadow: inset 0 0 0 3px var(--action), inset 0 0 0 5px var(--on-action); }
+.dsh-btn--primary:active { background: var(--action-pressed); box-shadow: inset 0 0 0 3px var(--action-pressed), inset 0 0 0 5px var(--on-action); }
+.dsh-btn--secondary { background: var(--surface-raised); color: var(--text); box-shadow: inset 0 0 0 3px var(--surface-raised), inset 0 0 0 4px var(--outline); }
+.dsh-btn--secondary:active { background: var(--surface-sunken); box-shadow: inset 0 0 0 3px var(--surface-sunken), inset 0 0 0 4px var(--outline); }
+.dsh-btn--text { background: transparent; color: var(--brand-text); border-color: transparent; box-shadow: none; min-height: var(--target-min); padding: 0 var(--space-3); text-decoration: underline; text-underline-offset: 4px; }
+.dsh-btn--block { display: flex; width: 100%; }
+.dsh-btn[disabled] { background: var(--ink-200); color: var(--text-muted); border-color: var(--ink-400); box-shadow: inset 0 0 0 3px var(--ink-200), inset 0 0 0 4px var(--ink-400); cursor: not-allowed; }
+@media (prefers-reduced-motion: reduce) { .dsh-btn { transition: none; } }
+
+/* StatusTag ─ 五種樹況 */
+.dsh-tag {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  padding: 3px var(--space-2); border-radius: var(--radius-sm); border: var(--stroke-fine) solid currentColor;
+  font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 700; letter-spacing: 0.04em;
+}
+.dsh-tag svg { width: 14px; height: 14px; flex: none; }
+.dsh-tag--ok { background: var(--state-ok-bg); color: var(--state-ok-text); }
+.dsh-tag--watch { background: var(--state-watch-bg); color: var(--state-watch-text); }
+.dsh-tag--notice { background: var(--state-notice-bg); color: var(--state-notice-text); border-style: dashed; }
+.dsh-tag--keep { background: var(--state-keep-bg); color: var(--state-keep); }
+.dsh-tag--move { background: var(--state-move-bg); color: var(--state-move); }
+
+/* Plaque ─ 匾額標題 */
+.dsh-plaque {
+  display: inline-block; padding: var(--space-2) var(--space-6);
+  background: var(--brand-strong); color: var(--honor-on-dark);
+  border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-sm);
+  font-family: var(--font-display); font-weight: 900; font-size: 24px; line-height: 32px; letter-spacing: 0.15em;
+}
+.dsh-plaque--lg { font-size: 40px; line-height: 48px; padding: var(--space-3) var(--space-8); }
+
+/* TreeCard ─ 樹的卡片（底部抽屜） */
+.dsh-card {
+  display: flex; flex-direction: column; gap: var(--space-3);
+  padding: var(--space-4); background: var(--surface-raised);
+  border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md);
+}
+.dsh-card__head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); }
+.dsh-card__name { font-family: var(--font-display); font-weight: 900; font-size: 32px; line-height: 40px; margin: 0; }
+.dsh-card__meta { font-size: 14px; line-height: 20px; color: var(--text-muted); margin: 0; }
+.dsh-card__count { font-size: 18px; line-height: 28px; font-weight: 500; margin: 0; }
+.dsh-card__count b { color: var(--brand-text); }
+
+/* NoticeBanner ─ 公示中通知條 */
+.dsh-notice {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-3) var(--space-4); background: var(--state-notice-bg); color: var(--text);
+  border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md);
+  border-left-width: 0; position: relative; overflow: hidden;
+  padding-left: calc(var(--space-4) + 14px);
+}
+.dsh-notice::before {
+  content: ""; position: absolute; inset: 0 auto 0 0; width: 14px;
+  background: repeating-linear-gradient(-45deg, var(--state-notice) 0 7px, var(--outline) 7px 11px);
+}
+.dsh-notice__title { font-weight: 900; font-size: 16px; line-height: 24px; color: var(--state-notice-text); margin: 0; }
+.dsh-notice__body { font-size: 14px; line-height: 20px; margin: 0; }
+.dsh-notice__days { margin-left: auto; font-family: var(--font-display); font-weight: 900; font-size: 24px; line-height: 28px; text-align: center; font-variant-numeric: tabular-nums; }
+.dsh-notice__days small { display: block; font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 700; color: var(--text-muted); }
+
+/* Patterns ─ 可重複背景紋樣（Patterns 素材群組） */
+.dsh-pattern--lattice { background-color: var(--surface); background-image: url("./assets/patterns/lattice.svg"); background-size: 32px 32px; }
+.dsh-pattern--leaves { background-color: var(--surface); background-image: url("./assets/patterns/leaves.svg"); background-size: 56px 56px; }
+.dsh-pattern--cloud { background-color: var(--green-700); background-image: url("./assets/patterns/cloud.svg"); background-size: 64px 40px; color: var(--ink-50); }
+
+/* LanternCount ─ 守護人數（燈海） */
+.dsh-lanterns {
+  display: flex; flex-direction: column; gap: var(--space-3);
+  padding: var(--space-4); background: var(--brand-strong); color: var(--ink-50);
+  border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md);
+}
+.dsh-lanterns__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+.dsh-lanterns__num { font-family: var(--font-display); font-weight: 900; font-size: 32px; line-height: 40px; color: var(--honor-on-dark); font-variant-numeric: tabular-nums; }
+.dsh-lanterns__num small { font-family: var(--font-sans); font-size: 16px; font-weight: 700; margin-left: var(--space-1); }
+.dsh-lanterns__label { font-size: 14px; line-height: 20px; font-weight: 700; color: var(--green-100); }
+.dsh-lanterns__grid { display: flex; flex-wrap: wrap; gap: 6px; }
+.dsh-lantern { position: relative; width: 16px; height: 20px; box-sizing: border-box; border: var(--stroke-fine) solid var(--outline); border-radius: 3px 3px 6px 6px; background: var(--honor); }
+.dsh-lantern::before { content: ""; position: absolute; left: 3px; right: 3px; top: -5px; height: 3px; background: var(--outline); border-radius: 1px; }
+.dsh-lantern--off { background: var(--green-700); border-color: var(--green-400); }
+.dsh-lantern--off::before { background: var(--green-400); }
+.dsh-lanterns__note { font-size: 13px; line-height: 20px; color: var(--green-100); margin: 0; }
+
+/* VitalityBar ─ 元氣值條 */
+.dsh-vital { display: flex; flex-direction: column; gap: var(--space-2); }
+.dsh-vital__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); }
+.dsh-vital__label { font-size: 14px; line-height: 20px; font-weight: 700; }
+.dsh-vital__value { font-family: var(--font-display); font-weight: 900; font-size: 20px; line-height: 28px; font-variant-numeric: tabular-nums; }
+.dsh-vital__value small { font-family: var(--font-sans); font-size: 14px; font-weight: 700; color: var(--text-muted); margin-left: var(--space-1); }
+.dsh-vital__track { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 3px; padding: 3px; height: 28px; box-sizing: border-box; background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm); }
+.dsh-vital__seg { background: var(--ink-200); border-radius: 1px; }
+.dsh-vital__seg.is-on { background: var(--brand); }
+.dsh-vital--weak .dsh-vital__seg.is-on { background: var(--state-watch); }
+.dsh-vital__hint { font-size: 13px; line-height: 20px; color: var(--text-muted); margin: 0; }
+
+/* HealthChecklist ─ 健康檢查清單 */
+.dsh-check { display: flex; flex-direction: column; background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md); overflow: hidden; }
+.dsh-check__title { margin: 0; padding: var(--space-3) var(--space-4); font-family: var(--font-display); font-weight: 900; font-size: 20px; line-height: 28px; border-bottom: var(--stroke-fine) solid var(--outline); }
+.dsh-check__item { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: var(--space-3); align-items: start; padding: var(--space-3) var(--space-4); min-height: var(--target-min); box-sizing: border-box; border-bottom: 1px solid var(--line); cursor: pointer; }
+.dsh-check__item:last-of-type { border-bottom: none; }
+.dsh-check__box { appearance: none; -webkit-appearance: none; margin: 0; width: 28px; height: 28px; box-sizing: border-box; border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm); background: var(--surface-raised) center / 18px 18px no-repeat; cursor: pointer; }
+.dsh-check__box:checked { background-color: var(--brand); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M3 9.5 L7.5 14 L15 4.5' fill='none' stroke='%23fcfaf5' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+.dsh-check__box:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+.dsh-check__q { font-size: 16px; line-height: 26px; font-weight: 500; }
+.dsh-check__hint { display: block; font-size: 13px; line-height: 20px; color: var(--text-muted); font-weight: 400; }
+.dsh-check__foot { padding: var(--space-3) var(--space-4) var(--space-4); border-top: var(--stroke-fine) solid var(--outline); }
+
+/* NotificationCard ─ 通知卡 */
+.dsh-notif { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: var(--space-3); align-items: start; padding: var(--space-3) var(--space-4); background: var(--surface-raised); border: var(--stroke-fine) solid var(--outline); border-radius: var(--radius-md); color: var(--text); text-decoration: none; }
+.dsh-notif img { width: 40px; height: 40px; }
+.dsh-notif__title { margin: 0; font-size: 16px; line-height: 24px; font-weight: 500; }
+.dsh-notif__body { margin: 2px 0 0; font-size: 14px; line-height: 20px; color: var(--text-muted); }
+.dsh-notif__time { font-size: 13px; line-height: 20px; color: var(--text-muted); white-space: nowrap; display: flex; align-items: center; gap: var(--space-1); }
+.dsh-notif--unread .dsh-notif__title { font-weight: 900; }
+.dsh-notif--unread .dsh-notif__time::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--brand); border: var(--stroke-fine) solid var(--outline); box-sizing: border-box; }
+.dsh-notif:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+
+/* BulletinCard ─ 佈告卡（公告詳情） */
+.dsh-bulletin { display: flex; flex-direction: column; background: var(--surface-raised); border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-sm); overflow: hidden; }
+.dsh-bulletin__band { height: 12px; background: repeating-linear-gradient(-45deg, var(--state-notice) 0 8px, var(--outline) 8px 12px); border-bottom: var(--stroke-fine) solid var(--outline); }
+.dsh-bulletin__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-4) 0; }
+.dsh-bulletin__title { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 24px; line-height: 32px; letter-spacing: 0.1em; }
+.dsh-bulletin__no { font-size: 13px; line-height: 20px; color: var(--text-muted); padding: 0 var(--space-4); margin: 0; }
+.dsh-bulletin__list { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--space-2) var(--space-4); margin: var(--space-3) var(--space-4); padding: var(--space-3) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.dsh-bulletin__list dt { font-size: 14px; line-height: 22px; font-weight: 700; color: var(--text-muted); }
+.dsh-bulletin__list dd { margin: 0; font-size: 16px; line-height: 22px; }
+.dsh-bulletin__foot { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; padding: 0 var(--space-4) var(--space-4); }
+
+/* BeastCard ─ 神獸卡（一般款／稀有款） */
+.dsh-beast { width: 248px; display: flex; flex-direction: column; background: var(--surface-raised); border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-md); overflow: hidden; }
+.dsh-beast__art { position: relative; height: 196px; display: flex; align-items: flex-end; justify-content: center; border-bottom: var(--stroke-ui) solid var(--outline); }
+.dsh-beast__art img { width: 150px; height: 175px; position: relative; }
+.dsh-beast__body { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); padding: 0 var(--space-4) var(--space-4); }
+.dsh-beast__name { margin-top: -22px; position: relative; }
+.dsh-beast__meta { margin: 0; font-size: 14px; line-height: 20px; color: var(--text-muted); text-align: center; }
+.dsh-beast__guard { margin: 0; font-size: 16px; line-height: 24px; font-weight: 700; }
+.dsh-beast__guard b { color: var(--brand-text); font-variant-numeric: tabular-nums; }
+.dsh-beast__seal { position: absolute; top: var(--space-2); right: var(--space-2); padding: 2px var(--space-2); background: var(--honor); color: var(--text); border: var(--stroke-fine) solid var(--outline); border-radius: var(--radius-sm); font-size: 13px; line-height: 20px; font-weight: 900; letter-spacing: 0.1em; }
+.dsh-beast--rare { box-shadow: inset 0 0 0 4px var(--brand-strong), inset 0 0 0 6px var(--honor); padding: 6px; }
+.dsh-beast--rare .dsh-beast__art { border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+.dsh-beast--rare .dsh-beast__art::before { content: ""; position: absolute; width: 168px; height: 168px; border-radius: 50%; top: 14px; left: 50%; transform: translateX(-50%); background: var(--gold-200); border: var(--stroke-ui) solid var(--outline); box-sizing: border-box; }
+
+/* BottomNav ─ 底部導覽列 */
+.dsh-nav { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: end; background: var(--surface-raised); border-top: var(--stroke-ui) solid var(--outline); padding: 0 var(--space-2) calc(var(--space-2) + env(safe-area-inset-bottom, 0px)); }
+.dsh-nav__item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 2px; min-height: 58px; padding-top: var(--space-2); background: none; border: none; color: var(--text-muted); font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 700; text-decoration: none; cursor: pointer; }
+.dsh-nav__item svg { width: 26px; height: 26px; }
+.dsh-nav__item[aria-current="page"] { color: var(--brand-text); }
+.dsh-nav__item[aria-current="page"]::before { content: ""; position: absolute; top: -3px; left: 50%; transform: translateX(-50%); width: 32px; height: 5px; background: var(--brand); border: var(--stroke-fine) solid var(--outline); border-top: none; border-radius: 0 0 3px 3px; }
+.dsh-nav__item:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: -3px; }
+.dsh-nav__scan { width: 56px; height: 56px; margin-top: -22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--brand); color: var(--ink-50); border: var(--stroke-ui) solid var(--outline); box-shadow: inset 0 0 0 3px var(--brand), inset 0 0 0 5px var(--ink-50); }
+.dsh-nav__scan svg { width: 28px; height: 28px; }

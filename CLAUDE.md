@@ -213,7 +213,8 @@
 - [docs/team-collaboration/](docs/team-collaboration/)：團隊角色分工、協作備忘與招募需求。
 - [docs/discussion-notes/](docs/discussion-notes/)：產品原始構想與討論筆記。
 - [docs/proposal/](docs/proposal/)：Day 1 提案簡報規劃（每頁的重點、內容、講稿與待確認事項）。
-- [docs/design/](docs/design/)：品牌視覺規範與神獸角色設定（草稿）。做介面、插圖、文案時要照這裡的配色、字體和語氣。
+- [design-system/](design-system/)：**正式的視覺設計系統**（10/22 由 Claude Design 產出）。做介面、插圖、簡報、影片時，配色、字體、元件、語氣都照這裡，先讀 [design-system/README.md](design-system/README.md)。神獸 3D 圖在 `design-system/assets/character/beasts/`。
+- [docs/design/](docs/design/)：神獸角色設定（名字、個性、故事）和產出設計系統用的提示詞。舊的品牌視覺規範已由 design-system 取代，只留作參考。
 - [data/research/](data/research/)：開放資料清單、背景事件與引用來源。
 - [data/source/](data/source/)：原始資料檔案；題目分類資料已去識別化，只限本活動使用。
 
