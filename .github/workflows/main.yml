@@ -1,0 +1,24 @@
+name: Send Discord Notification on Push
+
+on:
+  push:
+
+jobs:
+  discord-notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Discord Notification
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: |
+            🚀 **New Push to Repository!**
+            **Repository:** ${{ github.repository }}
+            **Branch:** ${{ github.ref_name }}
+            **Pusher:** ${{ github.actor }}
+
+            **Commits in this push:**
+            ${{ join(github.event.commits.*.message, '\n') }}
+
+            [View Changes](https://github.com/${{ github.repository }}/compare/${{ github.event.before }}...${{ github.event.after }})

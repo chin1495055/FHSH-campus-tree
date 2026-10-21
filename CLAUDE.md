@@ -184,10 +184,13 @@
 
 | 日期 | 事件 |
 |---|---|
-| 10/23（五）19:00–22:00 | Day 1，Discord 線上提案 |
+| **10/23 前** | **填提案發言登記表**（https://reurl.cc/mzjxoW），發言順序照登記先後；提前加入 Discord 伺服器（https://discord.puma.taipei/），確認帳號和語音正常 |
+| 10/23（五）19:00–22:00 | Day 1 松前小聚，Discord 主舞台。19:40–21:30 各隊依登記順序提案，**每組 3 分鐘**，不用正式簡報。規則和資料整理在 #市政debug松服務台 頻道 |
 | 10/24（六）10:30–16:30 | Day 2 現場實作。12:00 公布 Demo 名單，**16:00 作品提交截止** |
 | 10/24 16:30–17:00 | 直播 Demo，每組約 2 分鐘 |
 | 10/24 16:30–10/31（六）18:00 | 線上票選 |
+
+**颱風備案**：如果 10/24 宣布停班停課，黑客松改成**全線上**，一樣有 Demo 和座談。10/23 松前小聚會宣布。
 
 ## 開放資料
 
@@ -207,8 +210,10 @@
 
 - [01_種樹痛點儀表板.html](01_種樹痛點儀表板.html)：種樹題目相關市民意見的痛點儀表板（單一 HTML 檔，約 650KB）。
 - [docs/system-analysis/](docs/system-analysis/)：MVP 規格與市民優先 User Stories。
-- [docs/team-collaboration/](docs/team-collaboration/)：團隊角色分工與協作備忘。
+- [docs/team-collaboration/](docs/team-collaboration/)：團隊角色分工、協作備忘與招募需求。
 - [docs/discussion-notes/](docs/discussion-notes/)：產品原始構想與討論筆記。
+- [docs/proposal/](docs/proposal/)：Day 1 提案簡報規劃（每頁的重點、內容、講稿與待確認事項）。
+- [docs/design/](docs/design/)：品牌視覺規範與神獸角色設定（草稿）。做介面、插圖、文案時要照這裡的配色、字體和語氣。
 - [data/research/](data/research/)：開放資料清單、背景事件與引用來源。
 - [data/source/](data/source/)：原始資料檔案；題目分類資料已去識別化，只限本活動使用。
 
@@ -220,11 +225,20 @@
 
 ## 協作方式
 
+- **隊名**：AI 方舟計畫。
 - **團隊分工**：
   - **Saori**：擅長全端工程，主要投入系統架構、技術選型與開發。
   - **Qmoa**：主要投入產品構想、背景整理與文件。
   - **Saori 與 Qmoa**：以夥伴方式合作，依專長與認領項目分工；產品方向、技術方案和工作流程透過討論共同確認。Claude 協助任一夥伴時，git 操作與程式細節都要清楚說明，並提醒必要注意事項。
 - 團隊用 GitHub 同步，remote 是 `innerwork-saori/2026-debugWithPuma`。動手前先 `git pull`，改完再 push，避免和隊友衝突。
+- **push 後發 Discord 更新摘要**：
+  - push 成功後，Claude 把這次的改動整理成 3～5 行白話摘要，先給本人看，**本人確認後才發送**到團隊 Discord 頻道。
+  - 摘要開頭寫明是誰的更新，例如「🌳 Qmoa 更新｜主題」，最後提醒對方 `git pull`。
+  - 提到的檔案要附上可以點的 GitHub 連結，格式是 `[檔名](https://github.com/innerwork-saori/2026-debugWithPuma/blob/main/路徑)`。路徑裡的中文要先轉成網址編碼（percent-encoding），不然 Discord 的連結會斷掉。
+  - **Saori 已設定 GitHub Action（`.github/workflows/main.yml`）**：每次 push 都會自動把 commit 訊息發到 Discord，所以 commit 訊息要寫清楚。手動摘要只用在需要額外說明的重要改動。
+  - 兩人共用同一個 webhook，發到同一個頻道，所以摘要開頭一定要寫是誰的更新。網址由 Qmoa 私訊給 Saori，各自存在自己電腦的 `~/.config/debugwithpuma/discord_webhook`（權限設 600），用 POST 送出 `{"content": "..."}`，成功會回傳 204。
+  - **webhook 網址等於密鑰，絕對不要寫進 repo、commit、文件或頻道訊息**。外流的話，到 Discord 頻道設定的「整合」→「Webhook」刪掉重建。
+  - 檔案不存在時，不要自己找網址或猜網址，請本人提供。
 - 文件、介面文案和 commit 說明都用**繁體中文與台灣用語**，標點用全形。
 - 現場只有 5.5 小時，只做 Demo 路徑上會用到的功能。12:00 之後原則上不加新功能。
 - 介面要讓沒看過的人兩分鐘內看懂，市民是主要使用者，所以以手機為主來設計，遊戲化的回饋（認養、回報、守護成果）要一眼就看得出來。
