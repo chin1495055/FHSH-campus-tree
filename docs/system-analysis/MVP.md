@@ -120,21 +120,70 @@
   - HTTPS 部署：PWA、定位和相機都需要 HTTPS（GitHub Pages、Vercel 都有）。
 - **會用到的手機功能**：
   - 定位：找附近的樹、確認在地守護者真的在樹旁邊。
-  - 相機：回報時拍照，用 `<input type="file" accept="image/*" capture>` 就夠。
-  - 掃 QR code：需要在網頁裡開相機即時辨識。iPhone 的 Safari 不支援瀏覽器內建的 QR 辨識功能，要用套件（例如 html5-qrcode），由團隊依需求與實作成本討論選定。
+  - 相機：回報時拍照。關鍵畫面的步驟 1 是 App 內的取景框（虛線框、提示文字、快門鍵），要用 `getUserMedia` 自己開相機，比 `<input type="file" accept="image/*" capture>` 多花約 30 分鐘。時間不夠就退回 `<input capture>`，會跳到手機內建相機，看不到取景框。
+  - 掃 QR code：底部導覽列中間有「掃描」鍵，要在網頁裡開相機即時辨識。iPhone 的 Safari 不支援瀏覽器內建的 QR 辨識功能，用 `qr-scanner`（nimiq）套件。QR code 裡放網址 `https://…/#/tree/樹號`，用手機內建相機掃也能直接打開那棵樹。
   - 分享：用 Web Share API 直接叫出手機的分享選單，不支援時退回複製連結。
 - **要注意**：
   - **快取會讓隊友看到舊版**：當天一直在改，Service Worker 的快取要加版本號，HTML 用「網路優先」。否則部署後別人打開還是舊畫面。
   - **推播通知先不做真的**：iPhone 要先加到主畫面才收得到推播，設定也麻煩。Demo 的通知用畫面模擬。
   - Demo 前在 iPhone 和 Android 都實際「加到主畫面」測一次。
 
-### 其他建議（還沒決定，由團隊討論確認）
+### 技術選型（10/22 Saori 整理，對照關鍵畫面設計稿）
 
-- **純前端網頁**：不做後端。資料放 JSON 檔，使用者的操作存在瀏覽器裡（localStorage）就好，Demo 夠用。
-- **地圖**：Leaflet ＋ OpenStreetMap，免費、不用申請金鑰。
-- **部署**：GitHub Pages 或 Vercel，網址當天就要確認可以打開。
-- **分享卡**：用 canvas 或 html2canvas 產生圖片。
+原則：開發時間只有約 6 小時，用最簡單、能做出「大樹神獸 關鍵畫面」設計稿（16 頁）的工具。**純前端靜態網站，不做後端、不用建置工具。**
+
+| 項目 | 選擇 | 理由 |
+|---|---|---|
+| 語言 | HTML、CSS、原生 JavaScript（ES modules） | 不用 `npm install`、不用打包，存檔重新整理就看得到 |
+| 框架 | 不用框架，畫面用 hash 路由（`#/tree/樹號`）切換。畫面多了想寫得乾淨，可以從 CDN 載入 Alpine.js 或 petite-vue | P0 約 5～6 個畫面，不需要 React |
+| 地圖 | Leaflet ＋ CARTO Positron 淡色圖磚（免費，要標示出處），再加 CSS 濾鏡調成米色 | 不用申請金鑰。OpenStreetMap 預設圖磚顏色太雜，和設計稿的米色底圖不搭 |
+| 地圖標記 | Leaflet 的 `divIcon`，用 HTML 和 CSS 做神獸圓形頭像和守護人數標籤 | 照設計稿做；樹超過 500 棵就加 `Leaflet.markercluster` 群聚 |
+| PWA | 自己寫 `manifest.json` 和 `sw.js`（約 40 行） | 快取加版本號，HTML 用網路優先 |
+| 資料儲存 | 樹木資料放靜態 JSON；使用者的操作（守護、回報、佈告、圖鑑）存在 localStorage | 不用資料庫，Demo 夠用 |
+| 照片 | 用 canvas 縮到約 800px 的 JPEG，存進 IndexedDB（可用 `idb-keyval`），或只在畫面上預覽、不保存 | 原圖會很快塞爆 localStorage（約 5MB） |
+| 產生 QR code | 事前用 Python `qrcode` 套件或線上工具，替 Demo 那幾棵樹產生後印出來 | 只需要做一次 |
+| 字型 | 從 Google Fonts 載入思源宋體（Noto Serif TC）等，依 [design-system](../../design-system/README.md) 為準 | Google Fonts 會依用到的字分段下載，速度可以接受 |
+| 神獸圖片 | 轉成去背 WebP，每張壓到約 100KB 以內 | 手機和票選訪客的載入速度 |
+| 部署 | GitHub Pages，從 `main` 分支直接發布 | repo 已在 GitHub，push 就上線，自帶 HTTPS |
+
+- **為什麼不做後端**：代價是每個人只看得到自己的守護和佈告。守護人數用「模擬的基礎人數，加上自己按的那一下」呈現，Demo 和票選訪客都看得懂。加共享資料庫（例如 Supabase）約多 1 小時，而且佈告欄會變成真的公開發文，票選期間就要處理內容審核和個資，風險比好處大，放進 100 天落地計畫就好。
+- **部署要先確認**：GitHub Pages 免費版只能發布公開 repo，私人 repo 就改用 Cloudflare Pages 或 Vercel 連 GitHub。網址要在 10/23 前上線，並在 iPhone、Android 都「加到主畫面」測過。
 - 用到的套件和 AI 工具（例如 Claude）都要記到 README。
+
+### 分享卡與 OG 預覽圖
+
+- **不要用 html2canvas**：它對直排文字（籤詩的 `writing-mode: vertical-rl`）和網頁字型支援不好，很可能排錯。
+- **最省時（建議）**：守護籤、求援籤和 OG 預覽圖（關鍵畫面第 13～16 頁）先做成固定的 PNG，分享時用 Web Share API 把圖片和網址一起送出。
+- **要顯示即時守護人數**：改用 `html-to-image`，它用瀏覽器自己的排版截圖，直排沒問題。
+- **OG 預覽圖要是固定的圖片檔**：LINE、Threads 讀不到 `#/tree/樹號` 這種 hash 網址的內容，所以替 Demo 那幾棵樹各產生一個 `t/樹號.html`，裡面只放 OG 標籤和跳轉，用腳本產生。
+
+### 關鍵畫面怎麼做
+
+| 畫面 | 做法 | 難度 |
+|---|---|---|
+| 地圖首頁（神獸頭像、人數標籤、篩選鈕、底部卡片） | Leaflet `divIcon` ＋ CSS | 中 |
+| 神獸頁、樹的檔案（元氣條、燈海卡、底部固定按鈕） | 純 HTML、CSS | 低 |
+| 回報步驟 1：取景框和快門 | `getUserMedia` | 中 |
+| 回報步驟 2、3：健康檢查、完成頁（128 → 129 盞） | 純 HTML、CSS；數字跳動和燈亮用 CSS 動畫 | 低 |
+| 異動警報（橘黑斜紋、倒數天數） | CSS `repeating-linear-gradient` | 低 |
+| 社區佈告欄、未驗證狀態、發起活動表單 | 純 HTML、CSS，存 localStorage | 低 |
+| 守護圖鑑、空白狀態 | 純 HTML、CSS | 低 |
+| 守護籤、求援籤、OG 預覽圖 | 見上方「分享卡與 OG 預覽圖」 | 中到高 |
+| 底部導覽列和中間的掃描鍵 | `qr-scanner` 套件 | 中 |
+
+**範圍提醒**：10/20 會議決定 Epic C（異動警報、分享卡）這次不做，但關鍵畫面有畫。建議先做會議定案的 P0 畫面，時間夠再加異動警報（約 15～20 分鐘，可以補上防誤砍的故事），分享卡用固定 PNG 做法（約 20 分鐘）。
+
+### 樹木資料前處理（Day 1 晚上或 Day 2 早上先做）
+
+1. 從 data.gov.tw 官方下載連結取得[行道樹及公園樹木分布圖](https://data.gov.tw/dataset/128274)。
+2. 用一支小腳本（Python 或 Node）：
+   - 座標很可能是 TWD97（EPSG:3826），轉成經緯度（WGS84），可以用 `pyproj` 或 `proj4js`。下載後先看欄位再確認。
+   - 只留總部周邊（中正區北平東路 30-1 號，半徑約 300～500 公尺）一兩百棵。
+   - 只留需要的欄位，輸出 `data/trees.json`。
+3. 另一支腳本把 `mock_*.json` 的模擬欄位合併上去。真實和模擬資料分開存放，README 才好標示。
+4. 全市原始檔很大，不要放進前端，也不要進 repo。
+
+開放資料只接這一份。樹穴、人行道範圍、公園基本資料和 P0 功能無關，MVP 不接；公園資料等 P1「切換區域」再考慮。樹齡資料集裡應該沒有，用胸徑粗估並標示「推估」。
 
 ## 分工對應（接 [團隊角色分工.md](../team-collaboration/團隊角色分工.md)）
 
@@ -162,5 +211,5 @@
 2. **Demo 主角是哪棵樹**：美崙公園的情境最有話題，但涉及紀念樹的政治爭議。也可以用虛構的樹，或換成東門茄苳。
 3. **市府端查詢（⑥）要不要做**：Saori 原本的核心點子，也是 Demo 收尾的亮點，建議至少做一個簡單版。
 4. **神獸美術**：誰畫、什麼風格，或要不要用 AI 生圖（要記到 README）。
-5. **技術選型**：PWA 已決定，其他建議（純前端、Leaflet、部署平台）大家同不同意。
+5. **技術選型**：已整理在上方「技術選型」（純前端靜態網站、Leaflet、GitHub Pages），請 Qmoa 確認。
 6. **樹上的 QR code**：裡面存的是網址還是樹號？跟開放資料的樹木編號是不是同一套？巡視紀錄有沒有開放？

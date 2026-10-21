@@ -222,7 +222,9 @@
 
 - **作品必須是 PWA**：要有 `manifest.json`、Service Worker、HTTPS 部署，可以加到手機主畫面。細節見 [docs/system-analysis/MVP.md](docs/system-analysis/MVP.md) 的「技術」一節。
 - Service Worker 快取要加版本號，HTML 用網路優先，避免部署後隊友看到舊版。
-- 其他選型（框架、地圖套件、部署平台）還沒定案。決定後請更新這一節，寫上怎麼安裝、執行和部署。
+- **技術選型（10/22）**：純前端靜態網站，不做後端、不用建置工具。原生 JavaScript ＋ Leaflet，資料放靜態 JSON，使用者操作存 localStorage，部署到 GitHub Pages。完整理由和關鍵畫面的做法見 MVP.md「技術選型」。
+- 分享卡不要用 html2canvas（直排籤詩會排錯），先用固定 PNG。
+- 開始寫程式後，請在這一節補上怎麼在本機執行和部署。
 
 ## 協作方式
 
