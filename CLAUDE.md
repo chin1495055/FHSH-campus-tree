@@ -184,10 +184,13 @@
 
 | 日期 | 事件 |
 |---|---|
-| 10/23（五）19:00–22:00 | Day 1，Discord 線上提案 |
+| **10/23 前** | **填提案發言登記表**（https://reurl.cc/mzjxoW），發言順序照登記先後；提前加入 Discord 伺服器（https://discord.puma.taipei/），確認帳號和語音正常 |
+| 10/23（五）19:00–22:00 | Day 1 松前小聚，Discord 主舞台。19:40–21:30 各隊依登記順序提案，**每組 3 分鐘**，不用正式簡報。規則和資料整理在 #市政debug松服務台 頻道 |
 | 10/24（六）10:30–16:30 | Day 2 現場實作。12:00 公布 Demo 名單，**16:00 作品提交截止** |
 | 10/24 16:30–17:00 | 直播 Demo，每組約 2 分鐘 |
 | 10/24 16:30–10/31（六）18:00 | 線上票選 |
+
+**颱風備案**：如果 10/24 宣布停班停課，黑客松改成**全線上**，一樣有 Demo 和座談。10/23 松前小聚會宣布。
 
 ## 開放資料
 
@@ -232,6 +235,7 @@
   - push 成功後，Claude 把這次的改動整理成 3～5 行白話摘要，先給本人看，**本人確認後才發送**到團隊 Discord 頻道。
   - 摘要開頭寫明是誰的更新，例如「🌳 Qmoa 更新｜主題」，最後提醒對方 `git pull`。
   - 提到的檔案要附上可以點的 GitHub 連結，格式是 `[檔名](https://github.com/innerwork-saori/2026-debugWithPuma/blob/main/路徑)`。路徑裡的中文要先轉成網址編碼（percent-encoding），不然 Discord 的連結會斷掉。
+  - **Saori 已設定 GitHub Action（`.github/workflows/main.yml`）**：每次 push 都會自動把 commit 訊息發到 Discord，所以 commit 訊息要寫清楚。手動摘要只用在需要額外說明的重要改動。
   - 兩人共用同一個 webhook，發到同一個頻道，所以摘要開頭一定要寫是誰的更新。網址由 Qmoa 私訊給 Saori，各自存在自己電腦的 `~/.config/debugwithpuma/discord_webhook`（權限設 600），用 POST 送出 `{"content": "..."}`，成功會回傳 204。
   - **webhook 網址等於密鑰，絕對不要寫進 repo、commit、文件或頻道訊息**。外流的話，到 Discord 頻道設定的「整合」→「Webhook」刪掉重建。
   - 檔案不存在時，不要自己找網址或猜網址，請本人提供。
