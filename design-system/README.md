@@ -4,7 +4,7 @@
 
 ## 標誌
 
-- 主要用 `assets/logos/logo-horizontal.svg`（榕仔公圓章＋「大樹神獸」標準字）；小空間、App 圖示、頭像用 `assets/logos/logo-emblem.svg`；深色底用反白版；單色印刷用 mono 版。
+- 主要用 `assets/logos/logo-horizontal.svg`（鬚鬚公圓章＋「大樹神獸」標準字）；小空間、App 圖示、頭像用 `assets/logos/logo-emblem.svg`；深色底用反白版；單色印刷用 mono 版。
 - 四周留白至少圓章直徑的 1/4；圓章最小 24px，橫式最小寬 120px。詳細規則見 Logo 元件。
 
 ## 使用情境
@@ -17,7 +17,7 @@
 
 - 用「你」稱呼使用者，像鄰居說話：「這棵榕樹已經有 128 位鄰居守護。」
 - 按鈕說清楚會發生什麼：「守護它」「回報樹況」「看公告」。
-- 樹用尊稱與暱稱：「大樹公」「榕仔公」。神獸是長輩、是朋友，不是怪物，也不是可以抽的卡。
+- 樹用尊稱與暱稱：「大樹公」「樹王公」。神獸是長輩、是朋友，不是怪物，也不是可以抽的卡。
 - 講到移除、公示，語氣冷靜、給時間與行動：「公示中，剩 12 天。你可以看公告、表達意見。」不要恐嚇。
 - 不用 emoji。不用「抽」「轉」「機率」「稀有」等抽卡用語。
 
@@ -83,7 +83,7 @@
 
 ## 神獸與插畫
 
-- 代表神獸「榕仔公」：葉叢頭冠、白色氣根鬍鬚、樹幹身體、腰間寬鬆繫一條紅布。角色設定以 `assets/character/rongzaigong-3d.png` 為準；App 內與小尺寸用線稿版 `assets/character/rongzaigong-line.svg`。
+- 代表神獸「鬚鬚公」：葉叢頭冠、白色氣根鬍鬚、樹幹身體、腰間寬鬆繫一條紅布。角色設定以 `assets/character/xuxugong-3d.png` 為準；App 內與小尺寸用線稿版 `assets/character/xuxugong-line.svg`。
 - 其他神獸的 3D 圖（鬚鬚公、加冬仔、雀雀，各有元氣滿滿與需要關心兩種狀態）在 `assets/character/beasts/`，檔案用途見該資料夾的 README。名字、個性、故事見 `docs/design/神獸角色設定.md`。
 - 線稿畫法：正面對稱、墨線包邊、平塗；樹皮用 `gold-600`／`gold-500`，葉叢用 `brand`，鬍鬚用 `ink-50`，腮紅用 `red-300`。
 - 表情永遠溫和（瞇眼笑），不畫兇猛的門神臉。
@@ -93,7 +93,8 @@
 ## 圖示
 
 - 自繪 48×48 圖示，`stroke-ui` 墨線＋平塗，見 `Icons` 群組。功能：guard（守護）、report（回報）、camera（拍照）、share（分享）、bell（通知）、map（地圖）、collection（圖鑑）、scan（掃 QR code）；主題：tree（樹）、lantern（光明燈）、red-cloth（紅布條＝已被守護）、notice（公示中）。
-- 底部導覽列用同造型的 26px 單色線條版（`currentColor`、2.5px 線），讓選取狀態可以變色。
+- 底部導覽列用同造型的 26px 單色線條版，放在 `assets/icons/nav/`：nav-map、nav-collection、nav-scan、nav-bell、nav-me（26×26、2.5px 線、`currentColor`、不填色）。用 `dsh-nav__icon--{名稱}` 套用，顏色跟著選取狀態變，見 BottomNav。
 - 背景紋樣三種，見 Patterns：窗花格紋（頁面底）、榕葉紋（一般卡片插畫底）、雲紋（深色區塊、稀有款）。
 - 圖示是固定顏色的 SVG，用 `<img>` 放，不能用 currentColor 改色；需要新顏色就新增一個檔。
-- 地圖標記是小屋簷形狀（見 MapMarker），一般樹 `marker-size`，神獸放大 1.5 倍並加 `honor` 光圈。
+- 地圖標記是小屋簷形狀加一根小柱，柱底墨點對準樹的座標（見 MapMarker）；一般樹 `marker-size`，神獸放大 1.5 倍並加 `honor` 光圈、小金匾與神獸小圖（`assets/character/beasts/{神獸}/healthy-icon.webp`）。
+- 燕尾屋脊見 Ridge：`assets/patterns/ridge-end.svg` 做左右兩端，中段伸縮；`assets/patterns/ridge.svg` 是固定寬度完整版。

@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>大樹神獸 元件示範：地圖標記、燕尾屋脊、底部導覽列</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./components.css">
+<style>
+  body { margin: 0; background: var(--surface); color: var(--text); font-family: var(--font-sans); }
+  .demo { max-width: 960px; margin: 0 auto; padding: var(--space-8) var(--space-4) var(--space-12); display: flex; flex-direction: column; gap: var(--space-8); }
+  .demo h1 { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 32px; line-height: 40px; }
+  .demo h2 { margin: 0 0 var(--space-3); font-family: var(--font-display); font-weight: 900; font-size: 22px; line-height: 30px; }
+  .demo p { margin: 0; color: var(--text-muted); font-size: 15px; line-height: 24px; }
+  .panel { background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md); padding: var(--space-4); }
+  .row { display: flex; flex-wrap: wrap; gap: var(--space-8) var(--space-6); align-items: flex-end; padding: var(--space-6) var(--space-4) var(--space-12); background: var(--surface-sunken); border-radius: var(--radius-sm); }
+  .cell { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); min-width: 72px; }
+  .cell small { font-size: 13px; font-weight: 700; }
+  .row-title { font-size: 14px; font-weight: 900; margin: var(--space-4) 0 var(--space-2); }
+  #map { height: 360px; border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm); background: var(--surface-sunken); }
+  .leaflet-container { background: var(--surface-sunken); font-family: var(--font-sans); }
+  .ridges { display: flex; flex-direction: column; gap: var(--space-4); }
+  .phone { max-width: 390px; border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md); overflow: hidden; background: var(--surface-sunken); padding-top: var(--space-8); }
+</style>
+</head>
+<body>
+<main class="demo">
+  <header>
+    <h1>元件示範</h1>
+    <p>地圖標記（一般樹與神獸，五種樹況）、燕尾屋脊、底部導覽列。所有顏色、線寬、圓角都來自 tokens.css。請用本機網頁伺服器開啟（例如在這個資料夾執行 <code>python3 -m http.server</code>），用 file:// 直接開檔時遮罩圖示不會顯示。</p>
+  </header>
+
+  <section class="panel">
+    <h2>地圖標記：一般樹</h2>
+    <div class="row-title">一般狀態</div>
+    <div class="row" id="regular"></div>
+    <div class="row-title">選取中（底部卡片打開時）</div>
+    <div class="row" id="regular-selected"></div>
+  </section>
+
+  <section class="panel">
+    <h2>地圖標記：神獸</h2>
+    <div class="row-title">一般狀態</div>
+    <div class="row" id="beast"></div>
+    <div class="row-title">選取中</div>
+    <div class="row" id="beast-selected"></div>
+  </section>
+
+  <section class="panel">
+    <h2>放進 Leaflet：檢查尖端對準座標</h2>
+    <p>小綠圈是樹的實際座標，標記的墨點應該正好落在圈心。點標記可切換選取。</p>
+    <div id="map" style="margin-top: var(--space-3)"></div>
+  </section>
+
+  <section class="panel">
+    <h2>燕尾屋脊</h2>
+    <div class="ridges">
+      <div style="width: 120px"><div class="dsh-ridge" role="presentation"><span class="dsh-ridge__beam"></span></div></div>
+      <div style="width: 240px"><div class="dsh-ridge" role="presentation"><span class="dsh-ridge__beam"></span></div></div>
+      <div style="width: 358px"><div class="dsh-ridge" role="presentation"><span class="dsh-ridge__beam"></span></div></div>
+      <div><div class="dsh-ridge" role="presentation"><span class="dsh-ridge__beam"></span></div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>底部導覽列</h2>
+    <div style="display: flex; flex-wrap: wrap; gap: var(--space-6)">
+      <div class="phone">
+        <nav class="dsh-nav" aria-label="主要導覽">
+          <a class="dsh-nav__item" href="#" aria-current="page"><span class="dsh-nav__icon dsh-nav__icon--map" aria-hidden="true"></span>地圖</a>
+          <a class="dsh-nav__item" href="#"><span class="dsh-nav__icon dsh-nav__icon--collection" aria-hidden="true"></span>圖鑑</a>
+          <span class="dsh-nav__item"><a class="dsh-nav__scan" href="#" aria-label="掃描樹牌 QR code"><span class="dsh-nav__icon dsh-nav__icon--scan" aria-hidden="true"></span></a>掃描</span>
+          <a class="dsh-nav__item" href="#"><span class="dsh-nav__icon dsh-nav__icon--bell" aria-hidden="true"></span>通知</a>
+          <a class="dsh-nav__item" href="#"><span class="dsh-nav__icon dsh-nav__icon--me" aria-hidden="true"></span>我的</a>
+        </nav>
+      </div>
+      <div class="phone">
+        <nav class="dsh-nav" aria-label="主要導覽">
+          <a class="dsh-nav__item" href="#"><span class="dsh-nav__icon dsh-nav__icon--map" aria-hidden="true"></span>地圖</a>
+          <a class="dsh-nav__item" href="#" aria-current="page"><span class="dsh-nav__icon dsh-nav__icon--collection" aria-hidden="true"></span>圖鑑</a>
+          <span class="dsh-nav__item"><a class="dsh-nav__scan" href="#" aria-label="掃描樹牌 QR code"><span class="dsh-nav__icon dsh-nav__icon--scan" aria-hidden="true"></span></a>掃描</span>
+          <a class="dsh-nav__item" href="#"><span class="dsh-nav__icon dsh-nav__icon--bell" aria-hidden="true"></span>通知</a>
+          <a class="dsh-nav__item" href="#"><span class="dsh-nav__icon dsh-nav__icon--me" aria-hidden="true"></span>我的</a>
+        </nav>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+/* 與 components/MapMarker.md 相同的範本函式 */
+var DSH_MARKER = {
+  size: { tree: [48, 60], beast: [72, 90] },
+  anchor: { tree: [24, 55], beast: [36, 84] },
+  labels: { ok: '正常', watch: '需關注', notice: '公示中', keep: '保留', move: '移植' }
+};
+
+function dshEscape(s) {
+  return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
+}
+
+function dshMarkerHtml(o) {
+  var status = o.status || 'ok';
+  var beast = !!o.beastIcon;
+  var label = DSH_MARKER.labels[status];
+  var svg;
+  if (!beast) {
+    var ROOF = 'M5 36 Q17.5 32 24 5 Q30.5 32 43 36 Z';
+    var marks = {
+      watch: '<path class="dsh-marker__mark" d="M24 17 V25"/><circle class="dsh-marker__mark--solid" cx="24" cy="30" r="2"/>',
+      keep: '<path class="dsh-marker__mark--solid" d="M24 20 L28 25.5 L24 31 L20 25.5 Z"/>',
+      move: '<path class="dsh-marker__mark" d="M18.5 26 H29 M25 22 L29 26 L25 30"/>'
+    };
+    var stripes = status === 'notice'
+      ? '<defs><clipPath id="dsh-roof-clip"><path d="' + ROOF + '"/></clipPath></defs><g class="dsh-marker__stripes" clip-path="url(#dsh-roof-clip)"><path d="M0 24 L18 6 M4 36 L28 12 M12 40 L36 16 M22 40 L44 18 M32 40 L50 22"/></g>'
+      : '';
+    svg = '<svg class="dsh-marker__shape" viewBox="0 0 48 60" aria-hidden="true">' +
+      '<path class="dsh-marker__stem" d="M24 36 V51"/><circle class="dsh-marker__dot" cx="24" cy="55" r="3.5"/>' +
+      '<path class="dsh-marker__roof" d="' + ROOF + '"/>' + stripes +
+      '<path class="dsh-marker__line" d="' + ROOF + '"/>' +
+      '<path class="dsh-marker__ridge" d="M5 36 C2.5 36 1.5 32 1 28 M43 36 C45.5 36 46.5 32 47 28"/>' +
+      (marks[status] || '') + '</svg>';
+  } else {
+    var CAP = 'M10 26 Q26 22 36 4 Q46 22 62 26 Z';
+    var bmarks = {
+      watch: '<path class="dsh-marker__mark" d="M36 10.5 V17"/><circle class="dsh-marker__mark--solid" cx="36" cy="21" r="1.8"/>',
+      keep: '<path class="dsh-marker__mark--solid" d="M36 12 L39 16.5 L36 21 L33 16.5 Z"/>',
+      move: '<path class="dsh-marker__mark" d="M31 17 H40 M37 14 L40 17 L37 20"/>'
+    };
+    var bstripes = status === 'notice'
+      ? '<clipPath id="dsh-cap-clip"><path d="' + CAP + '"/></clipPath>'
+      : '';
+    svg = '<svg class="dsh-marker__shape" viewBox="0 0 72 90" aria-hidden="true">' +
+      '<defs><clipPath id="dsh-beast-avatar"><circle cx="36" cy="46" r="21"/></clipPath>' + bstripes + '</defs>' +
+      '<path class="dsh-marker__stem" d="M36 75 V80"/><circle class="dsh-marker__dot" cx="36" cy="84" r="4"/>' +
+      '<circle class="dsh-marker__halo" cx="36" cy="46" r="29"/>' +
+      '<circle class="dsh-marker__avatar-bg" cx="36" cy="46" r="21"/>' +
+      '<image href="' + dshEscape(o.beastIcon) + '" x="15" y="25" width="42" height="42" clip-path="url(#dsh-beast-avatar)"/>' +
+      '<circle class="dsh-marker__avatar-ring" cx="36" cy="46" r="21"/>' +
+      '<path class="dsh-marker__roof" d="' + CAP + '"/>' +
+      (status === 'notice' ? '<g class="dsh-marker__stripes" clip-path="url(#dsh-cap-clip)"><path d="M8 26 L28 6 M18 28 L38 8 M28 28 L46 10 M38 28 L56 10 M48 28 L62 14"/></g>' : '') +
+      '<path class="dsh-marker__line" d="' + CAP + '"/>' +
+      '<path class="dsh-marker__ridge" d="M10 26 C6.5 26 5 21 4.5 17 M62 26 C65.5 26 67 21 67.5 17"/>' +
+      '<rect class="dsh-marker__plaque" x="28" y="27" width="16" height="7" rx="1"/>' +
+      (bmarks[status] || '') + '</svg>';
+  }
+  var name = o.name ? dshEscape(o.name) + '，' : '';
+  var count = o.count != null ? '<span class="dsh-marker__count" aria-hidden="true">' + dshEscape(o.count) + '</span>' : '';
+  return '<span class="dsh-marker dsh-marker--' + status + (beast ? ' dsh-marker--beast' : '') + (o.selected ? ' is-selected' : '') + '"' +
+    ' role="img" aria-label="' + name + label + (o.count != null ? '，' + dshEscape(o.count) + ' 位守護' : '') + '">' +
+    svg + count + '<span class="dsh-marker__label">' + label + '</span></span>';
+}
+
+function dshMarkerIcon(o) {
+  var kind = o.beastIcon ? 'beast' : 'tree';
+  return L.divIcon({ className: 'dsh-leaflet-icon', html: dshMarkerHtml(o), iconSize: DSH_MARKER.size[kind], iconAnchor: DSH_MARKER.anchor[kind] });
+}
+
+/* 示範：一般樹與神獸各五種狀態 */
+var STATUSES = ['ok', 'watch', 'notice', 'keep', 'move'];
+var COUNTS = [12, 5, 33, 18, 9];
+var BEASTS = [
+  { icon: './assets/character/beasts/xuxugong/healthy-icon.webp', name: '鬚鬚公', count: 128 },
+  { icon: './assets/character/beasts/gadang/healthy-icon.webp', name: '加冬仔', count: 46 },
+  { icon: './assets/character/beasts/queque/healthy-icon.webp', name: '雀雀', count: 64 },
+  { icon: './assets/character/beasts/xuxugong/healthy-icon.webp', name: '鬚鬚公', count: 210 },
+  { icon: './assets/character/beasts/gadang/healthy-icon.webp', name: '加冬仔', count: 21 }
+];
+function fill(id, selected, beast) {
+  document.getElementById(id).innerHTML = STATUSES.map(function (s, i) {
+    var o = beast ? { status: s, beastIcon: BEASTS[i].icon, name: BEASTS[i].name, count: BEASTS[i].count, selected: selected }
+                  : { status: s, count: COUNTS[i], selected: selected };
+    return '<div class="cell">' + dshMarkerHtml(o) + (selected ? '' : '<small>' + DSH_MARKER.labels[s] + '</small>') + '</div>';
+  }).join('');
+}
+fill('regular', false, false); fill('regular-selected', true, false);
+fill('beast', false, true); fill('beast-selected', true, true);
+
+/* Leaflet：不載地圖圖磚，用簡單座標系驗證 iconAnchor */
+if (window.L) {
+  var map = L.map('map', { crs: L.CRS.Simple, minZoom: 0, maxZoom: 2, zoomControl: true, attributionControl: false });
+  map.fitBounds([[0, 0], [100, 300]]);
+  var pts = [
+    { at: [60, 30], o: { status: 'ok', count: 12 } },
+    { at: [40, 75], o: { status: 'watch', count: 5 } },
+    { at: [65, 120], o: { status: 'notice', count: 33 } },
+    { at: [35, 165], o: { status: 'keep', count: 18 } },
+    { at: [60, 205], o: { status: 'move', count: 9 } },
+    { at: [40, 260], o: { status: 'ok', beastIcon: BEASTS[0].icon, name: '鬚鬚公', count: 128 } }
+  ];
+  var current = null;
+  pts.forEach(function (p) {
+    L.circleMarker(p.at, { radius: 9, color: getComputedStyle(document.documentElement).getPropertyValue('--brand').trim(), weight: 2, fill: false, interactive: false }).addTo(map);
+    var m = L.marker(p.at, { icon: dshMarkerIcon(p.o), keyboard: true, title: DSH_MARKER.labels[p.o.status] }).addTo(map);
+    m.on('click', function () {
+      if (current && current !== m) { current.opts.selected = false; current.setIcon(dshMarkerIcon(current.opts)); current.setZIndexOffset(0); }
+      m.opts.selected = !m.opts.selected; m.setIcon(dshMarkerIcon(m.opts)); m.setZIndexOffset(m.opts.selected ? 1000 : 0);
+      current = m.opts.selected ? m : null;
+    });
+    m.opts = Object.assign({}, p.o);
+  });
+}
+</script>
+</body>
+</html>
