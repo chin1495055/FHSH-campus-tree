@@ -1,1 +1,5 @@
 .DS_Store
+
+# 開放資料原始檔（全市資料約 100 MB），不進 repo。
+# 重新下載方式見 scripts/build_data.py 開頭的說明。
+data/source/open-data/

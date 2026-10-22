@@ -1,0 +1,69 @@
+{
+  "meta": {
+    "dataType": "模擬資料",
+    "note": "樹號、樹種、位置是真實開放資料；神獸名字、個性、故事、狀態、元氣值、守護人數都是團隊創作或模擬。角色設定見 docs/design/神獸角色設定.md。",
+    "statusValues": "normal 正常｜watch 需關注｜notice 公示中｜keep 保留｜transplant 移植"
+  },
+  "beasts": [
+    {
+      "treeId": "JS0155103034",
+      "slug": "xuxugong",
+      "name": "鬚鬚公",
+      "species": "榕樹",
+      "rarity": "傳說",
+      "personality": "慢條斯理、愛講古，記得整條街幾十年來發生的事。長輩們最喜歡在它底下下棋聊天。",
+      "catchphrase": "慢慢來，樹仔是一年一年大的。",
+      "story": "社區還是一片稻田的時候它就在這裡了。附近的孩子都給它做過契子，每年有人來向它報告考試成績。（創作故事）",
+      "funFact": "榕樹的氣根垂到地面後會變粗，變成支撐的「柱子」，所以一棵老榕樹可能看起來像一片小樹林。",
+      "status": "notice",
+      "vitality": 82,
+      "guardians": { "local": 32, "remote": 96 },
+      "images": {
+        "healthy": "design-system/assets/character/beasts/xuxugong/healthy.webp",
+        "sad": "design-system/assets/character/beasts/xuxugong/sad.webp",
+        "icon": "design-system/assets/character/beasts/xuxugong/healthy-icon.webp"
+      },
+      "demoRole": "Demo 主角：被公告移除 → 守護者發聲"
+    },
+    {
+      "treeId": "JS0155100001",
+      "slug": "gadang",
+      "name": "加冬仔",
+      "species": "茄苳",
+      "rarity": "稀有",
+      "personality": "熱心、愛照顧人，是社區的大姊頭。看到有人經過就想招呼對方吃飯。",
+      "catchphrase": "呷飽未？",
+      "story": "以前的人說茄苳很「好養」，老一輩會用茄苳葉燉雞。它最喜歡聽大家講家裡的事。（創作故事）",
+      "funFact": "茄苳的一片葉子由三片小葉組成，叫做三出複葉。",
+      "status": "normal",
+      "vitality": 90,
+      "guardians": { "local": 18, "remote": 41 },
+      "images": {
+        "healthy": "design-system/assets/character/beasts/gadang/healthy.webp",
+        "sad": "design-system/assets/character/beasts/gadang/sad.webp",
+        "icon": "design-system/assets/character/beasts/gadang/healthy-icon.webp"
+      },
+      "demoRole": "元氣滿滿的對照組"
+    },
+    {
+      "treeId": "JS0155503095",
+      "slug": "queque",
+      "name": "雀雀",
+      "species": "雀榕",
+      "rarity": "稀有",
+      "personality": "熱鬧、好客、交遊廣闊，是社區的交際花。最喜歡介紹守護者互相認識。",
+      "catchphrase": "來來來，我介紹朋友給你認識！",
+      "story": "附近的白頭翁、綠繡眼都是它的老朋友，每到結果的季節，樹上熱鬧得像夜市。（創作故事）",
+      "funFact": "雀榕的種子被鳥吃下後，常常在別的樹或牆縫裡發芽，所以有時候會在奇怪的地方看到雀榕長出來。",
+      "status": "watch",
+      "vitality": 55,
+      "guardians": { "local": 12, "remote": 35 },
+      "images": {
+        "healthy": "design-system/assets/character/beasts/queque/healthy.webp",
+        "sad": "design-system/assets/character/beasts/queque/sad.webp",
+        "icon": "design-system/assets/character/beasts/queque/sad-icon.webp"
+      },
+      "demoRole": "回報出現病徵、需要關心的情境"
+    }
+  ]
+}

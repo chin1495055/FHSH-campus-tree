@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "dataType": "模擬資料",
+    "note": "過去的回報紀錄是虛構的，暱稱都是假的，照片先不放。checks 對應回報表單的健康檢查清單，true 代表有看到。",
+    "checkItems": {
+      "rootBulge": "根盤隆起",
+      "trunkNetPattern": "樹幹有網狀格紋",
+      "sparseLeaves": "枝葉稀疏",
+      "constructionNotice": "有施工公告",
+      "pitFilled": "樹穴被填"
+    }
+  },
+  "reports": [
+    {
+      "id": "R-MOCK-001",
+      "treeId": "JS0155103034",
+      "date": "2026-09-14",
+      "nickname": "早起散步的松鼠（模擬）",
+      "checks": { "rootBulge": false, "trunkNetPattern": false, "sparseLeaves": false, "constructionNotice": false, "pitFilled": false },
+      "note": "樹下又有阿伯在下棋，氣根長得很好。"
+    },
+    {
+      "id": "R-MOCK-002",
+      "treeId": "JS0155103034",
+      "date": "2026-10-05",
+      "nickname": "華山喝咖啡的人（模擬）",
+      "checks": { "rootBulge": false, "trunkNetPattern": false, "sparseLeaves": false, "constructionNotice": false, "pitFilled": false },
+      "note": "颱風過後掉了一些小枝，主幹看起來沒事。"
+    },
+    {
+      "id": "R-MOCK-003",
+      "treeId": "JS0155103034",
+      "date": "2026-10-20",
+      "nickname": "早起散步的松鼠（模擬）",
+      "checks": { "rootBulge": false, "trunkNetPattern": false, "sparseLeaves": false, "constructionNotice": true, "pitFilled": false },
+      "note": "樹旁邊貼了施工公告，寫說要移除，大家快來看。"
+    },
+    {
+      "id": "R-MOCK-004",
+      "treeId": "JS0155100001",
+      "date": "2026-09-28",
+      "nickname": "帶狗散步的鄰居（模擬）",
+      "checks": { "rootBulge": false, "trunkNetPattern": false, "sparseLeaves": false, "constructionNotice": false, "pitFilled": false },
+      "note": "開始結小果子了。"
+    },
+    {
+      "id": "R-MOCK-005",
+      "treeId": "JS0155100001",
+      "date": "2026-10-18",
+      "nickname": "樹下吃便當的上班族（模擬）",
+      "checks": { "rootBulge": false, "trunkNetPattern": false, "sparseLeaves": false, "constructionNotice": false, "pitFilled": false },
+      "note": "樹皮剝落是茄苳本來就會這樣，不是生病。"
+    },
+    {
+      "id": "R-MOCK-006",
+      "treeId": "JS0155503095",
+      "date": "2026-09-20",
+      "nickname": "賞鳥的小學生家長（模擬）",
+      "checks": { "rootBulge": false, "trunkNetPattern": false, "sparseLeaves": false, "constructionNotice": false, "pitFilled": false },
+      "note": "今天數到五隻白頭翁。"
+    },
+    {
+      "id": "R-MOCK-007",
+      "treeId": "JS0155503095",
+      "date": "2026-10-16",
+      "nickname": "賞鳥的小學生家長（模擬）",
+      "checks": { "rootBulge": true, "trunkNetPattern": false, "sparseLeaves": true, "constructionNotice": false, "pitFilled": false },
+      "note": "根附近的地面好像拱起來了，葉子也比上個月稀，不確定是不是換葉。"
+    }
+  ]
+}
