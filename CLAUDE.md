@@ -234,11 +234,11 @@
   - **Qmoa**：主要投入產品構想、背景整理與文件。
   - **Saori 與 Qmoa**：以夥伴方式合作，依專長與認領項目分工；產品方向、技術方案和工作流程透過討論共同確認。Claude 協助任一夥伴時，git 操作與程式細節都要清楚說明，並提醒必要注意事項。
 - 團隊用 GitHub 同步，remote 是 `innerwork-saori/2026-debugWithPuma`。動手前先 `git pull`，改完再 push，避免和隊友衝突。
-- **push 後發 Discord 更新摘要**：
-  - push 成功後，Claude 把這次的改動整理成 3～5 行白話摘要，先給本人看，**本人確認後才發送**到團隊 Discord 頻道。
-  - 摘要開頭寫明是誰的更新，例如「🌳 Qmoa 更新｜主題」，最後提醒對方 `git pull`。
+- **push 後的 Discord 通知**：
+  - **Saori 已設定 GitHub Action（`.github/workflows/main.yml`）**：每次 push 都會自動把 commit 訊息發到團隊 Discord 頻道，所以 commit 訊息要寫清楚，它就是隊友看到的通知。
+  - push 後 Claude **不用主動整理摘要、也不用問要不要發**。只有本人要求時，才把改動整理成 3～5 行白話摘要，先給本人看，**本人確認後才發送**。
+  - 手動摘要開頭寫明是誰的更新，例如「🌳 Qmoa 更新｜主題」，最後提醒對方 `git pull`。
   - 提到的檔案要附上可以點的 GitHub 連結，格式是 `[檔名](https://github.com/innerwork-saori/2026-debugWithPuma/blob/main/路徑)`。路徑裡的中文要先轉成網址編碼（percent-encoding），不然 Discord 的連結會斷掉。
-  - **Saori 已設定 GitHub Action（`.github/workflows/main.yml`）**：每次 push 都會自動把 commit 訊息發到 Discord，所以 commit 訊息要寫清楚。手動摘要只用在需要額外說明的重要改動。
   - 兩人共用同一個 webhook，發到同一個頻道，所以摘要開頭一定要寫是誰的更新。網址由 Qmoa 私訊給 Saori，各自存在自己電腦的 `~/.config/debugwithpuma/discord_webhook`（權限設 600），用 POST 送出 `{"content": "..."}`，成功會回傳 204。
   - **webhook 網址等於密鑰，絕對不要寫進 repo、commit、文件或頻道訊息**。外流的話，到 Discord 頻道設定的「整合」→「Webhook」刪掉重建。
   - 檔案不存在時，不要自己找網址或猜網址，請本人提供。
