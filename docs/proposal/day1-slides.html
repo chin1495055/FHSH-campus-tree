@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>大樹神獸 Day 1 提案</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap">
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<link rel="stylesheet" href="../../design-system/components.css">
+<style>
+  /* 簡報畫布固定 1920×1080，依視窗等比縮放 */
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--ink-900); }
+  body { font-family: var(--font-sans); color: var(--text); }
+  .stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: center; }
+  .slide { position: absolute; inset: 0; display: none; box-sizing: border-box; padding: 96px 120px 120px; background: var(--surface); overflow: hidden; }
+  .slide.is-active { display: block; animation: slide-in .6s ease both; }
+  .slide.is-back { animation-name: slide-in-back; }
+
+  /* 字級（畫布 px） */
+  .serif { font-family: var(--font-display); font-weight: 900; }
+  h1, h2, h3, p { margin: 0; }
+  .kicker { display: flex; align-items: center; gap: 24px; margin-bottom: 48px; }
+  .kicker .dsh-plaque { font-size: 44px; line-height: 56px; padding: 12px 40px; }
+  .lead { font-size: 40px; line-height: 60px; font-weight: 500; color: var(--text-muted); }
+  .muted { color: var(--text-muted); }
+
+  /* 頁尾 */
+  .foot { position: absolute; left: 120px; right: 120px; bottom: 40px; display: flex; align-items: center; justify-content: space-between; font-size: 26px; line-height: 36px; font-weight: 700; color: var(--text-muted); }
+  .foot__brand { display: flex; align-items: center; gap: 16px; }
+  .foot__brand img { width: 44px; height: 44px; }
+  .foot__num { font-family: var(--font-display); font-variant-numeric: tabular-nums; }
+  .slide--dark .foot { color: var(--green-100); }
+
+
+  /* 卡片 */
+  .panel { background: var(--surface-raised); border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-md); padding: 40px 48px; box-sizing: border-box; }
+  .num { display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 50%; background: var(--brand); color: var(--ink-50); border: var(--stroke-ui) solid var(--outline); font-family: var(--font-display); font-weight: 900; font-size: 36px; flex: none; }
+  .panel__head { display: flex; align-items: center; gap: 20px; margin-bottom: 24px; }
+  .panel__head h3 { font-family: var(--font-display); font-weight: 900; font-size: 52px; line-height: 64px; }
+  .panel > p, .s6__guard-text > p, .s7__worship > p { font-size: 36px; line-height: 54px; }
+
+  /* ── 動態效果：進到該頁自動播放，--d 控制延遲 ── */
+  .a { animation-duration: .7s; animation-timing-function: cubic-bezier(.2,.8,.2,1); animation-fill-mode: both; animation-delay: var(--d, 0s); animation-play-state: paused; }
+  .slide.is-active .a { animation-play-state: running; }
+  .a-up { animation-name: up; }
+  .a-left { animation-name: from-left; }
+  .a-right { animation-name: from-right; }
+  .a-fade { animation-name: fade; }
+  .a-pop { animation-name: pop; animation-duration: .8s; }
+  .a-drop { animation-name: drop; animation-duration: .8s; }
+  .a-pin { animation-name: pin; animation-duration: .9s; }
+  .a-flip { animation-name: flip; animation-duration: .8s; }
+  .char { display: inline-block; opacity: 0; }
+  .slide.is-active .char { animation: char .5s ease both; animation-delay: var(--d, 0s); }
+
+  @keyframes slide-in { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
+  @keyframes slide-in-back { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: none; } }
+  @keyframes up { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: none; } }
+  @keyframes from-left { from { opacity: 0; transform: translateX(-80px); } to { opacity: 1; transform: none; } }
+  @keyframes from-right { from { opacity: 0; transform: translateX(80px); } to { opacity: 1; transform: none; } }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes pop { 0% { opacity: 0; transform: translateY(80px) scale(.6); } 60% { opacity: 1; transform: translateY(-16px) scale(1.06); } 100% { transform: none; } }
+  @keyframes drop { 0% { opacity: 0; transform: translateY(-120px); } 70% { opacity: 1; transform: translateY(10px); } 100% { transform: none; } }
+  @keyframes pin { 0% { opacity: 0; transform: translateY(-40px) rotate(-6deg) scale(1.1); } 60% { opacity: 1; transform: rotate(2deg); } 100% { transform: rotate(-1deg); } }
+  @keyframes flip { from { opacity: 0; transform: perspective(1200px) rotateY(-30deg) translateX(-40px); } to { opacity: 1; transform: none; } }
+  @keyframes char { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+  @keyframes sway { 0%, 100% { transform: rotate(-1deg); } 50% { transform: rotate(1.2deg); } }
+  @keyframes flutter { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-8deg); } }
+  @keyframes glow { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes press { 0%, 100% { transform: none; } 50% { transform: scale(.94); } }
+
+  /* ── 1 開場 ── */
+  .slide.s1.is-active { display: grid; grid-template-columns: 1fr 760px; }
+  .s1__text { display: flex; flex-direction: column; justify-content: center; gap: 48px; padding-bottom: 40px; }
+  .s1__logo { width: 520px; }
+  .s1 h1 { font-family: var(--font-display); font-weight: 900; font-size: 120px; line-height: 150px; letter-spacing: .04em; }
+  .s1 h1 em { font-style: normal; color: var(--brand-text); }
+  .s1__sub { font-size: 38px; line-height: 56px; font-weight: 700; color: var(--text-muted); }
+  .s1__art { position: relative; display: flex; align-items: flex-end; justify-content: center; margin: -96px -120px -120px 0; background: var(--surface-sunken); border-left: var(--stroke-hero) solid var(--outline); }
+  .s1__halo { position: absolute; width: 600px; height: 600px; top: 150px; border-radius: 50%; background: var(--gold-100); border: var(--stroke-bold) solid var(--outline); }
+  .s1__beast { position: relative; height: 860px; margin-bottom: 40px; }
+  .slide.is-active .s1__bob { animation: bob 3.2s ease-in-out 1.2s infinite; }
+
+  /* ── 2 動機 ── */
+  .s2__cases { display: flex; flex-direction: column; gap: 20px; margin-bottom: 72px; }
+  .s2__cases p { font-size: 44px; line-height: 64px; color: var(--text-muted); font-weight: 500; padding-left: 32px; border-left: 8px solid var(--line); }
+  .s2__quote { font-family: var(--font-display); font-weight: 900; font-size: 120px; line-height: 160px; }
+  .s2__quote span { display: block; }
+  .s2__quote .hl { color: var(--brand-text); }
+  .s2__then { margin-top: 64px; font-size: 40px; line-height: 60px; font-weight: 700; }
+  .s2__then b { background: var(--green-100); padding: 0 12px; }
+
+  /* ── 3 為什麼從市民 ── */
+  .s3 { display: grid; grid-template-columns: 1fr 660px; gap: 64px; }
+  .s3__reasons { display: flex; flex-direction: column; gap: 28px; }
+  .s3__reasons .panel { display: flex; align-items: center; gap: 28px; padding: 32px 40px; }
+  .s3__reasons p { font-size: 42px; line-height: 58px; font-weight: 700; }
+  .s3__culture { background: var(--brand-strong); color: var(--ink-50); border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-md); padding: 48px; display: flex; flex-direction: column; gap: 36px; }
+  .s3__culture h3 { font-family: var(--font-display); font-weight: 900; font-size: 52px; line-height: 64px; color: var(--honor-on-dark); }
+  .s3__row { display: flex; align-items: center; gap: 28px; font-size: 44px; line-height: 56px; font-weight: 700; }
+  .s3__row img { width: 80px; height: 80px; background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm); padding: 8px; box-sizing: border-box; }
+  .slide.is-active .s3__cloth { animation: flutter 1.6s ease-in-out 1.6s infinite; transform-origin: 50% 20%; }
+  .s3__eq { margin-top: auto; padding-top: 28px; border-top: var(--stroke-fine) dashed var(--green-300); font-family: var(--font-display); font-weight: 900; font-size: 48px; line-height: 60px; color: var(--honor-on-dark); }
+
+  /* ── 4 大樹神獸 ── */
+  .s4__intro { font-size: 44px; line-height: 64px; font-weight: 700; margin: -12px 0 24px; }
+  .s4__row { display: flex; justify-content: space-around; align-items: flex-end; height: 640px; }
+  .s4__beast { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .s4__beast img { height: 520px; }
+  .s4__beast .dsh-plaque { font-size: 40px; line-height: 52px; margin-top: -28px; position: relative; }
+  .s4__beast small { font-size: 32px; line-height: 44px; font-weight: 700; color: var(--text-muted); margin-top: 12px; }
+  .s4__note { position: absolute; right: 120px; top: 120px; font-size: 26px; color: var(--text-muted); }
+
+  /* ── 5 認識／收集 ── */
+  .s5 { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+  .s5 .panel { height: 720px; display: flex; flex-direction: column; }
+  .s5__story { display: flex; align-items: center; gap: 32px; margin-top: auto; }
+  .s5__story img { width: 200px; height: 200px; border-radius: 50%; border: var(--stroke-bold) solid var(--outline); background: var(--gold-100); flex: none; }
+  .s5__bubble { position: relative; background: var(--green-50); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md); padding: 24px 32px; font-family: var(--font-display); font-weight: 900; font-size: 40px; line-height: 56px; }
+  .s5__bubble small { display: block; font-family: var(--font-sans); font-size: 26px; line-height: 36px; font-weight: 700; color: var(--text-muted); margin-top: 8px; }
+  .s5__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: auto; }
+  .s5__slot { aspect-ratio: 1; border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md); background: var(--surface-sunken); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .s5__slot img { width: 100%; height: 100%; object-fit: cover; }
+  .s5__slot--empty { border-style: dashed; border-color: var(--ink-400); }
+  .s5__slot--empty img { width: 45%; height: 45%; opacity: .35; object-fit: contain; }
+
+  /* ── 6 守護／回報 ── */
+  .s6 { display: grid; grid-template-columns: 1.12fr .88fr; gap: 48px; }
+  .s6 .panel { height: 760px; display: flex; flex-direction: column; }
+  .s6__guard { display: grid; grid-template-columns: 1fr 360px; gap: 32px; flex: 1; min-height: 0; }
+  .s6__guard-text { display: flex; flex-direction: column; gap: 28px; }
+  .s6__modes { display: flex; flex-direction: column; gap: 16px; }
+  .s6__mode { display: flex; align-items: center; gap: 16px; font-size: 32px; line-height: 44px; font-weight: 700; }
+  .s6__mode b { padding: 4px 16px; border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm); background: var(--green-50); color: var(--brand-text); font-weight: 900; white-space: nowrap; }
+  .s6__btn { zoom: 1.7; align-self: flex-start; margin-top: auto; }
+  .slide.is-active .s6__btn { animation: press .4s ease 1.4s both; }
+  .s6__card { width: 360px; height: 449px; align-self: end; border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm); }
+  .s6__check { zoom: 1.4; }
+  .s6__check .dsh-check__item { cursor: default; }
+  .s6__notice { zoom: 1.4; margin-top: auto; }
+  .s6__notice img { width: 28px; height: 28px; flex: none; }
+
+  /* ── 7 參拜／社區 ── */
+  .s7 { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+  .s7 .panel { height: 760px; display: flex; flex-direction: column; }
+  .s7__worship { display: flex; align-items: center; gap: 40px; margin: 8px 0 32px; }
+  .s7__lamp { position: relative; width: 200px; height: 200px; flex: none; display: flex; align-items: center; justify-content: center; }
+  .s7__halo { position: absolute; inset: 0; border-radius: 50%; background: var(--gold-200); border: var(--stroke-ui) solid var(--outline); }
+  .slide.is-active .s7__halo { animation: glow 1.4s ease .8s both; }
+  .s7__lamp img { position: relative; width: 128px; height: 128px; }
+  .s7__dont { margin-top: auto; padding: 28px 32px; background: var(--green-50); border: var(--stroke-fine) solid var(--green-600); border-radius: var(--radius-md); }
+  .s7__dont h4 { margin: 0 0 12px; font-size: 32px; line-height: 44px; font-weight: 900; color: var(--brand-text); }
+  .s7__dont ul { margin: 0; padding-left: 40px; font-size: 32px; line-height: 50px; }
+  .s7__event { zoom: 1.5; margin: 0 0 24px; transform-origin: 50% 0; }
+  .slide.is-active .s7__sway { animation: sway 3s ease-in-out 1.6s infinite; transform-origin: 50% 0; }
+  .s7__goal { margin-top: auto; font-size: 34px; line-height: 50px; font-weight: 700; }
+  .s7__goal b { color: var(--brand-text); }
+
+  /* ── 8 找夥伴 ── */
+  .slide--dark { background: var(--green-700) url("../../design-system/assets/patterns/cloud.svg"); background-size: 96px 60px; color: var(--ink-50); }
+  .s8 { display: flex; flex-direction: column; align-items: center; text-align: center; height: 100%; }
+  .s8 .dsh-plaque { font-size: 64px; line-height: 80px; padding: 20px 64px; }
+  .s8__list { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin: 56px 0 0; max-width: 1500px; }
+  .s8__list span { padding: 14px 32px; background: var(--surface-raised); color: var(--text); border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-sm); font-size: 40px; line-height: 52px; font-weight: 900; }
+  .s8__close { margin-top: auto; padding: 40px 64px; background: var(--brand-strong); border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-md); }
+  .s8__close p { font-family: var(--font-display); font-weight: 900; font-size: 60px; line-height: 84px; color: var(--honor-on-dark); }
+  .s8__close p + p { font-family: var(--font-sans); font-size: 32px; line-height: 48px; font-weight: 700; color: var(--green-100); margin-top: 16px; }
+
+  /* ── 計時器與講者備註 ── */
+  .timer { position: fixed; top: 16px; right: 16px; z-index: 10; display: none; padding: 8px 20px; background: var(--ink-900); color: var(--ink-50); border: 3px solid var(--ink-50); border-radius: var(--radius-sm); font: 900 32px/40px var(--font-sans); font-variant-numeric: tabular-nums; }
+  .timer.is-on { display: block; }
+  .timer.is-warn { background: var(--state-notice); color: var(--ink-900); }
+  .timer.is-over { background: var(--action); }
+  .notes { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 10; display: none; max-height: 40vh; overflow: auto; padding: 16px 24px; background: var(--ink-900); color: var(--ink-50); border: 3px solid var(--ink-50); border-radius: var(--radius-md); font-size: 22px; line-height: 36px; }
+  .notes.is-on { display: block; }
+  .notes small { display: block; color: var(--ink-400); font-size: 16px; line-height: 24px; margin-bottom: 4px; }
+  .help { position: fixed; left: 16px; top: 16px; z-index: 10; color: var(--ink-500); font-size: 14px; opacity: 0; transition: opacity .3s; }
+  body:hover .help { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide.is-active, .a, .char, .slide.is-active .char, [class*="s1__bob"], .s3__cloth, .s7__halo, .s7__sway, .s6__btn { animation: none !important; opacity: 1 !important; }
+  }
+</style>
+</head>
+<body>
+<div class="help">← → 換頁　F 全螢幕　T 計時　R 重設計時　N 講者備註</div>
+<div class="timer" id="timer">3:00</div>
+<div class="notes" id="notes"></div>
+
+<main class="stage" id="stage">
+
+  <!-- 1 開場 -->
+  <section class="slide s1" data-notes="大家好，我們是 Qmoa 和 Saori，隊名 AI 方舟計畫，選的是題目一。我們的作品叫大樹神獸，只想做一件事：讓台北每一棵樹，都有一群鄰居。" data-sec="15">
+    <div class="s1__text">
+      <img class="s1__logo a a-fade" src="../../design-system/assets/logos/logo-horizontal.svg" alt="大樹神獸">
+      <h1 class="type">讓每棵樹<br><em>都有一群鄰居</em></h1>
+      <p class="s1__sub a a-up" style="--d: 1.6s">題目 #1 把三千棵樹種回來<br>隊伍：AI 方舟計畫</p>
+    </div>
+    <div class="s1__art">
+      <div class="s1__halo a a-fade" style="--d: .2s"></div>
+      <div class="a a-up" style="--d: .3s"><img class="s1__beast s1__bob" src="../../design-system/assets/character/beasts/xuxugong/healthy-cutout.webp" alt="鬚鬚公"></div>
+    </div>
+  </section>
+
+  <!-- 2 動機 -->
+  <section class="slide" data-notes="為什麼做這個？東門的老茄苳原本要移植，卻被誤砍；美崙公園的紀念榕移除了半年才被發現。不是沒人在乎，是沒人知道。地圖和數據都有人做了，我們想處理的是：樹出事，怎麼讓人早點知道。" data-sec="25">
+    <div class="kicker a a-fade"><span class="dsh-plaque">我們的動機</span></div>
+    <div class="s2__cases">
+      <p class="a a-left" style="--d: .3s">東門的老茄苳，原本要移植，卻被誤砍。</p>
+      <p class="a a-left" style="--d: .6s">美崙公園的紀念榕，移除半年後才被發現。</p>
+    </div>
+    <p class="s2__quote">
+      <span class="a a-up" style="--d: 1.1s">不是沒人在乎，</span>
+      <span class="hl a a-up" style="--d: 1.9s">是沒人知道。</span>
+    </p>
+    <p class="s2__then a a-fade" style="--d: 2.6s">地圖、補植、數據都有人做了。我們想處理的是：<b>樹出事，怎麼讓人早點知道</b>。</p>
+  </section>
+
+  <!-- 3 為什麼從市民 -->
+  <section class="slide" data-notes="為什麼從市民做起？每天經過樹的是市民。政府定期巡視，中間的空檔市民天天看得到。而且台灣人本來就敬樹：叫它大樹公、幫它綁紅布、讓小孩給它做契子，這就是最早的認養。" data-sec="25">
+    <div class="kicker a a-fade"><span class="dsh-plaque">為什麼從市民做起</span></div>
+    <div class="s3">
+      <div class="s3__reasons">
+        <div class="panel a a-left" style="--d: .2s"><span class="num">1</span><p>每天經過樹的，是住在附近的市民</p></div>
+        <div class="panel a a-left" style="--d: .5s"><span class="num">2</span><p>巡視之間有空檔，鄰居天天看得到</p></div>
+        <div class="panel a a-left" style="--d: .8s"><span class="num">3</span><p>與其砍樹當下才攔，不如平常就有人關心</p></div>
+      </div>
+      <div class="s3__culture a a-right" style="--d: 1.1s">
+        <h3>台灣人本來就敬樹</h3>
+        <div class="s3__row a a-up" style="--d: 1.4s"><img src="../../design-system/assets/icons/tree.svg" alt="">尊稱「大樹公」</div>
+        <div class="s3__row a a-up" style="--d: 1.6s"><img class="s3__cloth" src="../../design-system/assets/icons/red-cloth.svg" alt="">幫它綁紅布</div>
+        <div class="s3__row a a-up" style="--d: 1.8s"><img src="../../design-system/assets/icons/guard.svg" alt="">讓小孩給它做契子</div>
+        <p class="s3__eq a a-fade" style="--d: 2.2s">＝ 最早的認養</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 大樹神獸 -->
+  <section class="slide" data-notes="所以我們讓老樹化身大樹神獸，像榕樹變成的鬚鬚公、茄苳變成的加冬仔，有名字、有個性，也有一群信眾守著。" data-sec="15">
+    <div class="kicker a a-fade"><span class="dsh-plaque">大樹神獸</span></div>
+    <p class="s4__intro a a-fade" style="--d: .2s">老樹化身神獸：有名字、有個性，也有一群信眾守著。</p>
+    <div class="s4__row">
+      <div class="s4__beast a a-pop" style="--d: .5s"><img src="../../design-system/assets/character/beasts/xuxugong/healthy-cutout.webp" alt="鬚鬚公"><span class="dsh-plaque">鬚鬚公</span><small>榕樹</small></div>
+      <div class="s4__beast a a-pop" style="--d: .8s"><img src="../../design-system/assets/character/beasts/gadang/healthy-cutout.webp" alt="加冬仔"><span class="dsh-plaque">加冬仔</span><small>茄苳</small></div>
+      <div class="s4__beast a a-pop" style="--d: 1.1s"><img src="../../design-system/assets/character/beasts/queque/healthy-cutout.webp" alt="雀雀"><span class="dsh-plaque">雀雀</span><small>雀榕</small></div>
+    </div>
+    <p class="s4__note">角色名字與故事為團隊創作</p>
+  </section>
+
+  <!-- 5 認識／收集 -->
+  <section class="slide" data-notes="第一，認識在地故事：每隻神獸都有樹種知識和地方的故事，長輩說、小孩記。第二，收集圖鑑：散步、通勤就能收集不同的樹，爸媽可以帶小孩一起找。" data-sec="25">
+    <div class="kicker a a-fade"><span class="dsh-plaque">認識它、收集它</span></div>
+    <div class="s5">
+      <div class="panel a a-flip" style="--d: .2s">
+        <div class="panel__head"><span class="num">1</span><h3>認識在地故事</h3></div>
+        <p>每隻神獸都有樹種知識和這條街的故事。長輩說故事，小孩記下來，變成神獸的來歷。</p>
+        <div class="s5__story a a-up" style="--d: 1s">
+          <img src="../../design-system/assets/character/beasts/xuxugong/healthy-icon.webp" alt="鬚鬚公">
+          <div class="s5__bubble">「慢慢來，樹仔是<br>一年一年大的。」<small>鬚鬚公的口頭禪</small></div>
+        </div>
+      </div>
+      <div class="panel a a-flip" style="--d: .5s">
+        <div class="panel__head"><span class="num">2</span><h3>收集圖鑑</h3></div>
+        <p>散步、通勤就能收集不同樹種。爸媽帶小孩一起找樹、幫樹取名字。</p>
+        <div class="s5__grid">
+          <div class="s5__slot"><img class="a a-pop" style="--d: 1.2s" src="../../design-system/assets/character/beasts/xuxugong/healthy-icon.webp" alt="鬚鬚公"></div>
+          <div class="s5__slot"><img class="a a-pop" style="--d: 1.5s" src="../../design-system/assets/character/beasts/gadang/healthy-icon.webp" alt="加冬仔"></div>
+          <div class="s5__slot"><img class="a a-pop" style="--d: 1.8s" src="../../design-system/assets/character/beasts/queque/healthy-icon.webp" alt="雀雀"></div>
+          <div class="s5__slot s5__slot--empty"><img src="../../design-system/assets/icons/tree.svg" alt=""></div>
+          <div class="s5__slot s5__slot--empty"><img src="../../design-system/assets/icons/tree.svg" alt=""></div>
+          <div class="s5__slot s5__slot--empty"><img src="../../design-system/assets/icons/tree.svg" alt=""></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 守護／回報 -->
+  <section class="slide" data-notes="第三，集體守護：掃樹上的 QR code 按下守護，每棵樹都看得到有幾位鄰居守著，外縣市也能遠端關注，還能分享守護籤找朋友一起來。第四，回報：經過時照清單看看樹，發現病徵或施工就回報。樹被公告移除，所有守護者都會收到通知。" data-sec="25">
+    <div class="kicker a a-fade"><span class="dsh-plaque">守護它、回報它</span></div>
+    <div class="s6">
+      <div class="panel a a-flip" style="--d: .2s">
+        <div class="panel__head"><span class="num">3</span><h3>集體守護（認養）</h3></div>
+        <div class="s6__guard">
+          <div class="s6__guard-text">
+            <p>掃樹上的 QR code，按下守護。每棵樹都看得到有幾位鄰居守著。</p>
+            <div class="s6__modes">
+              <div class="s6__mode a a-up" style="--d: .7s"><b>在地守護</b>到現場回報</div>
+              <div class="s6__mode a a-up" style="--d: .9s"><b>遠端關注</b>外縣市也能參與</div>
+            </div>
+            <button class="dsh-btn dsh-btn--primary s6__btn a a-up" style="--d: 1.1s" type="button" tabindex="-1">守護它</button>
+          </div>
+          <img class="s6__card a a-pin" style="--d: 1.8s" src="assets/share-card-xuxugong.webp" alt="守護籤分享卡：我在守護它，129 位鄰居守護">
+        </div>
+      </div>
+      <div class="panel a a-flip" style="--d: .5s">
+        <div class="panel__head"><span class="num">4</span><h3>回報機制</h3></div>
+        <form class="dsh-check s6__check" onsubmit="return false">
+          <p class="dsh-check__title">今天看到的樣子</p>
+          <label class="dsh-check__item"><input type="checkbox" class="dsh-check__box" tabindex="-1"><span class="dsh-check__q">根盤平平的，沒有隆起</span></label>
+          <label class="dsh-check__item"><input type="checkbox" class="dsh-check__box" tabindex="-1"><span class="dsh-check__q">樹幹沒有網狀紋路</span></label>
+          <label class="dsh-check__item"><input type="checkbox" class="dsh-check__box" tabindex="-1"><span class="dsh-check__q">枝葉茂密，沒有變稀疏</span></label>
+          <label class="dsh-check__item"><input type="checkbox" class="dsh-check__box" tabindex="-1"><span class="dsh-check__q">樹旁沒有施工，樹穴沒被填</span></label>
+        </form>
+        <div class="dsh-notice s6__notice a a-up" style="--d: 3s" role="status">
+          <img src="../../design-system/assets/icons/notice.svg" alt="">
+          <div><p class="dsh-notice__title">公示中：預計移除</p><p class="dsh-notice__body">所有守護者都會收到通知</p></div>
+          <p class="dsh-notice__days">12<small>天</small></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 參拜／社區 -->
+  <section class="slide" data-notes="第五，參拜：在遊戲裡參拜許願，順便學正確敬樹，不釘樹、不在樹根燒金紙。第六，社區活動：樹下再次成為鄰居的聚會所，一起巡樹、幫大樹公過生日，比的是一起，不是排名。" data-sec="25">
+    <div class="kicker a a-fade"><span class="dsh-plaque">一起參拜、一起聚會</span></div>
+    <div class="s7">
+      <div class="panel a a-flip" style="--d: .2s">
+        <div class="panel__head"><span class="num">5</span><h3>參拜</h3></div>
+        <div class="s7__worship">
+          <div class="s7__lamp"><span class="s7__halo"></span><img src="../../design-system/assets/icons/lantern.svg" alt=""></div>
+          <p>參拜、許願、結緣，像去廟裡一樣有儀式感。</p>
+        </div>
+        <div class="s7__dont a a-up" style="--d: 1.6s">
+          <h4>順便學正確敬樹</h4>
+          <ul><li>不在樹幹上釘東西、纏鐵絲</li><li>不在樹根旁燒香、燒金紙</li></ul>
+        </div>
+      </div>
+      <div class="panel a a-flip" style="--d: .5s">
+        <div class="panel__head"><span class="num">6</span><h3>社區活動</h3></div>
+        <div class="s7__event a a-pin" style="--d: 1.1s">
+          <article class="dsh-event dsh-event--canopy s7__sway">
+            <div class="dsh-event__date"><span class="dsh-event__month">11 月</span><span class="dsh-event__day">8</span><span class="dsh-event__week">週六</span></div>
+            <div class="dsh-event__body">
+              <span class="dsh-event__label">市民活動</span>
+              <h4 class="dsh-event__title">鬚鬚公生日會</h4>
+              <p class="dsh-event__meta"><b>地點</b>鬚鬚公樹下</p>
+              <p class="dsh-event__desc">帶一個老故事，一起幫大樹公過生日。</p>
+            </div>
+            <div class="dsh-event__foot">
+              <span class="dsh-event__count"><span class="dsh-event__dots"><span></span><span></span><span></span></span>12 人想參加</span>
+              <span class="dsh-btn dsh-btn--secondary">我想參加</span>
+            </div>
+          </article>
+        </div>
+        <p class="s7__goal a a-up" style="--d: 1.8s">樹下再次成為鄰居的聚會所。<br>以里為單位：<b>比的是一起，不是排名</b>。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 找夥伴 -->
+  <section class="slide slide--dark" data-notes="我們在找夥伴：視覺、遊戲、體驗設計，和熟悉移樹流程的人。新加坡讓每棵樹有身分證，我們想讓每棵樹，都有一群鄰居。謝謝！" data-sec="15">
+    <div class="s8">
+      <span class="dsh-plaque a a-drop">我們在找夥伴</span>
+      <div class="s8__list">
+        <span class="a a-up" style="--d: .6s">視覺設計（神獸插畫、3D）</span>
+        <span class="a a-up" style="--d: .8s">遊戲規劃與設計</span>
+        <span class="a a-up" style="--d: 1s">體驗設計</span>
+        <span class="a a-up" style="--d: 1.2s">熟悉移樹、施工流程的人</span>
+      </div>
+      <div class="s8__close a a-up" style="--d: 1.6s">
+        <p class="type" data-delay="2">新加坡讓每棵樹有身分證，<br>我們讓每棵樹都有一群鄰居。</p>
+        <p>聯絡：Discord（待補）</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function () {
+  var stage = document.getElementById('stage');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var notes = document.getElementById('notes');
+  var timerEl = document.getElementById('timer');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var current = -1;
+
+  /* 頁尾：每頁都放 logo、作品名稱、聯絡方式與頁碼 */
+  slides.forEach(function (s, i) {
+    var dark = s.classList.contains('slide--dark');
+    var f = document.createElement('div');
+    f.className = 'foot';
+    f.innerHTML = '<span class="foot__brand"><img src="../../design-system/assets/logos/' + (dark ? 'logo-emblem-mono.svg' : 'logo-emblem.svg') + '" alt="">大樹神獸｜AI 方舟計畫　聯絡：Discord（待補）</span>' +
+      '<span class="foot__num">' + (i + 1) + ' / ' + slides.length + '</span>';
+    s.appendChild(f);
+  });
+
+  /* 逐字浮現：把 .type 裡的文字拆成一個個字 */
+  document.querySelectorAll('.type').forEach(function (el) {
+    var base = parseFloat(el.getAttribute('data-delay') || '0.6');
+    var n = 0;
+    (function walk(node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (c) {
+        if (c.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          Array.prototype.forEach.call(c.textContent, function (ch) {
+            var sp = document.createElement('span');
+            sp.className = 'char';
+            sp.style.setProperty('--d', (base + n++ * 0.07).toFixed(2) + 's');
+            sp.textContent = ch;
+            frag.appendChild(sp);
+          });
+          node.replaceChild(frag, c);
+        } else if (c.nodeType === 1) { walk(c); }
+      });
+    })(el);
+  });
+
+  /* 依視窗等比縮放 */
+  function fit() {
+    var k = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    stage.style.transform = 'translate(-50%, -50%) scale(' + k + ')';
+  }
+  window.addEventListener('resize', fit);
+  fit();
+
+  /* 第 6 頁：清單依序打勾 */
+  var checkTimers = [];
+  function playChecks(s) {
+    checkTimers.forEach(clearTimeout);
+    checkTimers = [];
+    var boxes = s.querySelectorAll('.dsh-check__box');
+    Array.prototype.forEach.call(boxes, function (b, i) {
+      b.checked = reduce;
+      if (!reduce) checkTimers.push(setTimeout(function () { b.checked = true; }, 1300 + i * 400));
+    });
+  }
+
+  function show(i) {
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    if (i === current) return;
+    var back = i < current;
+    slides.forEach(function (s, j) {
+      s.classList.remove('is-active', 'is-back');
+      if (j === i) {
+        void s.offsetWidth; /* 重新觸發動畫 */
+        s.classList.add('is-active');
+        if (back) s.classList.add('is-back');
+      }
+    });
+    current = i;
+    playChecks(slides[i]);
+    var s = slides[i];
+    var text = s.getAttribute('data-notes') || '';
+    var count = text.replace(/[\s，。、：；！？「」（）,.]/g, '').length;
+    notes.innerHTML = '<small>第 ' + (i + 1) + ' 頁　建議 ' + s.getAttribute('data-sec') + ' 秒　' + count + ' 字</small>' + text;
+    if (location.hash !== '#' + (i + 1)) history.replaceState(null, '', '#' + (i + 1));
+  }
+
+  /* 3 分鐘倒數：T 開始／暫停，R 重設；剩 10 秒變橘、時間到變紅 */
+  var total = 180, left = total, tick = null;
+  function render() {
+    var t = Math.max(left, 0);
+    timerEl.textContent = left <= 0 ? '時間到' : Math.floor(t / 60) + ':' + ('0' + (t % 60)).slice(-2);
+    timerEl.classList.toggle('is-warn', left <= 10 && left > 0);
+    timerEl.classList.toggle('is-over', left <= 0);
+  }
+  function toggleTimer() {
+    timerEl.classList.add('is-on');
+    if (tick) { clearInterval(tick); tick = null; return; }
+    tick = setInterval(function () { left--; render(); if (left <= 0) { clearInterval(tick); tick = null; } }, 1000);
+  }
+  function resetTimer() { if (tick) clearInterval(tick); tick = null; left = total; render(); }
+
+  document.addEventListener('keydown', function (e) {
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'PageDown' || k === ' ') { e.preventDefault(); show(current + 1); }
+    else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); show(current - 1); }
+    else if (k === 'Home') show(0);
+    else if (k === 'End') show(slides.length - 1);
+    else if (k === 'f' || k === 'F') {
+      if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen();
+    }
+    else if (k === 't' || k === 'T') toggleTimer();
+    else if (k === 'r' || k === 'R') resetTimer();
+    else if (k === 'n' || k === 'N') notes.classList.toggle('is-on');
+  });
+  window.addEventListener('hashchange', function () { show(parseInt(location.hash.slice(1), 10) - 1 || 0); });
+
+  render();
+  show(parseInt(location.hash.slice(1), 10) - 1 || 0);
+})();
+</script>
+</body>
+</html>
