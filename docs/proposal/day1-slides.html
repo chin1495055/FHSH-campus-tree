@@ -98,6 +98,9 @@
   .s2__solid { animation: vanish 1.4s ease 1s both; animation-play-state: paused; }
   .s2__ghost { animation: fade 1s ease 1.8s both; animation-play-state: paused; }
   .slide.is-active .s2__solid, .slide.is-active .s2__ghost { animation-play-state: running; }
+  .s2__leaf { opacity: 0; transform-box: fill-box; transform-origin: center; animation: leaf-fall 1.6s ease-in var(--d, 1s) both; animation-play-state: paused; }
+  .slide.is-active .s2__leaf { animation-play-state: running; }
+  @keyframes leaf-fall { 0% { opacity: 0; transform: none; } 12% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--x, 0), 210px) rotate(220deg); } }
   @keyframes vanish { 0% { opacity: 1; } 30% { opacity: .85; } 100% { opacity: 0; } }
 
   /* ── 3 為什麼從市民 ── */
@@ -170,6 +173,7 @@
   .s8 .dsh-plaque { font-size: 64px; line-height: 80px; padding: 20px 64px; }
   .s8__list { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin: 56px 0 0; max-width: 1500px; }
   .s8__list span { padding: 14px 32px; background: var(--surface-raised); color: var(--text); border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-sm); font-size: 40px; line-height: 52px; font-weight: 900; }
+  .s8__more { margin-top: 40px; font-size: 40px; line-height: 56px; font-weight: 700; color: var(--green-100); }
   .s8__close { margin-top: auto; padding: 40px 64px; background: var(--brand-strong); border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-md); }
   .s8__close p { font-family: var(--font-display); font-weight: 900; font-size: 60px; line-height: 84px; color: var(--honor-on-dark); }
   .s8__close p + p { font-family: var(--font-sans); font-size: 32px; line-height: 48px; font-weight: 700; color: var(--green-100); margin-top: 16px; }
@@ -187,7 +191,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .slide.is-active, .a, .char, .slide.is-active .char, [class*="s1__bob"], .s3__cloth, .s7__sway, .s6__btn, .s2__ghost { animation: none !important; opacity: 1 !important; }
-    .s2__solid { animation: none !important; opacity: 0 !important; }
+    .s2__solid, .s2__leaf { animation: none !important; opacity: 0 !important; }
   }
 </style>
 </head>
@@ -224,19 +228,67 @@
     </p>
     <figure class="s2__art" aria-hidden="true">
       <svg viewBox="0 0 600 600">
-        <path d="M40 524 H560" stroke="var(--outline)" stroke-width="5" stroke-linecap="round"/>
-        <rect x="190" y="504" width="220" height="26" rx="4" fill="var(--surface-sunken)" stroke="var(--outline)" stroke-width="4"/>
-        <g class="s2__ghost" fill="none" stroke="var(--ink-400)" stroke-width="5" stroke-dasharray="14 12" stroke-linejoin="round">
-          <path d="M170 330 C100 330 95 230 160 215 C150 130 240 85 300 130 C350 70 460 100 450 190 C520 205 520 330 440 330 Z"/>
-          <path d="M272 330 V470 M328 330 V470"/>
+        <!-- 人行道、路緣、鋪面接縫 -->
+        <rect x="20" y="500" width="560" height="62" fill="var(--ink-200)"/>
+        <path d="M20 531 H190 M410 531 H580 M90 500 V562 M160 500 V531 M440 531 V562 M510 500 V562" stroke="var(--ink-300)" stroke-width="3"/>
+        <rect x="14" y="560" width="572" height="16" rx="3" fill="var(--ink-300)" stroke="var(--outline)" stroke-width="4"/>
+        <path d="M20 500 H580" stroke="var(--outline)" stroke-width="5" stroke-linecap="round"/>
+        <!-- 樹穴與格柵 -->
+        <rect x="196" y="494" width="208" height="26" rx="4" fill="var(--ink-700)" stroke="var(--outline)" stroke-width="4"/>
+        <path d="M214 497 V517 M232 497 V517 M250 497 V517 M350 497 V517 M368 497 V517 M386 497 V517" stroke="var(--ink-500)" stroke-width="3" stroke-linecap="round"/>
+        <!-- 消失後留下的虛線輪廓與掉在地上的樹牌 -->
+        <g class="s2__ghost">
+          <g fill="none" stroke="var(--ink-400)" stroke-width="5" stroke-dasharray="14 12" stroke-linejoin="round" stroke-linecap="round">
+            <path d="M150 270 C110 262 106 205 145 190 C130 140 175 100 225 112 C240 70 300 58 330 92 C365 62 430 78 440 125 C485 130 505 185 475 215 C500 250 470 292 430 285 C410 312 360 315 340 295 C315 318 265 318 245 296 C215 312 165 300 150 270 Z"/>
+            <path d="M281 300 V462 M319 300 V462 M282 360 L246 318 M318 350 L356 310"/>
+          </g>
+          <g transform="rotate(-18 384 484)">
+            <rect x="370" y="466" width="28" height="34" rx="3" fill="var(--surface-raised)" stroke="var(--outline)" stroke-width="3"/>
+            <g fill="var(--outline)" transform="translate(81 49)"><rect x="291" y="421" width="4" height="4"/><rect x="299" y="421" width="4" height="4"/><rect x="307" y="421" width="4" height="4"/><rect x="291" y="429" width="4" height="4"/><rect x="303" y="429" width="4" height="4"/><rect x="295" y="437" width="4" height="4"/><rect x="307" y="437" width="4" height="4"/></g>
+          </g>
         </g>
+        <!-- 原本完整的樹 -->
         <g class="s2__solid">
-          <rect x="272" y="300" width="56" height="210" rx="6" fill="var(--gold-600)" stroke="var(--outline)" stroke-width="5"/>
-          <path d="M170 330 C100 330 95 230 160 215 C150 130 240 85 300 130 C350 70 460 100 450 190 C520 205 520 330 440 330 Z" fill="var(--brand)" stroke="var(--outline)" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M282 360 L246 318 M318 350 L356 310" stroke="var(--outline)" stroke-width="22" stroke-linecap="round"/>
+          <path d="M282 360 L246 318 M318 350 L356 310" stroke="var(--gold-600)" stroke-width="13" stroke-linecap="round"/>
+          <path d="M262 502 C274 484 280 452 281 400 L281 300 L319 300 L319 400 C320 452 326 484 338 502 Z" fill="var(--gold-600)" stroke="var(--outline)" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M292 330 C289 360 294 380 290 410 M309 318 C313 345 307 372 311 395 M300 448 C298 465 303 478 299 492" fill="none" stroke="var(--gold-800)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M150 270 C110 262 106 205 145 190 C130 140 175 100 225 112 C240 70 300 58 330 92 C365 62 430 78 440 125 C485 130 505 185 475 215 C500 250 470 292 430 285 C410 312 360 315 340 295 C315 318 265 318 245 296 C215 312 165 300 150 270 Z" fill="var(--brand)" stroke="var(--outline)" stroke-width="5" stroke-linejoin="round"/>
+          <g fill="var(--green-600)">
+            <path d="M172 268 C162 248 182 232 204 242 C220 226 248 236 246 258 C254 280 222 290 206 280 C190 290 172 284 172 268 Z"/>
+            <path d="M262 282 C252 262 274 248 296 258 C314 244 342 256 338 276 C344 296 312 302 298 294 C280 302 262 298 262 282 Z"/>
+            <path d="M372 270 C364 250 386 238 406 248 C424 236 450 250 444 270 C448 288 420 294 406 286 C390 294 374 288 372 270 Z"/>
+            <path d="M318 170 C312 154 330 142 348 150 C362 140 384 152 380 168 C384 184 360 190 348 184 C334 190 320 184 318 170 Z"/>
+          </g>
+          <g fill="var(--green-300)">
+            <ellipse cx="196" cy="160" rx="20" ry="10" transform="rotate(-25 196 160)"/>
+            <ellipse cx="282" cy="108" rx="22" ry="10" transform="rotate(-12 282 108)"/>
+            <ellipse cx="392" cy="116" rx="20" ry="9" transform="rotate(12 392 116)"/>
+            <ellipse cx="164" cy="222" rx="12" ry="7" transform="rotate(-40 164 222)"/>
+            <ellipse cx="452" cy="182" rx="12" ry="7" transform="rotate(30 452 182)"/>
+          </g>
+          <path d="M222 190 C234 178 252 178 262 188 M300 200 C312 190 330 190 340 200 M400 200 C410 190 426 192 432 202 M240 236 C250 228 264 228 272 236" fill="none" stroke="var(--outline)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M286 404 L300 396 L314 404" fill="none" stroke="var(--outline)" stroke-width="2"/>
+          <rect x="286" y="413" width="28" height="34" rx="3" fill="var(--surface-raised)" stroke="var(--outline)" stroke-width="3"/>
+          <g fill="var(--outline)"><rect x="291" y="421" width="4" height="4"/><rect x="299" y="421" width="4" height="4"/><rect x="307" y="421" width="4" height="4"/><rect x="291" y="429" width="4" height="4"/><rect x="303" y="429" width="4" height="4"/><rect x="295" y="437" width="4" height="4"/><rect x="307" y="437" width="4" height="4"/></g>
         </g>
-        <rect x="272" y="466" width="56" height="44" rx="4" fill="var(--gold-600)" stroke="var(--outline)" stroke-width="5"/>
-        <ellipse cx="300" cy="466" rx="28" ry="9" fill="var(--gold-200)" stroke="var(--outline)" stroke-width="4"/>
+        <!-- 飄落的葉子 -->
+        <g fill="var(--brand)" stroke="var(--outline)" stroke-width="2.5">
+          <path class="s2__leaf" style="--d: 1.1s; --x: -40px" d="M200 250 C210 238 226 240 230 252 C220 262 206 262 200 250 Z"/>
+          <path class="s2__leaf" style="--d: 1.35s; --x: 30px" d="M380 240 C390 228 406 230 410 242 C400 252 386 252 380 240 Z"/>
+          <path class="s2__leaf" style="--d: 1.6s; --x: -20px" d="M300 270 C310 258 326 260 330 272 C320 282 306 282 300 270 Z"/>
+        </g>
+        <!-- 樹樁 -->
+        <path d="M266 502 C275 490 279 478 280 462 L320 462 C321 478 325 490 334 502 Z" fill="var(--gold-600)" stroke="var(--outline)" stroke-width="5" stroke-linejoin="round"/>
+        <ellipse cx="300" cy="462" rx="20" ry="7" fill="var(--gold-200)" stroke="var(--outline)" stroke-width="4"/>
+        <ellipse cx="300" cy="462" rx="11" ry="3.5" fill="none" stroke="var(--gold-600)" stroke-width="2"/>
+        <circle cx="300" cy="462" r="1.8" fill="var(--gold-700)"/>
+        <g fill="var(--gold-300)" stroke="var(--outline)" stroke-width="1.5">
+          <circle cx="252" cy="492" r="3"/><circle cx="262" cy="488" r="2.5"/><circle cx="344" cy="490" r="3"/><circle cx="336" cy="494" r="2"/>
+        </g>
+        <!-- 問號泡泡 -->
         <g class="a a-pop" style="--d: 2.6s">
+          <path d="M428 182 L404 214 L446 196 Z" fill="var(--surface-raised)" stroke="var(--outline)" stroke-width="5" stroke-linejoin="round"/>
           <circle cx="470" cy="150" r="58" fill="var(--surface-raised)" stroke="var(--outline)" stroke-width="5"/>
           <text x="470" y="178" text-anchor="middle" font-family="var(--font-display)" font-weight="900" font-size="84" fill="var(--text)">?</text>
         </g>
@@ -385,17 +437,18 @@
   </section>
 
   <!-- 8 找夥伴 -->
-  <section class="slide slide--dark" data-notes="最後，我們在找夥伴：會畫畫、做遊戲、做體驗設計，或懂移樹流程的朋友，歡迎來找我們。新加坡讓每棵樹有身分證，我們希望每棵樹，都有一群鄰居。謝謝大家！" data-sec="20">
+  <section class="slide slide--dark" data-notes="最後，我們在找夥伴：會畫畫、做遊戲、做體驗設計，或懂移樹流程的朋友；只是好奇想聊聊，也很歡迎。新加坡讓每棵樹有身分證，我們要讓台灣每棵樹，都有一群守護他的鄰居。謝謝大家！" data-sec="20">
     <div class="s8">
       <span class="dsh-plaque a a-drop">我們在找夥伴</span>
       <div class="s8__list">
-        <span class="a a-up" style="--d: .6s">視覺設計（神獸插畫、3D）</span>
+        <span class="a a-up" style="--d: .6s">美術設計（神獸插畫、3D）</span>
         <span class="a a-up" style="--d: .8s">遊戲規劃與設計</span>
         <span class="a a-up" style="--d: 1s">體驗設計</span>
         <span class="a a-up" style="--d: 1.2s">熟悉移樹、施工流程的人</span>
       </div>
+      <p class="s8__more a a-fade" style="--d: 1.4s">對這個專案有興趣，也歡迎找我們交流！</p>
       <div class="s8__close a a-up" style="--d: 1.6s">
-        <p class="type" data-delay="2">新加坡讓每棵樹有身分證，<br>我們讓每棵樹都有一群鄰居。</p>
+        <p class="type" data-delay="2">新加坡讓每棵樹有身分證，<br>我們讓台灣每棵樹都有一群守護他的鄰居。</p>
         <p>Discord：qmoa_liu</p>
       </div>
     </div>
@@ -412,12 +465,12 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var current = -1;
 
-  /* 頁尾：每頁都放 logo、作品名稱、聯絡方式與頁碼 */
+  /* 頁尾：每頁都放 logo、作品名稱與頁碼；聯絡方式只放在最後一頁 */
   slides.forEach(function (s, i) {
     var dark = s.classList.contains('slide--dark');
     var f = document.createElement('div');
     f.className = 'foot';
-    f.innerHTML = '<span class="foot__brand"><img src="../../design-system/assets/logos/' + (dark ? 'logo-emblem-mono.svg' : 'logo-emblem.svg') + '" alt="">大樹神獸｜AI 方舟計畫　Discord：qmoa_liu</span>' +
+    f.innerHTML = '<span class="foot__brand"><img src="../../design-system/assets/logos/' + (dark ? 'logo-emblem-mono.svg' : 'logo-emblem.svg') + '" alt="">大樹神獸｜AI 方舟計畫</span>' +
       '<span class="foot__num">' + (i + 1) + ' / ' + slides.length + '</span>';
     s.appendChild(f);
   });
