@@ -1,4 +1,5 @@
 """樹木資料前處理：開放資料 → data/trees.json，並產生模擬守護人數 data/mock/mock_guardians.json。
+負責人：Saori
 
 執行方式（在 repo 根目錄）：
     python scripts/build_data.py
