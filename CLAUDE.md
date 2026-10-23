@@ -226,10 +226,11 @@
 - [docs/system-analysis/](docs/system-analysis/)：MVP 規格與市民優先 User Stories。
 - [docs/team-collaboration/](docs/team-collaboration/)：團隊角色分工、協作備忘與招募需求。
 - [docs/discussion-notes/](docs/discussion-notes/)：產品原始構想與討論筆記。
-- [docs/proposal/](docs/proposal/)：Day 1 提案簡報規劃（每頁的重點、內容、講稿與待確認事項）。
+- [docs/proposal/](docs/proposal/)：Day 1 提案簡報（[day1-slides.html](docs/proposal/day1-slides.html)）、規劃與講稿。
+- [docs/demo-video/](docs/demo-video/)：Day 2 Demo 影片的 brief、分鏡、剪輯方式與時間表（審核要件第 2 項）。
 - [design-system/](design-system/)：**正式的視覺設計系統**（10/22 由 Claude Design 產出）。做介面、插圖、簡報、影片時，配色、字體、元件、語氣都照這裡，先讀 [design-system/README.md](design-system/README.md)。神獸 3D 圖在 `design-system/assets/character/beasts/`。
 - [docs/design/](docs/design/)：神獸角色設定（名字、個性、故事）和產出設計系統用的提示詞。舊的品牌視覺規範已由 design-system 取代，只留作參考。
-  - [大樹神獸關鍵畫面.html](docs/design/大樹神獸關鍵畫面.html)：**App 的 16 個關鍵畫面設計稿**（Claude Design 匯出），地圖首頁、神獸頁、回報三步驟、異動警報、社區佈告欄、圖鑑、分享卡與 OG 圖。寫 App 和拍 Demo 影片都以這份為準。畫面上的神獸名字還是舊版（榕仔公、雀榕阿嬤、茄苳仔），實作時改用角色設定的鬚鬚公、加冬仔、雀雀。
+  - [大樹神獸關鍵畫面.html](docs/design/大樹神獸關鍵畫面.html)：**App 的 16 個關鍵畫面設計稿**（Claude Design 匯出），地圖首頁、神獸頁、回報三步驟、異動警報、社區佈告欄、圖鑑、分享卡與 OG 圖。寫 App 和拍 Demo 影片都以這份為準。神獸名字已改成鬚鬚公、茄苳仔、雀雀（10/23）。畫面上的「雀雀阿嬤」（異動警報）和「雀雀兄」（圖鑑）是刻意保留的彩蛋角色，不要改掉。
   - [大樹神獸視覺概念與色彩系統.html](docs/design/大樹神獸視覺概念與色彩系統.html)：視覺方向探索（A 剪黏、B 彩繪門神線稿、C 籤詩光明燈，**選定 B**）和色彩系統，是 design-system 的來源，只留作參考。
   - 這兩個檔案是單一 HTML，要用瀏覽器打開（需要 JavaScript），檔案較大（約 3MB、11MB）。
 - [data/research/](data/research/)：開放資料清單、背景事件與引用來源。
@@ -260,5 +261,6 @@
   - **webhook 網址等於密鑰，絕對不要寫進 repo、commit、文件或頻道訊息**。外流的話，到 Discord 頻道設定的「整合」→「Webhook」刪掉重建。
   - 檔案不存在時，不要自己找網址或猜網址，請本人提供。
 - 文件、介面文案和 commit 說明都用**繁體中文與台灣用語**，標點用全形。
+- 樹和神獸一律用「祂」稱呼，不用「它」或「牠」，例如按鈕寫「守護祂」、分享卡寫「我在守護祂」。
 - 現場只有 5.5 小時，只做 Demo 路徑上會用到的功能。12:00 之後原則上不加新功能。
 - 介面要讓沒看過的人兩分鐘內看懂，市民是主要使用者，所以以手機為主來設計，遊戲化的回饋（認養、回報、守護成果）要一眼就看得出來。

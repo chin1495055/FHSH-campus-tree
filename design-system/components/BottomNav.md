@@ -2,7 +2,7 @@
 
 - `<nav class="dsh-nav">` 內五個 `dsh-nav__item`：地圖、圖鑑、掃描、通知、我的。
 - 目前頁面加 `aria-current="page"`：文字與圖示變 `brand-text`，上緣出現一條綠色小屋脊。
-- 中間的掃描是 `dsh-nav__scan`：綠底圓形、匾額雙框，凸出列外；不用紅色（紅色只給「守護它」）。
+- 中間的掃描是 `dsh-nav__scan`：綠底圓形、匾額雙框，凸出列外；不用紅色（紅色只給「守護祂」）。
 - 圖示：`<span class="dsh-nav__icon dsh-nav__icon--{map|collection|scan|bell|me}" aria-hidden="true"></span>`。圖檔在 `assets/icons/nav/`（26×26、2.5px 線、`currentColor`、不填色），CSS 用遮罩上色，所以會跟著文字顏色變（一般 `text-muted`、選取 `brand-text`、掃描鍵 `ink-50`）。
 - 也可以把 SVG 檔內容直接內嵌在 `<a>` 裡，效果相同。
 - 圖示與 48px 彩色版同一套造型：nav-map ↔ map、nav-collection ↔ collection、nav-scan ↔ scan、nav-bell ↔ bell；nav-me 是頭上長一片新芽的簡單人形。

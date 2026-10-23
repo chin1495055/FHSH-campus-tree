@@ -5,10 +5,10 @@
 | 資料夾 | 神獸 | 樹種 |
 |---|---|---|
 | `xuxugong/` | 鬚鬚公 | 榕樹 |
-| `gadang/` | 加冬仔 | 茄苳 |
+| `gadang/` | 茄苳仔 | 茄苳 |
 | `queque/` | 雀雀 | 雀榕 |
 
-> `xuxugong/healthy.png` 和 `../xuxugong-3d.png` 是同一張圖。神獸名字統一用角色設定的版本：鬚鬚公、加冬仔、雀雀（10/22 Qmoa 決定）。
+> `xuxugong/healthy.png` 和 `../xuxugong-3d.png` 是同一張圖。神獸名字統一用角色設定的版本：鬚鬚公、茄苳仔、雀雀（10/22 Qmoa 決定）。
 
 ## 檔案
 
