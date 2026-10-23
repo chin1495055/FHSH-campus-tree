@@ -26,7 +26,7 @@ OUT_GUARDIANS = MOCK_DIR / "mock_guardians.json"
 # 預設地點：競選總部（臺北市中正區北平東路 30-1 號）。
 # 這是地址的約略座標，請用地圖核對後再更新，前端的預設中心點也要一起改。
 CENTER = {"lat": 25.0459, "lng": 121.5243}
-RADIUS_M = 300
+RADIUS_M = 800
 
 # 推估樹齡用的假設：胸徑每年長 1.5 公分。只是粗估，畫面上要標「推估」。
 DBH_GROWTH_CM_PER_YEAR = 1.5

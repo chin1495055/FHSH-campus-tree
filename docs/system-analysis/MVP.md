@@ -137,8 +137,8 @@
 |---|---|---|
 | 語言 | HTML、CSS、原生 JavaScript（ES modules） | 不用 `npm install`、不用打包，存檔重新整理就看得到 |
 | 框架 | 不用框架，畫面用 hash 路由（`#/tree/樹號`）切換。畫面多了想寫得乾淨，可以從 CDN 載入 Alpine.js 或 petite-vue | P0 約 5～6 個畫面，不需要 React |
-| 地圖 | Leaflet ＋ CARTO Positron 淡色圖磚（免費，要標示出處），再加 CSS 濾鏡調成米色 | 不用申請金鑰。OpenStreetMap 預設圖磚顏色太雜，和設計稿的米色底圖不搭 |
-| 地圖標記 | Leaflet 的 `divIcon`，用 HTML 和 CSS 做神獸圓形頭像和守護人數標籤 | 照設計稿做；樹超過 500 棵就加 `Leaflet.markercluster` 群聚 |
+| 地圖 | Leaflet ＋ [OpenFreeMap](https://openfreemap.org/) Positron 向量底圖（透過 `maplibre-gl-leaflet` 放進 Leaflet，要標示出處），底色改成米色、地名只顯示中文 | 不用申請金鑰、沒有用量上限。CARTO 圖磚（10/23 實測）沒有金鑰會蓋滿「API KEY REQUIRED」浮水印，所以不用 |
+| 地圖標記 | Leaflet 的 `divIcon`，照 design-system 的 MapMarker 元件做屋簷標記、神獸頭像和守護人數標籤 | 照設計稿做；拉遠時一般樹縮成小圓點，避免約 1,900 棵疊成一團 |
 | PWA | 自己寫 `manifest.json` 和 `sw.js`（約 40 行） | 快取加版本號，HTML 用網路優先 |
 | 資料儲存 | 樹木資料放靜態 JSON；使用者的操作（守護、回報、佈告、圖鑑）存在 localStorage | 不用資料庫，Demo 夠用 |
 | 照片 | 用 canvas 縮到約 800px 的 JPEG，存進 IndexedDB（可用 `idb-keyval`），或只在畫面上預覽、不保存 | 原圖會很快塞爆 localStorage（約 5MB） |
@@ -179,7 +179,7 @@
 1. 從 data.gov.tw 官方下載連結取得[行道樹及公園樹木分布圖](https://data.gov.tw/dataset/128274)。
 2. 用一支小腳本（Python 或 Node）：
    - 座標很可能是 TWD97（EPSG:3826），轉成經緯度（WGS84），可以用 `pyproj` 或 `proj4js`。下載後先看欄位再確認。
-   - 只留總部周邊（中正區北平東路 30-1 號，半徑約 300～500 公尺）一兩百棵。
+   - 只留總部周邊（中正區北平東路 30-1 號，半徑 800 公尺）約 1,900 棵，trees.json 約 550KB。10/23 從 300 公尺放大，因為地圖稍微拉遠就只剩中間一小塊有樹。
    - 只留需要的欄位，輸出 `data/trees.json`。
 3. 另一支腳本把 `mock_*.json` 的模擬欄位合併上去。真實和模擬資料分開存放，README 才好標示。
 4. 全市原始檔很大，不要放進前端，也不要進 repo。
