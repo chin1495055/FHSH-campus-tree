@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#203f2a">
+<title>大樹神獸</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<link rel="stylesheet" href="design-system/tokens.css">
+<link rel="stylesheet" href="design-system/components.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body class="dsh-root">
+<div class="app">
+  <div id="map" class="map" aria-label="樹木地圖"></div>
+
+  <!-- 搜尋與篩選 -->
+  <div class="topbar">
+    <label class="search" for="q">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="#26231f" stroke-width="2.5"/><path d="M13 13 L18 18" stroke="#26231f" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <input id="q" type="search" placeholder="搜尋樹名、樹種或地點" autocomplete="off">
+    </label>
+    <div class="filters" role="group" aria-label="篩選">
+      <button type="button" class="chip" data-filter="all" aria-pressed="true">全部</button>
+      <button type="button" class="chip" data-filter="beast" aria-pressed="false">神獸</button>
+      <button type="button" class="chip" data-filter="watch" aria-pressed="false">需關注</button>
+      <button type="button" class="chip" data-filter="notice" aria-pressed="false">公示中</button>
+    </div>
+  </div>
+
+  <button type="button" class="locate" id="locate" aria-label="回到我的位置">
+    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="6" fill="none" stroke="#26231f" stroke-width="2.5"/><circle cx="11" cy="11" r="2.2" fill="#3f7a4a"/><path d="M11 1 V4 M11 18 V21 M1 11 H4 M18 11 H21" stroke="#26231f" stroke-width="2.5" stroke-linecap="round"/></svg>
+  </button>
+
+  <!-- 底部：樹卡＋導覽列 -->
+  <div class="bottom">
+    <article class="tree-card" id="card" hidden></article>
+    <nav class="dsh-nav" aria-label="主要導覽">
+      <a class="dsh-nav__item" href="#/" aria-current="page"><span class="dsh-nav__icon dsh-nav__icon--map" aria-hidden="true"></span>地圖</a>
+      <a class="dsh-nav__item" href="#/collection"><span class="dsh-nav__icon dsh-nav__icon--collection" aria-hidden="true"></span>圖鑑</a>
+      <span class="dsh-nav__item"><a class="dsh-nav__scan" href="#/scan" aria-label="掃描樹牌 QR code"><span class="dsh-nav__icon dsh-nav__icon--scan" aria-hidden="true"></span></a>掃描</span>
+      <a class="dsh-nav__item" href="#/notices"><span class="dsh-nav__icon dsh-nav__icon--bell" aria-hidden="true"></span>通知</a>
+      <a class="dsh-nav__item" href="#/me"><span class="dsh-nav__icon dsh-nav__icon--me" aria-hidden="true"></span>我的</a>
+    </nav>
+  </div>
+
+  <!-- 樹木頁／神獸頁（#/tree/樹號），由 js/tree.js 畫 -->
+  <section class="tree-page" id="tree-page" aria-label="樹的檔案" hidden></section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.0.22/leaflet-maplibre-gl.js"></script>
+<script src="js/marker.js"></script>
+<script type="module" src="js/map.js"></script>
+</body>
+</html>
