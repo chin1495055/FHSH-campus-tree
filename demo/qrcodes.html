@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>模擬樹牌 QR code</title>
+<!--
+  Demo 和測試用的模擬樹牌（不是 App 的畫面，不放進 sw.js）。
+  打開方式：本機 http://localhost:8000/demo/qrcodes.html，或部署後的 /demo/qrcodes.html。
+  用電腦螢幕顯示，拿手機在 App 的「掃描」頁掃；或直接列印，貼在 Demo 現場。
+  QR code 的內容照市府樹牌的格式：http://trees.gov.taipei/show/?treeid=樹號，樹號換成我們資料裡的樹。
+-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap">
+<style>
+  :root { --ink: #26231f; --paper: #f6f1e7; --tag: #e9eaea; --muted: #6b655c; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px 16px 48px; background: var(--paper); color: var(--ink); font-family: "Noto Sans TC", sans-serif; }
+  h1 { margin: 0 0 4px; font-size: 22px; }
+  .lead { margin: 0 0 24px; color: var(--muted); font-size: 14px; line-height: 22px; max-width: 760px; }
+  h2 { margin: 32px 0 12px; font-size: 17px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  /* 仿樹上的金屬樹牌：上方樹號，左邊樹種、右邊 QR code，兩側有孔 */
+  .tag {
+    position: relative; display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr; align-items: center;
+    gap: 4px 12px; padding: 14px 34px; background: var(--tag); border: 2px solid #9a9c9c; border-radius: 14px;
+    break-inside: avoid;
+  }
+  .tag::before, .tag::after { content: ""; position: absolute; top: 50%; width: 14px; height: 14px; margin-top: -7px; border-radius: 50%; background: var(--paper); border: 2px solid #9a9c9c; }
+  .tag::before { left: 10px; }
+  .tag::after { right: 10px; }
+  .tag__id { grid-column: 1 / -1; font-size: 15px; letter-spacing: 0.08em; font-variant-numeric: tabular-nums; }
+  .tag__name { font-size: 30px; font-weight: 400; letter-spacing: 0.15em; }
+  .tag__qr { width: 112px; height: 112px; background: #fff; padding: 4px; }
+  .tag__qr img { width: 100%; height: 100%; image-rendering: pixelated; display: block; }
+  .note { margin: 8px 0 0; font-size: 13px; line-height: 20px; color: var(--muted); }
+  .note code { font-size: 12px; word-break: break-all; }
+  .case { display: flex; flex-direction: column; }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .lead, .note { display: none; }
+    .tag::before, .tag::after { background: #fff; }
+  }
+</style>
+</head>
+<body>
+<h1>模擬樹牌（Demo／測試用）</h1>
+<p class="lead">
+  格式照市府樹牌：QR code 裡是 <code>http://trees.gov.taipei/show/?treeid=樹號</code>。
+  請在 App 下方的「掃描」頁掃這些樹牌。用手機內建相機掃會開到市府網站，不會開到我們的 App。
+  這些是模擬樹牌，樹號是開放資料裡的真實樹號，但樹牌本身不是市府的。
+</p>
+
+<h2>Demo 用：三隻神獸</h2>
+<div class="grid" id="demo"></div>
+
+<h2>測試用</h2>
+<div class="grid" id="test"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+  const GOV = (id) => `http://trees.gov.taipei/show/?treeid=${id}`;
+  // 部署後的 App 網址：用手機內建相機掃也能直接打開神獸頁
+  const APP = 'https://innerwork-saori.github.io/2026-debugWithPuma/';
+
+  const DEMO = [
+    { id: 'JS0155103034', name: '榕樹', note: '鬚鬚公（Demo 主角，公示中）' },
+    { id: 'JS0155100001', name: '茄苳', note: '加冬仔' },
+    { id: 'JS0155503095', name: '雀榕', note: '雀雀（需關注）' },
+  ];
+  const TEST = [
+    { id: 'JJ0530051019', name: '茄苳', text: GOV('JJ0530051019'), note: '真實樹牌照片上的樹號，不在我們的資料範圍：應該顯示「還不在我們的範圍」' },
+    { id: 'JS0155103034', name: '榕樹', text: `${APP}#/tree/JS0155103034`, note: '我們自己的網址：手機內建相機掃也能直接打開鬚鬚公' },
+    { id: '（不是樹牌）', name: '其他', text: 'https://example.com/', note: '不是樹牌的 QR code：應該顯示「這不是樹牌的 QR code」' },
+  ];
+
+  function qrImg(text) {
+    const qr = qrcode(0, 'M');
+    qr.addData(text);
+    qr.make();
+    return qr.createImgTag(6, 0, text);
+  }
+
+  function render(el, items) {
+    el.innerHTML = items.map((t) => {
+      const text = t.text ?? GOV(t.id);
+      return `
+        <div class="case">
+          <div class="tag">
+            <div class="tag__id">${t.id}</div>
+            <div class="tag__name">${t.name}</div>
+            <div class="tag__qr">${qrImg(text)}</div>
+          </div>
+          <p class="note">${t.note}<br><code>${text}</code></p>
+        </div>`;
+    }).join('');
+  }
+
+  render(document.getElementById('demo'), DEMO);
+  render(document.getElementById('test'), TEST);
+</script>
+</body>
+</html>

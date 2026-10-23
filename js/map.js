@@ -5,15 +5,17 @@ import { guardiansOf, totalOf } from './store.js';
 import { renderTreePage } from './tree.js';
 import { renderReportPage } from './report.js';
 import { renderNoticesPage } from './notices.js';
+import { renderScanPage } from './scan.js';
 
 // 路由註冊表：#/名稱 或 #/名稱/樹號 → 要畫的畫面。
 // 新增畫面：在 js/ 開一個檔案匯出 render(el, { tree, trees })，再到這裡加一行。
 // needsTree：網址要帶樹號，找不到那棵樹就回地圖。
-// 沒登記的網址（#/collection、#/scan、#/me）先回地圖。
+// 沒登記的網址（#/collection、#/me）先回地圖。
 const PAGES = {
   tree: { render: (el, { tree }) => renderTreePage(el, tree), needsTree: true },
   report: { render: renderReportPage, needsTree: true },
   notices: { render: renderNoticesPage },
+  scan: { render: renderScanPage },
 };
 
 // Demo 用的「你的位置」：總部（中正區北平東路 30-1 號）附近。真實定位離太遠時退回這裡。

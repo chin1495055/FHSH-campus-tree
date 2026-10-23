@@ -46,6 +46,19 @@ export function guardiansOf(tree) {
 
 export const totalOf = (g) => g.local + g.remote;
 
+// ── 掃描樹牌 ──────────────────────────────────
+// 掃過樹牌代表人曾經在樹旁邊。只記樹號和時間，不記位置。
+
+const SCANS = 'dsh.scans';
+
+/** 最近一次掃這棵樹樹牌的時間（毫秒），沒掃過是 null */
+export const lastScanOf = (id) => load(SCANS, {})[id] ?? null;
+
+export function markScanned(id) {
+  load(SCANS, {})[id] = Date.now();
+  save(SCANS);
+}
+
 // ── 回報 ──────────────────────────────────────
 // 格式和 data/mock/mock_reports.json 一樣：checks 的 true 代表「有看到這個問題」。
 // photo 是縮成小圖的 JPEG data URL（約 20KB），原圖不保存。
