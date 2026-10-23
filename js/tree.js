@@ -1,7 +1,7 @@
 // 樹木頁／神獸頁（關鍵畫面 ②）：#/tree/樹號
 // 樹號、樹種、位置是真實開放資料；神獸、故事、樹況、公示、回報、守護人數是模擬資料。
 import { esc, statusTag, loadJson, pageBarHtml } from './shared.js';
-import { getGuard, setGuard, guardiansOf, totalOf } from './store.js';
+import { getGuard, setGuard, guardiansOf, totalOf, getMyReports, vitalityOf } from './store.js';
 
 const LANTERN_MAX = 30;
 const REPORTS_SHOWN = 3;
@@ -101,8 +101,8 @@ function officialHtml(notice) {
     </article>`;
 }
 
-function vitalHtml(tree, reportCount) {
-  const v = tree.beast?.vitality;
+export function vitalHtml(tree, reportCount) {
+  const v = vitalityOf(tree);
   if (v == null) {
     return `
       <section class="dsh-vital tp-box">
@@ -117,7 +117,7 @@ function vitalHtml(tree, reportCount) {
     <section class="dsh-vital tp-box${v < 40 ? ' dsh-vital--weak' : ''}">
       <div class="dsh-vital__head"><span class="dsh-vital__label">元氣</span><span class="dsh-vital__value">${v}<small>${word}</small></span></div>
       <div class="dsh-vital__track" role="meter" aria-label="元氣" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${v}" aria-valuetext="${v}，${word}">${segs}</div>
-      <p class="dsh-vital__hint">依最近 ${reportCount} 筆鄰居回報計算（模擬）。</p>
+      ${reportCount == null ? '' : `<p class="dsh-vital__hint">依最近 ${reportCount} 筆鄰居回報計算（模擬）。</p>`}
     </section>`;
 }
 
@@ -177,7 +177,8 @@ function reportsHtml(reports, checkItems) {
     return `
       <li class="tp-report"${i >= REPORTS_SHOWN ? ' hidden' : ''}>
         <div class="tp-report__head"><b>${esc(r.nickname)}</b><time datetime="${esc(r.date)}">${shortDate(r.date)}</time></div>
-        <p class="tp-p">${esc(r.note)}</p>
+        ${r.photo ? `<img class="tp-report__photo" src="${esc(r.photo)}" alt="回報照片">` : ''}
+        ${r.note ? `<p class="tp-p">${esc(r.note)}</p>` : ''}
         ${seen.length ? `<p class="tp-report__seen">看到：${esc(seen.join('、'))}</p>` : ''}
       </li>`;
   }).join('');
@@ -246,7 +247,9 @@ const sheetHtml = (name) => `
 export async function renderTreePage(el, tree, { justGuarded = false } = {}) {
   const { notices, reports, checkItems } = await loadExtras();
   const notice = tree.status === 'notice' ? notices.find((n) => n.treeId === tree.id) : null;
-  const myReports = reports.filter((r) => r.treeId === tree.id).sort((a, b) => b.date.localeCompare(a.date));
+  // 自己的回報排在同一天的模擬回報前面（sort 是穩定排序）
+  const treeReports = [...getMyReports(tree.id), ...reports.filter((r) => r.treeId === tree.id)]
+    .sort((a, b) => b.date.localeCompare(a.date));
   const name = tree.beast?.name ?? tree.species;
   const sameTree = el.dataset.treeId === tree.id;
   const scrollTop = sameTree ? el.querySelector('.tp-scroll')?.scrollTop ?? 0 : 0;
@@ -258,11 +261,11 @@ export async function renderTreePage(el, tree, { justGuarded = false } = {}) {
       ${notice ? noticeBannerHtml(notice) : ''}
       ${heroHtml(tree)}
       <div class="tp-status">${statusTag(tree.status)}<span>${STATUS_NOTE[tree.status]}</span></div>
-      ${vitalHtml(tree, myReports.length)}
+      ${vitalHtml(tree, treeReports.length)}
       ${lanternsHtml(guardiansOf(tree), justGuarded)}
       ${notice ? officialHtml(notice) : ''}
       ${storyHtml(tree.beast)}
-      ${reportsHtml(myReports, checkItems)}
+      ${reportsHtml(treeReports, checkItems)}
       ${factsHtml(tree)}
     </div>
     <div class="tp-actions">${actionsHtml(tree)}</div>
@@ -297,7 +300,7 @@ export async function renderTreePage(el, tree, { justGuarded = false } = {}) {
     const open = btn.getAttribute('aria-expanded') !== 'true';
     el.querySelectorAll('.tp-report').forEach((li, i) => { li.hidden = !open && i >= REPORTS_SHOWN; });
     btn.setAttribute('aria-expanded', String(open));
-    btn.textContent = open ? '收起' : `看全部 ${myReports.length} 筆回報`;
+    btn.textContent = open ? '收起' : `看全部 ${treeReports.length} 筆回報`;
   });
 
   // 公示通知條：捲到下方的異動公告卡（不改網址，避免觸發路由）

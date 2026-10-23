@@ -141,6 +141,7 @@ body { background: var(--surface-sunken); }
 .tp-report__head { display: flex; justify-content: space-between; gap: var(--space-3); font-size: 14px; line-height: 20px; margin-bottom: var(--space-1); }
 .tp-report__head time { color: var(--text-muted); font-variant-numeric: tabular-nums; }
 .tp-report .tp-p { margin: 0; }
+.tp-report__photo { display: block; width: 96px; height: 128px; object-fit: cover; margin: var(--space-1) 0 var(--space-2); border: var(--stroke-fine) solid var(--outline); border-radius: var(--radius-sm); }
 .tp-report__seen { margin: var(--space-1) 0 0; font-size: 14px; line-height: 20px; font-weight: 700; color: var(--state-watch-text); }
 
 .tp-facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--space-2) var(--space-4); margin: 0; }
