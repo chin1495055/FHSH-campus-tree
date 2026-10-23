@@ -93,7 +93,7 @@ function gateHtml(tree) {
       <img src="design-system/assets/icons/guard.svg" alt="" width="40" height="40">
       <div>
         <b>在地守護者才能回報樹況</b>
-        要到現場親眼看過，回報才準。${remote ? '你現在是遠端關注，人在樹旁邊時，可以在樹的檔案改成在地守護。' : '先回樹的檔案按「守護它」，選擇在地守護。'}
+        要到現場親眼看過，回報才準。${remote ? '你現在是遠端關注，人在樹旁邊時，可以在樹的檔案改成在地守護。' : '先回樹的檔案按「守護祂」，選擇在地守護。'}
       </div>
     </div>
     <a class="dsh-btn dsh-btn--secondary dsh-btn--block" href="#/tree/${encodeURIComponent(tree.id)}">回到樹的檔案</a>`;
@@ -249,7 +249,7 @@ export async function renderReportPage(el, { tree }) {
       <section class="rp-done">
         <img class="rp-done__art${tree.beast ? '' : ' rp-done__art--tree'}" src="${beastImg(tree, mood)}" alt="">
         <h2 class="tp-h" tabindex="-1" data-focus>謝謝你，${esc(name)}收到了</h2>
-        <p class="tp-p">這是你給它的第 ${count} 次回報。${esc(delta)}</p>
+        <p class="tp-p">這是你給祂的第 ${count} 次回報。${esc(delta)}</p>
       </section>
       ${vitalHtml(tree, null)}
       ${problems.length ? `
@@ -259,7 +259,7 @@ export async function renderReportPage(el, { tree }) {
             <ul>${problems.map((k) => `<li>${esc(PROBLEM[k] ?? LABEL[k])}</li>`).join('')}</ul>
             正式上線後會轉給管理單位，並通知其他守護者一起留意。（Demo 不會真的送出）
           </div>
-        </div>` : '<p class="tp-p rp-center">一切看起來都好。下次經過，再來看看它。</p>'}
+        </div>` : '<p class="tp-p rp-center">一切看起來都好。下次經過，再來看看祂。</p>'}
       <a class="dsh-btn dsh-btn--secondary dsh-btn--block" href="${treeHref}">回到樹的檔案</a>
       <a class="dsh-btn dsh-btn--text dsh-btn--block" href="#/">回地圖</a>`);
   }

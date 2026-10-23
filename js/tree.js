@@ -9,7 +9,7 @@ const REPORTS_SHOWN = 3;
 const OLD_TREE_AGE = 50;
 
 const STATUS_NOTE = {
-  ok: '狀況穩定，有鄰居看著它。',
+  ok: '狀況穩定，有鄰居看著祂。',
   watch: '有鄰居回報病徵，需要多關心。',
   notice: '市府公告要處理這棵樹，公示期間可以表達意見。',
   keep: '審議後決定原地保留。',
@@ -151,7 +151,7 @@ function lanternsHtml(g, justGuarded) {
     <section class="dsh-lanterns tp-lanterns">
       ${LANTERN_SHAPE}
       <div class="dsh-lanterns__head">
-        <span class="dsh-lanterns__label">燈海・守護它的鄰居</span>
+        <span class="dsh-lanterns__label">燈海・守護祂的鄰居</span>
         <span class="dsh-lanterns__num${justGuarded ? ' is-bump' : ''}">${total}<small>盞</small></span>
       </div>
       <div class="dsh-lanterns__grid" aria-hidden="true">${lamps}</div>
@@ -163,7 +163,7 @@ function storyHtml(b) {
   if (!b) return '';
   return `
     <section class="tp-box">
-      <h3 class="tp-h">它的故事</h3>
+      <h3 class="tp-h">祂的故事</h3>
       <p class="tp-p">${esc(b.story)}</p>
       <p class="tp-p">${esc(b.personality)}</p>
       <p class="tp-fact"><b>你知道嗎？</b>${esc(b.funFact)}</p>
@@ -188,7 +188,7 @@ function reportsHtml(reports, checkItems) {
   return `
     <section class="tp-box">
       <h3 class="tp-h">最近的回報${reports.length ? `<small class="tp-h__count">・${reports.length} 筆</small>` : ''}</h3>
-      ${items ? `<ul class="tp-reports">${items}</ul>${more}` : '<p class="tp-p tp-muted">還沒有人回報。成為在地守護者，第一個記錄它的樣子。</p>'}
+      ${items ? `<ul class="tp-reports">${items}</ul>${more}` : '<p class="tp-p tp-muted">還沒有人回報。成為在地守護者，第一個記錄祂的樣子。</p>'}
     </section>`;
 }
 
@@ -214,7 +214,7 @@ function actionsHtml(tree) {
   const mine = getGuard(tree.id);
   const report = `<a class="dsh-btn dsh-btn--secondary dsh-btn--block" href="#/report/${encodeURIComponent(tree.id)}"><img src="design-system/assets/icons/report.svg" alt="" width="28" height="28">回報樹況</a>`;
   if (mine === 'local') {
-    return `${report}<p class="tp-actions__hint">你是在地守護者。經過時拍張照、看看它的狀況。</p>`;
+    return `${report}<p class="tp-actions__hint">你是在地守護者。經過時拍張照、看看祂的狀況。</p>`;
   }
   if (mine === 'remote') {
     return `
@@ -222,7 +222,7 @@ function actionsHtml(tree) {
       <p class="tp-actions__hint">有異動時會通知你。人在樹旁邊時，可以<button type="button" class="tp-link" data-guard="local">改成在地守護</button>來回報樹況。</p>`;
   }
   return `
-    <button type="button" class="dsh-btn dsh-btn--primary dsh-btn--block" data-open-sheet>守護它</button>
+    <button type="button" class="dsh-btn dsh-btn--primary dsh-btn--block" data-open-sheet>守護祂</button>
     <p class="tp-actions__hint">守護後，這棵樹有異動時你會第一個知道。</p>`;
 }
 
