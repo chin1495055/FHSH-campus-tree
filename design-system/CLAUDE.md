@@ -4,6 +4,7 @@
 
 - 顏色、字級、間距、圓角、墨線粗細：只用 `design-system/tokens.css` 的 CSS 變數與字級 class，不要寫死色碼。
 - 元件樣式：引入 `design-system/components.css`，用 `dsh-` 開頭的 class（例如 `dsh-btn dsh-btn--primary`、`dsh-tag dsh-tag--ok`）。
+- 桌機版（1024px 以上）：再引入 `design-system/desktop.css`，說明見 README 的「桌機版」一節。電腦上沒有掃描功能。
 - 圖示、標誌、角色、紋樣：用 `design-system/assets/` 裡的檔案，不要自己重畫或改色。
 - 字體：在 HTML `<head>` 載入 tokens.css 第二行註解裡的 Google Fonts 連結。
 - 全系統平面：不加陰影、不用漸層、不用 emoji、不用抽卡用語。

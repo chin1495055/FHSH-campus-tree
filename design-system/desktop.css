@@ -1,0 +1,176 @@
+/* 大樹神獸 桌機版（1024px 以上）。接在 tokens.css、components.css 之後載入。
+   手機版（小於 768px）不受影響；平板（768–1023px）沿用手機版、置中加寬。 */
+
+:root {
+  --content-max: 1280px;      /* 內容最大寬度，超寬螢幕置中，兩側留宣紙底 */
+  --desk-gutter: var(--space-8);
+  --desk-topnav-h: 72px;
+  --desk-rail: 360px;         /* 地圖左側欄 */
+  --desk-panel: 400px;        /* 地圖右側面板 */
+  --desk-aside: 420px;        /* 雙欄頁的左欄（神獸、預覽） */
+  --desk-gap: var(--space-8);
+  --desk-btn-max: 360px;      /* 桌機按鈕最大寬度 */
+}
+
+/* 用 <a> 做的按鈕和 <button> 一樣高（瀏覽器預設 a 是 content-box，會多出外框寬度） */
+a.dsh-btn { box-sizing: border-box; text-decoration: none; }
+
+/* 頂部導覽：桌機取代底部導覽列，沒有「掃描」 */
+.dsh-topnav { display: none; }
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .dsh-desk { max-width: 720px; margin: 0 auto; }
+}
+
+/* 1024–1279px：欄寬收窄，地圖至少留 380px */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  :root { --desk-rail: 300px; --desk-panel: 340px; --desk-aside: 340px; --desk-gutter: var(--space-6); --desk-gap: var(--space-6); }
+}
+
+@media (min-width: 1024px) {
+  .dsh-nav { display: none; }
+
+  /* 桌機上整排按鈕不拉滿欄寬：最多 360px、置中 */
+  .dsh-btn { box-sizing: border-box; }
+  .dsh-btn--block { max-width: var(--desk-btn-max); margin-inline: auto; }
+  .dsh-btnrow { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: center; }
+  .dsh-btnrow > .dsh-btn { flex: 0 1 220px; }
+
+  .dsh-topnav {
+    display: flex; align-items: center; gap: var(--space-8);
+    height: var(--desk-topnav-h); padding: 0 var(--desk-gutter); box-sizing: border-box;
+    background: var(--surface-raised); border-bottom: var(--stroke-ui) solid var(--outline);
+  }
+  .dsh-topnav__brand { display: flex; align-items: center; flex: none; }
+  .dsh-topnav__brand img { height: 40px; width: auto; display: block; }
+  .dsh-topnav__links { display: flex; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+  .dsh-topnav__item {
+    position: relative; display: flex; align-items: center; gap: var(--space-2);
+    height: var(--desk-topnav-h); padding: 0 var(--space-4); box-sizing: border-box;
+    color: var(--text-muted); font-size: 16px; line-height: 24px; font-weight: 700; text-decoration: none;
+  }
+  .dsh-topnav__item[aria-current="page"] { color: var(--brand-text); }
+  .dsh-topnav__item[aria-current="page"]::after {
+    content: ""; position: absolute; left: var(--space-4); right: var(--space-4); bottom: -3px; height: 6px;
+    background: var(--brand); border: var(--stroke-fine) solid var(--outline); border-bottom: none; border-radius: 3px 3px 0 0;
+  }
+  .dsh-topnav__item .dsh-nav__icon { width: 22px; height: 22px; }
+  .dsh-topnav__search { margin-left: auto; width: 360px; }
+
+  /* 頁面容器 */
+  .dsh-desk { max-width: var(--content-max); margin: 0 auto; padding: var(--space-8) var(--desk-gutter) var(--space-12); box-sizing: border-box; }
+  .dsh-crumb { display: flex; gap: var(--space-2); align-items: center; margin: 0 0 var(--space-4); font-size: 14px; line-height: 20px; color: var(--text-muted); }
+  .dsh-crumb a { color: var(--brand-text); font-weight: 700; }
+
+  /* 雙欄：左欄固定寬、右欄伸縮 */
+  .dsh-cols { display: flex; flex-wrap: wrap; gap: var(--desk-gap); align-items: flex-start; }
+  .dsh-cols__aside { flex: 0 1 var(--desk-aside); min-width: 0; display: flex; flex-direction: column; gap: var(--space-4); }
+  .dsh-cols__main { flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: var(--space-6); }
+  .dsh-cols--even > * { flex: 1 1 480px; }
+
+  /* 地圖首頁：左欄＋地圖＋右側面板 */
+  .dsh-mapdesk { display: grid; grid-template-columns: var(--desk-rail) minmax(0, 1fr) var(--desk-panel); height: calc(100vh - var(--desk-topnav-h)); min-height: 680px; }
+  .dsh-rail { display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-6); box-sizing: border-box; background: var(--surface); border-right: var(--stroke-ui) solid var(--outline); overflow-y: auto; }
+  .dsh-panel { display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-6); box-sizing: border-box; background: var(--surface-raised); border-left: var(--stroke-ui) solid var(--outline); overflow-y: auto; }
+  .dsh-mapview { position: relative; overflow: hidden; background: var(--surface-sunken); }
+
+  /* 搜尋框與篩選膠囊（沿用手機版的樣子） */
+  .dsh-search { display: flex; align-items: center; gap: var(--space-2); height: var(--target-min); padding: 0 var(--space-4); box-sizing: border-box; background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-pill); }
+  .dsh-search input { flex: 1; min-width: 0; border: none; background: transparent; font: inherit; font-size: 16px; color: var(--text); outline: none; }
+  .dsh-search:focus-within { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+  .dsh-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .dsh-chip { display: inline-flex; align-items: center; min-height: 40px; padding: 0 var(--space-4); background: var(--surface-raised); color: var(--text); border: var(--stroke-fine) solid var(--outline); border-radius: var(--radius-pill); font-family: var(--font-sans); font-size: 15px; font-weight: 700; cursor: pointer; }
+  .dsh-chip[aria-pressed="true"] { background: var(--brand-strong); color: var(--ink-50); }
+
+  /* 附近的樹清單 */
+  .dsh-treelist { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md); background: var(--surface-raised); overflow: hidden; }
+  .dsh-treelist__item { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: var(--space-3); align-items: center; padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--line); color: var(--text); text-decoration: none; }
+  .dsh-treelist__item:last-child { border-bottom: none; }
+  .dsh-treelist__item[aria-current="true"] { background: var(--green-50); box-shadow: inset 6px 0 0 var(--brand); }
+  .dsh-treelist__item img { width: 48px; height: 48px; display: block; }
+  .dsh-treelist__name { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 18px; line-height: 24px; }
+  .dsh-treelist__meta { margin: 0; font-size: 13px; line-height: 20px; color: var(--text-muted); }
+  .dsh-treelist__count { font-size: 14px; font-weight: 900; color: var(--brand-text); font-variant-numeric: tabular-nums; }
+
+  /* 區塊標題 */
+  .dsh-h { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 24px; line-height: 32px; }
+  .dsh-h small { font-family: var(--font-sans); font-size: 14px; font-weight: 700; color: var(--text-muted); margin-left: var(--space-2); }
+  .dsh-lead { margin: 0; font-size: 18px; line-height: 28px; font-weight: 500; }
+  .dsh-muted { margin: 0; font-size: 14px; line-height: 22px; color: var(--text-muted); }
+
+  /* 樹的檔案：定義清單 */
+  .dsh-facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--space-2) var(--space-6); margin: 0; padding: var(--space-4); background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md); }
+  .dsh-facts dt { font-size: 14px; line-height: 24px; font-weight: 700; color: var(--text-muted); }
+  .dsh-facts dd { margin: 0; font-size: 16px; line-height: 24px; }
+
+  /* 一般內容卡（故事、回報、說明） */
+  .dsh-box { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-4) var(--space-6); background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md); }
+  .dsh-box p { margin: 0; }
+
+  /* 守護方式：兩個選項並排（對話框與神獸頁共用） */
+  .dsh-guardopts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  .dsh-guardopt { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-4); background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md); cursor: pointer; text-align: left; font-family: var(--font-sans); color: var(--text); }
+  .dsh-guardopt[aria-checked="true"] { background: var(--green-50); box-shadow: inset 0 0 0 3px var(--green-50), inset 0 0 0 5px var(--brand); }
+  .dsh-guardopt__title { font-family: var(--font-display); font-size: 22px; line-height: 28px; font-weight: 900; }
+  .dsh-guardopt__desc { font-size: 15px; line-height: 22px; color: var(--text-muted); }
+  .dsh-guardopt__num { font-family: var(--font-display); font-size: 28px; line-height: 32px; font-weight: 900; color: var(--brand-text); font-variant-numeric: tabular-nums; }
+
+  /* 對話框：置中，背後是加深的頁面 */
+  .dsh-scrim { position: absolute; inset: 0; background: var(--ink-900); opacity: 0.55; }
+  .dsh-dialog { position: relative; width: 640px; max-width: calc(100% - var(--space-12)); display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-6) var(--space-8) var(--space-8); box-sizing: border-box; background: var(--surface); border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-md); }
+  .dsh-dialog__head { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-4); }
+  .dsh-dialog__title { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 32px; line-height: 40px; }
+  .dsh-close { width: var(--target-min); height: var(--target-min); display: inline-flex; align-items: center; justify-content: center; background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm); color: var(--text); cursor: pointer; flex: none; }
+  .dsh-close svg { width: 20px; height: 20px; }
+
+  /* 上傳照片 */
+  .dsh-upload { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-3); min-height: 220px; padding: var(--space-6); box-sizing: border-box; background: var(--surface-raised); border: var(--stroke-ui) dashed var(--outline); border-radius: var(--radius-md); text-align: center; }
+  .dsh-upload img { width: 48px; height: 48px; }
+  .dsh-upload__title { margin: 0; font-size: 18px; line-height: 28px; font-weight: 900; }
+  .dsh-thumbs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
+  .dsh-thumb { position: relative; aspect-ratio: 4 / 3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-1); background: var(--green-100); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; color: var(--green-800); }
+  .dsh-thumb img { width: 32px; height: 32px; }
+  .dsh-thumb__del { position: absolute; top: var(--space-1); right: var(--space-1); width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; background: var(--surface-raised); border: var(--stroke-fine) solid var(--outline); border-radius: var(--radius-sm); color: var(--text); cursor: pointer; }
+  .dsh-thumb__del svg { width: 14px; height: 14px; }
+  .dsh-field { display: flex; flex-direction: column; gap: var(--space-2); }
+  .dsh-field label { font-size: 14px; line-height: 20px; font-weight: 700; }
+  .dsh-input { height: var(--target-min); padding: 0 var(--space-4); box-sizing: border-box; background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm); font-family: var(--font-sans); font-size: 16px; color: var(--text); }
+  textarea.dsh-input { height: auto; min-height: 96px; padding: var(--space-3) var(--space-4); line-height: 24px; resize: vertical; }
+  .dsh-input:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+
+  /* 步驟條（回報三步驟排在同一頁） */
+  .dsh-steps { display: flex; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+  .dsh-step { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-4); background: var(--surface-raised); border: var(--stroke-fine) solid var(--outline); border-radius: var(--radius-pill); font-size: 14px; font-weight: 700; color: var(--text-muted); }
+  .dsh-step b { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--surface-sunken); border: var(--stroke-fine) solid var(--outline); color: var(--text); font-size: 13px; }
+  .dsh-step[aria-current="step"] { color: var(--text); background: var(--green-50); }
+  .dsh-step[aria-current="step"] b { background: var(--brand); color: var(--ink-50); }
+
+  /* 社區佈告欄：活動卡排成格狀 */
+  .dsh-event-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: var(--space-4); align-items: start; }
+
+  /* 圖鑑：卡片格狀 */
+  .dsh-dex { display: grid; grid-template-columns: repeat(auto-fill, minmax(248px, 1fr)); gap: var(--space-6); justify-items: start; }
+  .dsh-dex .dsh-beast { width: 100%; max-width: 280px; }
+  .dsh-dexrow { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--space-4); }
+  .dsh-dexmini { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: var(--space-3); align-items: center; padding: var(--space-3); background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md); color: var(--text); text-decoration: none; }
+  .dsh-dexmini img { width: 56px; height: 56px; display: block; }
+  .dsh-dexmini__ph { width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; background: var(--green-50); border: var(--stroke-fine) solid var(--outline); border-radius: var(--radius-sm); }
+  .dsh-dexmini__ph img { width: 36px; height: 36px; }
+  .dsh-dexmini__name { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 18px; line-height: 24px; }
+  .dsh-dexmini__meta { margin: 0; font-size: 13px; line-height: 20px; color: var(--text-muted); }
+  .dsh-pin { display: inline-flex; align-items: center; padding: 1px var(--space-2); background: var(--honor); color: var(--text); border: var(--stroke-fine) solid var(--outline); border-radius: var(--radius-sm); font-size: 12px; line-height: 18px; font-weight: 900; }
+  .dsh-pin--notice { background: var(--state-notice-bg); color: var(--state-notice-text); border-style: dashed; }
+
+  /* 分享頁：左邊預覽、右邊動作 */
+  .dsh-sharelist { display: flex; flex-direction: column; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
+  .dsh-copy { display: flex; gap: var(--space-2); }
+  .dsh-copy .dsh-input { flex: 1; min-width: 0; color: var(--text-muted); }
+
+  /* 守護籤（分享卡預覽，畫面用；實際分享圖是固定 PNG） */
+  .dsh-lot { display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-6); background: var(--surface-raised); border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-md); aspect-ratio: 1080 / 1350; box-sizing: border-box; }
+  .dsh-lot__no { margin: 0; align-self: center; font-family: var(--font-display); font-weight: 900; font-size: 18px; letter-spacing: 0.2em; color: var(--honor-text); }
+  .dsh-lot__poem { flex: 1; display: flex; flex-direction: row-reverse; justify-content: center; gap: var(--space-4); padding: var(--space-4) 0; border-top: var(--stroke-fine) solid var(--outline); border-bottom: var(--stroke-fine) solid var(--outline); }
+  .dsh-lot__poem p { margin: 0; writing-mode: vertical-rl; font-family: var(--font-display); font-weight: 900; font-size: 26px; line-height: 1; letter-spacing: 0.25em; }
+  .dsh-lot__foot { display: flex; align-items: center; gap: var(--space-4); }
+  .dsh-lot__foot img { width: 96px; height: 112px; object-fit: contain; }
+}

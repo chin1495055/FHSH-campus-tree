@@ -22,3 +22,27 @@
 使用者提供：連結與目前頁面。通知有未讀時在圖示右上加綠點，不加數字紅點。
 
 不要：超過五個入口；用陰影讓中間按鈕浮起來；用紅色。
+
+## 桌機版（1024px 以上）
+
+- 載入 `desktop.css` 後，`dsh-nav` 自動隱藏，改用頂部導覽 `dsh-topnav`。
+- 桌機沒有掃描功能，頂部導覽只有四個入口：地圖、圖鑑、通知、我的。找樹改用搜尋框和地圖。
+- 目前頁面一樣加 `aria-current="page"`，下緣出現綠色小屋脊。
+- 頂部搜尋框 `dsh-topnav__search` 放在最右邊；地圖首頁的搜尋框在左欄，頂部不放。
+
+```html
+<header class="dsh-topnav">
+  <a class="dsh-topnav__brand" href="map.html"><img src="assets/logos/logo-horizontal.svg" alt="大樹神獸"></a>
+  <nav aria-label="主要導覽">
+    <ul class="dsh-topnav__links">
+      <li><a class="dsh-topnav__item" href="map.html" aria-current="page"><span class="dsh-nav__icon dsh-nav__icon--map" aria-hidden="true"></span>地圖</a></li>
+      <li><a class="dsh-topnav__item" href="collection.html"><span class="dsh-nav__icon dsh-nav__icon--collection" aria-hidden="true"></span>圖鑑</a></li>
+      <li><a class="dsh-topnav__item" href="notices.html"><span class="dsh-nav__icon dsh-nav__icon--bell" aria-hidden="true"></span>通知</a></li>
+      <li><a class="dsh-topnav__item" href="me.html"><span class="dsh-nav__icon dsh-nav__icon--me" aria-hidden="true"></span>我的</a></li>
+    </ul>
+  </nav>
+  <label class="dsh-search dsh-topnav__search"><input type="search" placeholder="搜尋樹名、樹號或地點" aria-label="搜尋樹"></label>
+</header>
+```
+
+手機和桌機的導覽可以同時寫在頁面上，由 `desktop.css` 依螢幕寬度決定顯示哪一個。
