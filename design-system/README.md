@@ -83,7 +83,8 @@
 
 ## 桌機版（1024px 以上）
 
-- 在 `tokens.css`、`components.css` 之後載入 `desktop.css`。手機版（小於 768px）不受影響；平板（768–1023px）沿用手機版、置中加寬。
+- 在 `tokens.css`、`components.css` 之後載入 `desktop.css`。電腦版只在「寬度 1024px 以上，而且是滑鼠操作」時套用（`hover: hover` 且 `pointer: fine`）。手機和平板是 PWA，一律用手機版，包括 iPad 橫放；平板置中加寬。
+- JS 判斷是否為電腦版，用同一個條件：`matchMedia('(min-width: 1024px) and (hover: hover) and (pointer: fine)')`。
 - 桌機和手機的功能差異只有一個：**電腦上沒有掃描**。底部導覽列換成頂部導覽 `dsh-topnav`（地圖、圖鑑、通知、我的），找樹靠搜尋和地圖。
 - 在地守護由使用者自己選（「這是我家附近、常經過的樹」），不靠掃碼；回報可以回家用電腦上傳照片，附拍攝日期，位置資訊上傳前移除。
 - 版面 token（在 `desktop.css` 的 `:root`）：`--content-max` 1280px、`--desk-rail` 360px、`--desk-panel` 400px、`--desk-aside` 420px、`--desk-topnav-h` 72px、`--desk-btn-max` 360px。

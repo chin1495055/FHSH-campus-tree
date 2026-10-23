@@ -1,5 +1,6 @@
-/* 大樹神獸 桌機版（1024px 以上）。接在 tokens.css、components.css 之後載入。
-   手機版（小於 768px）不受影響；平板（768–1023px）沿用手機版、置中加寬。 */
+/* 大樹神獸 桌機版。接在 tokens.css、components.css 之後載入。
+   只在「寬度 1024px 以上，而且是滑鼠操作」的電腦上套用（hover: hover 且 pointer: fine）。
+   手機和平板（觸控）一律用 PWA 的手機版，包括 iPad 橫放這種超過 1024px 的平板。 */
 
 :root {
   --content-max: 1280px;      /* 內容最大寬度，超寬螢幕置中，兩側留宣紙底 */
@@ -18,16 +19,16 @@ a.dsh-btn { box-sizing: border-box; text-decoration: none; }
 /* 頂部導覽：桌機取代底部導覽列，沒有「掃描」 */
 .dsh-topnav { display: none; }
 
-@media (min-width: 768px) and (max-width: 1023px) {
+@media (min-width: 768px) and (max-width: 1023px), (min-width: 768px) and (pointer: coarse) {
   .dsh-desk { max-width: 720px; margin: 0 auto; }
 }
 
 /* 1024–1279px：欄寬收窄，地圖至少留 380px */
-@media (min-width: 1024px) and (max-width: 1279px) {
+@media (min-width: 1024px) and (max-width: 1279px) and (hover: hover) and (pointer: fine) {
   :root { --desk-rail: 300px; --desk-panel: 340px; --desk-aside: 340px; --desk-gutter: var(--space-6); --desk-gap: var(--space-6); }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   .dsh-nav { display: none; }
 
   /* 桌機上整排按鈕不拉滿欄寬：最多 360px、置中 */
