@@ -15,6 +15,15 @@ export const esc = (s) => dshEscape(s ?? '');
 export const statusTag = (status) =>
   `<span class="dsh-tag dsh-tag--${status}">${STATUS_ICON[status]}${DSH_MARKER.labels[status]}</span>`;
 
+const ICON_BACK = '<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M14 4 L7 11 L14 18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+/** 每個畫面頂端的標題列。路由打開畫面後會把焦點放在返回鈕（.tp-back） */
+export const pageBarHtml = (title, back = '#/') => `
+  <header class="tp-bar">
+    <a class="tp-back" href="${back}" aria-label="返回">${ICON_BACK}</a>
+    <h1 class="tp-bar__title">${esc(title)}</h1>
+  </header>`;
+
 export async function loadJson(path) {
   const res = await fetch(path);
   if (!res.ok) throw new Error(`讀不到 ${path}`);

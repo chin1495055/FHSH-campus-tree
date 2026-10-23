@@ -3,6 +3,18 @@
 import { STATUS, esc, statusTag, loadJson } from './shared.js';
 import { guardiansOf, totalOf } from './store.js';
 import { renderTreePage } from './tree.js';
+import { renderReportPage } from './report.js';
+import { renderNoticesPage } from './notices.js';
+
+// 路由註冊表：#/名稱 或 #/名稱/樹號 → 要畫的畫面。
+// 新增畫面：在 js/ 開一個檔案匯出 render(el, { tree, trees })，再到這裡加一行。
+// needsTree：網址要帶樹號，找不到那棵樹就回地圖。
+// 沒登記的網址（#/collection、#/scan、#/me）先回地圖。
+const PAGES = {
+  tree: { render: (el, { tree }) => renderTreePage(el, tree), needsTree: true },
+  report: { render: renderReportPage, needsTree: true },
+  notices: { render: renderNoticesPage },
+};
 
 // Demo 用的「你的位置」：總部（中正區北平東路 30-1 號）附近。真實定位離太遠時退回這裡。
 const HOME = [25.0459, 121.5243];
@@ -211,8 +223,8 @@ async function main() {
     maxZoom: 18,
   });
 
-  // 路由：#/tree/樹號 打開樹木頁。回報頁（#/report/樹號）還沒做，先停在樹木頁。
-  const page = document.getElementById('tree-page');
+  // 路由：依 PAGES 把畫面畫進同一個全螢幕的 #page，蓋在地圖上面
+  const page = document.getElementById('page');
   const byId = new Map(trees.map((t) => [t.id, t]));
   const behindPage = [...app.children].filter((c) => c !== page);
   function showPage(on) {
@@ -220,13 +232,17 @@ async function main() {
     behindPage.forEach((c) => { c.inert = on; });
   }
   async function route() {
-    const [, name, id] = location.hash.match(/^#\/([^/]+)\/([^/]+)/) ?? [];
-    const tree = (name === 'tree' || name === 'report') && byId.get(decodeURIComponent(id));
-    if (tree) {
-      if (selected !== tree) select(tree);
-      await renderTreePage(page, tree);
+    const [, name, id] = location.hash.match(/^#\/([^/]+)(?:\/([^/]+))?/) ?? [];
+    const target = Object.hasOwn(PAGES, name) ? PAGES[name] : null;
+    const tree = id ? byId.get(decodeURIComponent(id)) : null;
+    if (target && (tree || !target.needsTree)) {
+      if (tree && selected !== tree) select(tree);
+      // 換到別的畫面時清掉樹號，樹木頁才不會沿用上一次的捲動位置
+      if (name !== 'tree') delete page.dataset.treeId;
+      page.dataset.page = name;
+      await target.render(page, { tree, trees });
       showPage(true);
-      page.querySelector('.tp-back').focus({ preventScroll: true });
+      page.querySelector('.tp-back')?.focus({ preventScroll: true });
     } else {
       showPage(false);
       // 在樹木頁按了守護，回到地圖時人數要跟著更新

@@ -1,6 +1,6 @@
 // 樹木頁／神獸頁（關鍵畫面 ②）：#/tree/樹號
 // 樹號、樹種、位置是真實開放資料；神獸、故事、樹況、公示、回報、守護人數是模擬資料。
-import { esc, statusTag, loadJson } from './shared.js';
+import { esc, statusTag, loadJson, pageBarHtml } from './shared.js';
 import { getGuard, setGuard, guardiansOf, totalOf } from './store.js';
 
 const LANTERN_MAX = 30;
@@ -15,8 +15,6 @@ const STATUS_NOTE = {
   keep: '審議後決定原地保留。',
   move: '已移植到新地點，持續追蹤存活。',
 };
-
-const ICON_BACK = '<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M14 4 L7 11 L14 18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 // 公示與回報紀錄第一次打開樹木頁時才載入
 let extras;
@@ -255,10 +253,7 @@ export async function renderTreePage(el, tree, { justGuarded = false } = {}) {
 
   el.dataset.treeId = tree.id;
   el.innerHTML = `
-    <header class="tp-bar">
-      <a class="tp-back" href="#/" aria-label="回到地圖">${ICON_BACK}</a>
-      <h1 class="tp-bar__title">樹的檔案</h1>
-    </header>
+    ${pageBarHtml('樹的檔案')}
     <div class="tp-scroll">
       ${notice ? noticeBannerHtml(notice) : ''}
       ${heroHtml(tree)}

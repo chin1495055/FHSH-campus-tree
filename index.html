@@ -13,6 +13,9 @@
 <link rel="stylesheet" href="design-system/tokens.css">
 <link rel="stylesheet" href="design-system/components.css">
 <link rel="stylesheet" href="css/app.css">
+<!-- 每個畫面各自一個樣式檔，兩個人同時開發才不會改到同一個檔案 -->
+<link rel="stylesheet" href="css/report.css">
+<link rel="stylesheet" href="css/notices.css">
 </head>
 <body class="dsh-root">
 <div class="app">
@@ -48,8 +51,8 @@
     </nav>
   </div>
 
-  <!-- 樹木頁／神獸頁（#/tree/樹號），由 js/tree.js 畫 -->
-  <section class="tree-page" id="tree-page" aria-label="樹的檔案" hidden></section>
+  <!-- 蓋在地圖上的全螢幕畫面：樹木頁、回報頁、通知頁…都畫在這裡，見 js/map.js 的 PAGES -->
+  <section class="tree-page" id="page" hidden></section>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>

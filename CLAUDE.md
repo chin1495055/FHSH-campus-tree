@@ -241,7 +241,9 @@
 - Service Worker 快取要加版本號，HTML 用網路優先，避免部署後隊友看到舊版。
 - **技術選型（10/22）**：純前端靜態網站，不做後端、不用建置工具。原生 JavaScript ＋ Leaflet，資料放靜態 JSON，使用者操作存 localStorage，部署到 GitHub Pages。完整理由和關鍵畫面的做法見 MVP.md「技術選型」。
 - 分享卡不要用 html2canvas（直排籤詩會排錯），先用固定 PNG。
-- 開始寫程式後，請在這一節補上怎麼在本機執行和部署。
+- **本機執行**：在 repo 根目錄跑 `python -m http.server 8000`，打開 http://localhost:8000/ 。不能直接雙擊 index.html（讀不到 JSON）。部署方式還沒補。
+- **新增畫面**：在 `js/` 開一個檔案匯出 `render(el, { tree, trees })`，到 [js/map.js](js/map.js) 的 `PAGES` 註冊表加一行；樣式放自己的 `css/畫面名.css`，class 用自己的前綴。每個畫面一個檔案，兩人同時開發才不會衝突。
+- **分工（10/23）**：Saori 負責地圖、樹木頁、回報頁（[js/report.js](js/report.js)）、路由和 PWA；Qmoa 負責通知頁／異動警報（[js/notices.js](js/notices.js)）和分享卡。要改對方的檔案（尤其 map.js、store.js）先在 Discord 講一聲。
 
 ## 協作方式
 
