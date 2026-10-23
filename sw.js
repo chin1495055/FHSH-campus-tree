@@ -1,0 +1,86 @@
+// Service Worker：讓 App 可以加到主畫面，網路不穩時也打得開。負責人：Saori
+//
+// - 自己網站的檔案（HTML、JS、CSS、JSON、圖片）一律「網路優先」：有網路就拿最新版，
+//   現場一直在改，隊友才不會看到舊畫面。網路太慢（超過 NETWORK_TIMEOUT_MS）或斷線才用快取。
+// - CDN 套件和字型「快取優先」：網址有鎖版本號，內容不會變。
+// - 地圖圖磚不快取，避免塞爆手機空間。
+//
+// 改了下面的 PRECACHE 清單就把 VERSION 加一號，舊快取會在新版啟用時清掉。
+
+const VERSION = 'dsh-v2';
+const NETWORK_TIMEOUT_MS = 4000;
+const CDN_HOSTS = ['cdnjs.cloudflare.com', 'unpkg.com', 'fonts.googleapis.com', 'fonts.gstatic.com'];
+
+// 第一次打開就先存好的 App 外殼，之後斷線也能打開地圖首頁和三隻神獸的頁面
+const PRECACHE = [
+  './',
+  'index.html',
+  'manifest.json',
+  'css/app.css',
+  'css/report.css',
+  'css/notices.css',
+  'css/scan.css',
+  'js/map.js',
+  'js/marker.js',
+  'js/shared.js',
+  'js/store.js',
+  'js/tree.js',
+  'js/report.js',
+  'js/notices.js',
+  'js/scan.js',
+  'design-system/tokens.css',
+  'design-system/components.css',
+  'data/trees.json',
+  'data/mock/mock_beasts.json',
+  'data/mock/mock_guardians.json',
+  'data/mock/mock_notices.json',
+  'data/mock/mock_reports.json',
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(caches.open(VERSION).then((cache) => cache.addAll(PRECACHE)).then(() => self.skipWaiting()));
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys()
+      .then((keys) => Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim()),
+  );
+});
+
+async function networkFirst(request) {
+  const cache = await caches.open(VERSION);
+  // no-cache：每次都跟伺服器確認有沒有新版（GitHub Pages 預設會讓瀏覽器快取 10 分鐘）
+  const fromNetwork = fetch(request, { cache: 'no-cache' }).then((res) => {
+    if (res.ok) cache.put(request, res.clone());
+    return res;
+  });
+  const cached = await cache.match(request, { ignoreSearch: true });
+  if (!cached) return fromNetwork;
+  // 有快取時，網路太慢或失敗就先用快取（網路那邊回來後仍會更新快取）
+  const timeout = new Promise((resolve) => setTimeout(() => resolve(cached), NETWORK_TIMEOUT_MS));
+  return Promise.race([fromNetwork.catch(() => cached), timeout]);
+}
+
+async function cacheFirst(request) {
+  const cache = await caches.open(VERSION);
+  const cached = await cache.match(request);
+  if (cached) return cached;
+  const res = await fetch(request);
+  // opaque（跨網域、沒有 CORS）的回應也存，字型檔常常是這種
+  if (res.ok || res.type === 'opaque') cache.put(request, res.clone());
+  return res;
+}
+
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  if (request.method !== 'GET') return;
+  const url = new URL(request.url);
+  if (url.origin === self.location.origin) {
+    event.respondWith(networkFirst(request));
+  } else if (CDN_HOSTS.includes(url.hostname)) {
+    event.respondWith(cacheFirst(request));
+  }
+  // 其他（地圖圖磚等）交給瀏覽器自己處理
+});

@@ -1,0 +1,100 @@
+// 使用者自己的操作（守護哪些樹、送出的回報）存在這台裝置的 localStorage，不上傳。
+// 私密視窗或儲存被擋時，退回只存在記憶體裡，重新整理就會消失。
+// 負責人：Saori。兩人共用，要改先在 Discord 講一聲。
+
+const cache = {};
+
+function load(key, empty) {
+  if (!(key in cache)) {
+    try {
+      cache[key] = JSON.parse(localStorage.getItem(key)) ?? empty;
+    } catch {
+      cache[key] = empty;
+    }
+  }
+  return cache[key];
+}
+
+function save(key) {
+  try {
+    localStorage.setItem(key, JSON.stringify(cache[key]));
+    return true;
+  } catch {
+    // 存不進去也沒關係，這次瀏覽還是看得到
+    return false;
+  }
+}
+
+// ── 守護 ──────────────────────────────────────
+
+const GUARDS = 'dsh.guards';
+
+/** 'local'（在地守護）、'remote'（遠端關注）或 null */
+export const getGuard = (id) => load(GUARDS, {})[id] ?? null;
+
+export function setGuard(id, kind) {
+  load(GUARDS, {})[id] = kind;
+  save(GUARDS);
+}
+
+/** 守護人數＝模擬的基礎人數＋自己按的那一下 */
+export function guardiansOf(tree) {
+  const g = { ...tree.guardians };
+  const mine = getGuard(tree.id);
+  if (mine) g[mine] += 1;
+  return g;
+}
+
+export const totalOf = (g) => g.local + g.remote;
+
+// ── 掃描樹牌 ──────────────────────────────────
+// 掃過樹牌代表人曾經在樹旁邊。只記樹號和時間，不記位置。
+
+const SCANS = 'dsh.scans';
+
+/** 最近一次掃這棵樹樹牌的時間（毫秒），沒掃過是 null */
+export const lastScanOf = (id) => load(SCANS, {})[id] ?? null;
+
+export function markScanned(id) {
+  load(SCANS, {})[id] = Date.now();
+  save(SCANS);
+}
+
+// ── 回報 ──────────────────────────────────────
+// 格式和 data/mock/mock_reports.json 一樣：checks 的 true 代表「有看到這個問題」。
+// photo 是縮成小圖的 JPEG data URL（約 20KB），原圖不保存。
+
+const REPORTS = 'dsh.reports';
+
+/** 這台裝置對某棵樹送出的回報，新的在前 */
+export const getMyReports = (treeId) =>
+  load(REPORTS, []).filter((r) => r.treeId === treeId).reverse();
+
+export function addReport(report) {
+  const all = load(REPORTS, []);
+  all.push(report);
+  if (save(REPORTS)) return;
+  // 空間不夠多半是照片太多：這筆先不存照片再試一次
+  delete report.photo;
+  save(REPORTS);
+}
+
+// ── 元氣 ──────────────────────────────────────
+// 每筆回報先換成一個分數（每看到一個問題扣 15 分），再和原本的元氣值加權平均，
+// 所以一次回報只會讓元氣慢慢變化，不會一下子歸零。沒有基礎值的一般樹，第一筆回報就是元氣值。
+
+const PER_PROBLEM = 15;
+const NEW_WEIGHT = 0.3;
+
+export const problemsOf = (report) => Object.keys(report.checks).filter((k) => report.checks[k]);
+export const scoreOf = (report) => Math.max(25, 100 - PER_PROBLEM * problemsOf(report).length);
+
+/** 目前的元氣值（0～100），沒有資料時是 null */
+export function vitalityOf(tree) {
+  let v = tree.beast?.vitality ?? null;
+  // getMyReports 是新的在前，要從最舊的開始算
+  for (const r of getMyReports(tree.id).reverse()) {
+    v = v == null ? scoreOf(r) : Math.round(v * (1 - NEW_WEIGHT) + scoreOf(r) * NEW_WEIGHT);
+  }
+  return v;
+}

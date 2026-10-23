@@ -1,0 +1,17 @@
+{
+  "name": "大樹神獸",
+  "short_name": "大樹神獸",
+  "description": "認養、照顧、守護家附近的樹：每棵樹都有一群鄰居看著。",
+  "lang": "zh-Hant-TW",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7f2e8",
+  "theme_color": "#203f2a",
+  "icons": [
+    { "src": "design-system/assets/logos/app-icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "design-system/assets/logos/app-icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "design-system/assets/logos/app-icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
