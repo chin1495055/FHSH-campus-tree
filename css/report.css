@@ -3,6 +3,8 @@
 /* dsh-btn 等元件自己有 display，hidden 屬性要強制蓋過去 */
 .rp-scroll [hidden] { display: none !important; }
 .rp-scroll .dsh-btn { text-decoration: none; box-sizing: border-box; }
+/* 捲動區是直排 flex，內容太長時區塊預設會被壓扁（檢查清單的分隔線會切過文字），一律不壓縮 */
+.rp-scroll > * { flex: none; }
 .rp-scroll .tp-h { margin: 0; }
 .rp-center { text-align: center; }
 
