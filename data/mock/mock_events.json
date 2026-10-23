@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "dataType": "模擬資料",
+    "note": "社區佈告欄的樹下活動（PRD F6）是虛構的，暱稱都是假的。organizer 是 null 時顯示「在地守護者」（匿名）。地點固定在這棵樹下。使用者自己發起的活動存在 localStorage，不寫回這個檔案。",
+    "fields": "date 活動日期（星期由程式依日期算，不寫死）｜startTime、endTime 24 小時制｜interested 模擬的想參加人數",
+    "generatedAt": "2026-10-23"
+  },
+  "events": [
+    {
+      "id": "E-MOCK-001",
+      "treeId": "JS0155103034",
+      "date": "2026-10-25",
+      "startTime": "14:00",
+      "endTime": "16:00",
+      "title": "週日下午在樹下野餐",
+      "place": "鬚鬚公樹下（華山公園）",
+      "description": "帶塊野餐墊和一樣小點心就好，小朋友可以來找氣根。垃圾記得帶走喔。",
+      "organizer": null,
+      "interested": 18
+    },
+    {
+      "id": "E-MOCK-002",
+      "treeId": "JS0155103034",
+      "date": "2026-10-27",
+      "startTime": "07:00",
+      "endTime": "07:40",
+      "title": "一起來巡樹",
+      "place": "鬚鬚公樹下（華山公園）",
+      "description": "上班前繞公園裡五棵大樹一圈，順手做健康檢查，看到狀況就用 App 回報。",
+      "organizer": null,
+      "interested": 6
+    },
+    {
+      "id": "E-MOCK-003",
+      "treeId": "JS0155103034",
+      "date": "2026-10-28",
+      "startTime": "18:30",
+      "endTime": "19:00",
+      "title": "一起去聽步道整修說明會",
+      "place": "鬚鬚公樹下（華山公園）",
+      "description": "說明會 19:00 在某某里民活動中心（模擬），我們先在樹下集合再一起走過去。想問的問題可以先整理好。",
+      "organizer": "早起散步的松鼠（模擬）",
+      "interested": 24
+    },
+    {
+      "id": "E-MOCK-004",
+      "treeId": "JS0155103034",
+      "date": "2026-10-31",
+      "startTime": "15:00",
+      "endTime": "16:00",
+      "title": "樹下講古時間",
+      "place": "鬚鬚公樹下（華山公園）",
+      "description": "請住附近的長輩講講這棵榕樹以前的樣子，小朋友幫忙記下來，之後可以補進鬚鬚公的在地故事。",
+      "organizer": null,
+      "interested": 12
+    },
+    {
+      "id": "E-MOCK-005",
+      "treeId": "JS0155103034",
+      "date": "2026-11-01",
+      "startTime": "09:30",
+      "endTime": "11:00",
+      "title": "大樹公生日小聚會",
+      "place": "鬚鬚公樹下（華山公園）",
+      "description": "一起幫大樹公換一條新紅布（寬鬆綁就好，不要綁緊），再量一次樹圍。不燒香、不燒金紙，帶一句祝福來就好。",
+      "organizer": "阿樹（模擬）",
+      "interested": 32
+    },
+    {
+      "id": "E-MOCK-006",
+      "treeId": "JS0155100001",
+      "date": "2026-10-29",
+      "startTime": "12:10",
+      "endTime": "13:00",
+      "title": "樹下便當午餐會",
+      "place": "加冬仔樹下（華山公園）",
+      "description": "附近上班的人中午一起來樹下吃便當，順便認識同一棵樹的樹友。",
+      "organizer": "樹下吃便當的上班族（模擬）",
+      "interested": 9
+    },
+    {
+      "id": "E-MOCK-007",
+      "treeId": "JS0155503095",
+      "date": "2026-10-30",
+      "startTime": "07:30",
+      "endTime": "08:00",
+      "title": "一起幫雀雀看看根部",
+      "place": "雀雀樹下（華山公園）",
+      "description": "有樹友回報根部拱起來，大家一起拍照、勾選健康檢查，讓管理單位有更多現場資料。只用看的，不挖土、不踩樹穴。",
+      "organizer": null,
+      "interested": 5
+    }
+  ]
+}
