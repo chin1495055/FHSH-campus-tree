@@ -202,10 +202,10 @@
   .s8__close p + p { font-family: var(--font-sans); font-size: 32px; line-height: 48px; font-weight: 700; color: var(--green-100); margin-top: 16px; }
 
   /* ── 計時器與講者備註 ── */
-  .timer { position: fixed; top: 16px; right: 16px; z-index: 10; display: none; padding: 8px 20px; background: var(--ink-900); color: var(--ink-50); border: 3px solid var(--ink-50); border-radius: var(--radius-sm); font: 900 32px/40px var(--font-sans); font-variant-numeric: tabular-nums; }
+  .timer { position: fixed; top: 12px; right: 20px; z-index: 10; display: none; color: var(--ink-500); font: 900 32px/40px var(--font-sans); font-variant-numeric: tabular-nums; }
   .timer.is-on { display: block; }
-  .timer.is-warn { background: var(--state-notice); color: var(--ink-900); }
-  .timer.is-over { background: var(--action); }
+  .timer.is-warn { color: var(--state-notice); }
+  .timer.is-over { color: var(--action); }
   .notes { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 10; display: none; max-height: 40vh; overflow: auto; padding: 16px 24px; background: var(--ink-900); color: var(--ink-50); border: 3px solid var(--ink-50); border-radius: var(--radius-md); font-size: 22px; line-height: 36px; }
   .notes.is-on { display: block; }
   .notes small { display: block; color: var(--ink-400); font-size: 16px; line-height: 24px; margin-bottom: 4px; }
@@ -220,7 +220,7 @@
 </style>
 </head>
 <body>
-<div class="help">← → 換頁　F 全螢幕　T 計時　R 重設計時　N 講者備註</div>
+<div class="help">← → 換頁　F 全螢幕　T 計時開始／暫停　R 重新計時　N 講者備註</div>
 <div class="timer" id="timer">3:00</div>
 <div class="notes" id="notes"></div>
 
@@ -678,7 +678,7 @@
     if (location.hash !== '#' + (i + 1)) history.replaceState(null, '', '#' + (i + 1));
   }
 
-  /* 3 分鐘倒數：T 開始／暫停，R 重設；剩 10 秒變橘、時間到變紅 */
+  /* 3 分鐘倒數：T 開始／暫停，R 歸零並馬上重新開始；剩 10 秒變橘、時間到變紅 */
   var total = 180, left = total, tick = null;
   function render() {
     var t = Math.max(left, 0);
@@ -691,7 +691,7 @@
     if (tick) { clearInterval(tick); tick = null; return; }
     tick = setInterval(function () { left--; render(); if (left <= 0) { clearInterval(tick); tick = null; } }, 1000);
   }
-  function resetTimer() { if (tick) clearInterval(tick); tick = null; left = total; render(); }
+  function resetTimer() { if (tick) clearInterval(tick); tick = null; left = total; render(); toggleTimer(); }
 
   document.addEventListener('keydown', function (e) {
     var k = e.key;

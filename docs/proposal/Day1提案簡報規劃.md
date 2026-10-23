@@ -29,7 +29,7 @@
 
 - **檔案**：[day1-slides.html](day1-slides.html)，單一 HTML，直接套用 [design-system](../../design-system/README.md) 的 tokens、元件和神獸圖。
 - **開啟方式**：用本機伺服器開（在 repo 根目錄執行 `python3 -m http.server`，再開 `http://localhost:8000/docs/proposal/day1-slides.html`），或部署到 GitHub Pages 後直接開網址。雙擊用 file:// 開大多也能看，但字體和圖片以伺服器版為準。
-- **操作**：← → 或空白鍵換頁、`F` 全螢幕、`T` 開始／暫停 3 分鐘倒數（剩 10 秒變橘、時間到變紅）、`R` 重設計時、`N` 講者備註（逐字稿＋字數）。網址加 `#3` 直接跳到第 3 頁。
+- **操作**：← → 或空白鍵換頁、`F` 全螢幕、`T` 開始／暫停 3 分鐘倒數（剩 10 秒變橘、時間到變紅）、`R` 歸零並馬上重新計時、`N` 講者備註（逐字稿＋字數）。網址加 `#3` 直接跳到第 3 頁。
 - **動態效果**：進到每頁會自動播放，不用多按鍵。動作放慢、幅度放大，Discord 畫面幀率低也看得到。系統開啟「減少動態效果」時會關掉。
 - **素材**：神獸 3D 圖用 `design-system/assets/character/beasts/` 的 cutout 版；第 6 頁的守護籤分享卡放在 [assets/share-card-xuxugong.webp](assets/share-card-xuxugong.webp)。
 
