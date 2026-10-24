@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<!-- 票選宣傳圖卡：C1 主視覺（1080×1350）、C6 倒數卡（1080×1920）。用法見 docs/vote-campaign/票選宣傳規劃.md -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap">
+<link rel="stylesheet" href="../../../design-system/tokens.css">
+<style>
+*{box-sizing:border-box;margin:0}
+body{background:var(--ink-100);font-family:var(--font-sans);color:var(--text)}
+.card{position:relative;overflow:hidden;border:12px solid var(--ink-900);background:var(--ink-100) url(../../../design-system/assets/patterns/lattice.svg);display:flex;flex-direction:column;align-items:center;text-align:center}
+.c1{width:1080px;height:1350px;padding:56px 64px}
+.c6{width:1080px;height:1920px;padding:96px 72px}
+.logo{height:84px}
+.tag{font:900 30px var(--font-sans);letter-spacing:.06em;background:var(--green-800);color:var(--honor-on-dark);padding:12px 28px;border:4px solid var(--ink-900);border-radius:4px}
+h1{font:900 80px/1.2 var(--font-display);letter-spacing:.02em;white-space:nowrap}
+.sub{font:500 36px/1.6 var(--font-sans)}
+.beasts{display:flex;justify-content:center;align-items:flex-end;gap:0;margin:8px 0}
+.beasts img{width:340px;height:340px;object-fit:contain}
+.beasts img.mid{width:400px;height:400px}
+.c1 .beasts{margin:64px 0 0}.c1 .beasts img{width:360px;height:360px;margin:0 -50px}.c1 .beasts img.mid{width:540px;height:540px;position:relative;z-index:1}
+.t16{width:1280px;height:720px;flex-direction:row;padding:0 0 0 56px;text-align:left;align-items:stretch}
+.t16 .l{flex:1;display:flex;flex-direction:column;justify-content:center;gap:28px;padding:20px 0}
+.t16 .logo{height:72px;align-self:flex-start}
+.t16 h1{font-size:68px;line-height:1.3;letter-spacing:.01em}
+.t16 .tag{align-self:flex-start;font-size:32px}
+.t16 .r{width:640px;position:relative}
+.t16 .r img{position:absolute}
+.tc{padding:0;justify-content:center;align-items:center;text-align:center}
+.tc .l{flex:none;align-items:center;padding:0;gap:24px;position:relative;z-index:1}
+.tc .logo{align-self:center;height:116px}.tc .tag{align-self:center;font-size:24px;padding:8px 22px}
+.tc h1{font-size:72px;white-space:nowrap}
+.tc .b{position:absolute;bottom:14px;width:330px;height:330px;object-fit:contain}
+.tc .bl{left:-10px;width:280px;height:280px}.tc .br{right:-10px}
+.seal{position:absolute;top:44px;right:48px;width:84px;height:84px;background:var(--action);color:var(--on-action);border:4px solid var(--ink-900);border-radius:4px;outline:2px solid var(--ink-50);outline-offset:-10px;display:flex;align-items:center;justify-content:center;font:900 44px var(--font-display);transform:rotate(4deg);z-index:2}
+.vote{font:900 44px var(--font-sans);background:var(--action);color:var(--on-action);padding:26px 56px;border:5px solid var(--ink-900);border-radius:4px;outline:3px solid var(--ink-50);outline-offset:-12px}
+.note{font:400 24px/1.6 var(--font-sans);color:var(--text-muted)}
+.team{position:absolute;right:28px;bottom:20px;font:700 24px var(--font-sans);color:var(--text-muted)}
+.big{font:900 360px/1 var(--font-display)}
+</style></head><body>
+<script>
+const q=new URLSearchParams(location.search),k=q.get('card')||'c1';
+const B='../../../design-system/assets/character/beasts/';
+const beasts=`<div class="beasts"><img src="${B}queque/healthy-cutout.png"><img class="mid" src="${B}xuxugong/healthy-cutout.png"><img src="${B}gadang/healthy-cutout.png"></div>`;
+const foot=`<div class="note">樹木位置與樹種為臺北市開放資料，其餘為模擬資料</div><div class="team">AI 方舟計畫</div>`;
+let h;
+if(k==='thumb'){
+ h=`<div class="card t16 tc"><img class="b bl" src="${B}xuxugong/healthy-cutout.png"><div class="l"><img class="logo" src="../../../design-system/assets/logos/logo-horizontal.svg">
+ <h1>讓台北的每一棵樹，<br>都有一群守護祂的鄰居</h1><div class="tag">AI 方舟計畫</div></div><img class="b br" src="${B}gadang/healthy-cutout.png"><div class="seal">守</div></div>`;
+}else if(k==='c1'){
+ h=`<div class="card c1"><img class="logo" src="../../../design-system/assets/logos/logo-horizontal.svg">
+ <div style="height:24px"></div><h1>讓台北的每一棵樹，<br>都有一群守護祂的鄰居</h1>${beasts}
+ <div style="flex:1"></div>
+ <div class="tag">線上票選　10/24 – 10/31 18:00</div><div style="height:22px"></div>
+ <div class="vote">投「大樹神獸」一票</div><div style="height:22px"></div>${foot}</div>`;
+}else{
+ const m={d3:['3','剩 3 天','10/28 起還有三天，今天去守護一棵樹，再順手投一票。'],d1:['1','剩 1 天','明天 18:00 截止。這週有人守護了祂，你呢？'],h3:['3','最後 3 小時','今天 18:00 截止，還沒投的話現在是時候了。']}[k.slice(3)||k]||m;
+ const [n,t,s]=m;
+ h=`<div class="card c6"><img class="logo" src="../../../design-system/assets/logos/logo-horizontal.svg"><div style="flex:1"></div>
+ <div class="big">${n}</div><h1 style="margin-top:8px">${t}</h1><div style="height:32px"></div><div class="sub" style="max-width:800px">${s}</div>
+ <div style="flex:1"></div>${beasts}<div class="vote">投「大樹神獸」一票</div><div style="height:28px"></div>${foot}</div>`;
+}
+document.body.innerHTML=h;
+</script></body></html>
