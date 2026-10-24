@@ -51,6 +51,9 @@
   background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm);
   font-family: inherit; font-size: 16px; color: var(--text);
 }
+/* iOS Safari 的日期、時間欄位有原生最小寬度，會撐出畫面；拿掉原生外觀才會照格子寬度 */
+.board-input[type="date"], .board-input[type="time"] { -webkit-appearance: none; appearance: none; display: block; }
+.board-input::-webkit-date-and-time-value { text-align: left; }
 textarea.board-input { height: auto; padding: 10px var(--space-3); line-height: 24px; resize: vertical; }
 .board-input:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
 .board-place {
