@@ -69,7 +69,7 @@
 
 | 資料 | 來源 | 檔案 |
 |---|---|---|
-| 樹木位置、樹種、樹號、胸徑、樹高 | [臺北市行道樹及公園樹木分布圖](https://data.gov.tw/dataset/128274)（data.gov.tw） | [data/trees.json](data/trees.json) |
+| 樹木位置、樹種、樹號、胸徑、樹高 | [臺北市行道樹及公園樹木分布圖](https://data.gov.tw/dataset/128274)（data.gov.tw） | [data/trees.json](data/trees.json)（總部周邊，畫在地圖上）、[data/trees-all/](data/trees-all/)（全臺北 16 萬棵分成 256 個檔，掃到範圍外的樹牌時才讀） |
 
 - 只取競選總部（中正區北平東路 30-1 號）半徑 800 公尺內的 1,878 棵樹，座標由 TWD97 轉成 WGS84。前處理腳本是 [scripts/build_data.py](scripts/build_data.py)。
 - `ageEstimated`（樹齡）是用胸徑粗估的，`managerEstimated`（管理單位）是依資料集推定的，都不是原始欄位，畫面上會標「推估」「推定」。

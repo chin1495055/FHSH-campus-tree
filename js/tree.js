@@ -17,6 +17,12 @@ const STATUS_NOTE = {
   move: '已移植到新地點，持續追蹤存活。',
 };
 
+// 地圖範圍外的樹（見 lookup.js）：查得到開放資料，或只有樹號
+const OUTSIDE_NOTE = {
+  found: '這棵樹在地圖範圍外，還沒有鄰居守護。成為第一位守護祂的人。',
+  unknown: '這棵樹不在目前地圖的範圍，樹種和位置還沒查到。你一樣可以守護祂、回報祂的樣子。',
+};
+
 // 公示與回報紀錄第一次打開樹木頁時才載入
 let extras;
 function loadExtras() {
@@ -267,8 +273,8 @@ export async function renderTreePage(el, tree, { justGuarded = false } = {}) {
       <div class="tp-cols dsh-cols">
         <div class="tp-aside dsh-cols__aside">
           ${heroHtml(tree)}
-          ${tree.unlisted
-            ? '<div class="tp-status"><span>這棵樹不在目前地圖的範圍，樹種和位置還沒查到。你一樣可以守護祂、回報祂的樣子。</span></div>'
+          ${tree.outside
+            ? `<div class="tp-status"><span>${tree.lat == null ? OUTSIDE_NOTE.unknown : OUTSIDE_NOTE.found}</span></div>`
             : `<div class="tp-status">${statusTag(tree.status)}<span>${STATUS_NOTE[tree.status]}</span></div>`}
           ${vitalHtml(tree, treeReports.length)}
           ${lanternsHtml(guardiansOf(tree), justGuarded)}

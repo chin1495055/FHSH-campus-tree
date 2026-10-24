@@ -12,7 +12,7 @@ import { renderCollectionPage } from './collection.js';
 import { renderSharePage } from './share.js';
 import { renderMePage } from './me.js';
 import { CATEGORIES, categoryOf } from './categories.js';
-import { treeIdFrom, placeholderTree } from './lookup.js';
+import { treeIdFrom, findOutsideTree } from './lookup.js';
 
 // 路由註冊表：#/名稱 或 #/名稱/樹號 → 要畫的畫面。
 // 新增畫面：在 js/ 開一個檔案匯出 render(el, { tree, trees })，再到這裡加一行。
@@ -452,11 +452,13 @@ async function main() {
     syncNav(name);
     const target = Object.hasOwn(PAGES, name) ? PAGES[name] : null;
     let tree = id ? byId.get(decodeURIComponent(id)) : null;
-    // 不在地圖範圍的樹號（例如在家附近掃到的樹牌）：用樹號做一棵「樹種待查」的樹，畫面才打得開
+    // 不在地圖範圍的樹號（例如在家附近掃到的樹牌）：到全臺北的資料找，找不到就用「樹種待查」（見 lookup.js）
     const outsideId = !tree && target?.needsTree && id ? treeIdFrom(decodeURIComponent(id)) : null;
     if (outsideId) {
-      tree = byId.get(outsideId) ?? placeholderTree(outsideId);
+      tree = byId.get(outsideId) ?? await findOutsideTree(outsideId);
       byId.set(outsideId, tree);
+      // 等資料的時候網址已經換了，就不畫這一頁
+      if (location.hash.match(/^#\/[^/]+\/([^/]+)/)?.[1] !== id) return;
     }
     if (target && (tree || !target.needsTree)) {
       // 範圍外的樹沒有地圖標記，不用選取

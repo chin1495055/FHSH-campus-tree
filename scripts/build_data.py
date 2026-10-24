@@ -1,4 +1,5 @@
-"""樹木資料前處理：開放資料 → data/trees.json，並產生模擬守護人數 data/mock/mock_guardians.json。
+"""樹木資料前處理：開放資料 → data/trees.json（總部周邊）、data/trees-all/（全臺北分檔），
+並產生模擬守護人數 data/mock/mock_guardians.json。
 負責人：Saori
 
 執行方式（在 repo 根目錄）：
@@ -23,6 +24,10 @@ SOURCE_DIR = ROOT / "data" / "source" / "open-data"
 MOCK_DIR = ROOT / "data" / "mock"
 OUT_TREES = ROOT / "data" / "trees.json"
 OUT_GUARDIANS = MOCK_DIR / "mock_guardians.json"
+# 全臺北的樹分成小檔，掃到地圖範圍外的樹牌時，前端只下載那一份（js/lookup.js）
+OUT_ALL_DIR = ROOT / "data" / "trees-all"
+SHARDS = 256
+ALL_FIELDS = ["id", "species", "lat", "lng", "district", "kind", "location", "dbh", "height", "surveyDate", "ageEstimated"]
 
 # 預設地點：競選總部（臺北市中正區北平東路 30-1 號）。
 # 這是地址的約略座標，請用地圖核對後再更新，前端的預設中心點也要一起改。
@@ -110,6 +115,37 @@ def to_tree(raw, kind):
     }
 
 
+def shard_of(tree_id):
+    """樹號 → 分檔編號。js/lookup.js 的 shardOf 要用一模一樣的算法。"""
+    h = 0
+    for c in tree_id:
+        h = (h * 31 + ord(c)) % SHARDS
+    return f"{h:02x}"
+
+
+def write_all_shards(all_trees, today):
+    """每份約 630 棵；一棵樹存成一列陣列，欄位順序見 fields，檔案比較小。"""
+    shards = {}
+    for t in all_trees:
+        shards.setdefault(shard_of(t["id"]), []).append([t[k] for k in ALL_FIELDS])
+    OUT_ALL_DIR.mkdir(exist_ok=True)
+    for old in OUT_ALL_DIR.glob("*.json"):
+        old.unlink()
+    meta = {
+        "dataType": "真實開放資料",
+        "source": "臺北市行道樹及公園樹木分布圖 https://data.gov.tw/dataset/128274",
+        "license": "政府資料開放授權條款 https://data.gov.tw/license",
+        "note": "座標已由 TWD97 轉成 WGS84。ageEstimated 依胸徑粗估，不是原始欄位。",
+        "generatedAt": today,
+    }
+    for key, rows in shards.items():
+        (OUT_ALL_DIR / f"{key}.json").write_text(
+            json.dumps({"meta": meta, "fields": ALL_FIELDS, "rows": rows}, ensure_ascii=False, separators=(",", ":")),
+            encoding="utf-8",
+        )
+    return len(shards)
+
+
 def mock_guardians_for(tree, beasts):
     """依樹號產生固定的假人數，每次執行結果都一樣。神獸用 mock_beasts.json 裡寫好的數字。"""
     if tree["id"] in beasts:
@@ -128,11 +164,13 @@ def main():
         beasts = {b["treeId"]: b for b in json.load(f)["beasts"]}
 
     trees = []
+    all_trees = []
     for name, kind in [("TaipeiTree.json", "street"), ("TaipeiParkTree.json", "park")]:
         for raw in load(name):
             if not raw.get("TWD97X"):
                 continue
             tree = to_tree(raw, kind)
+            all_trees.append(tree)
             dist = distance_m(CENTER["lat"], CENTER["lng"], tree["lat"], tree["lng"])
             # 神獸對應的樹不管距離都收進來
             if dist <= RADIUS_M or tree["id"] in beasts:
@@ -181,7 +219,10 @@ def main():
         encoding="utf-8",
     )
 
+    shard_count = write_all_shards(all_trees, today)
+
     print(f"trees.json：{len(trees)} 棵（半徑 {RADIUS_M} 公尺，含神獸）")
+    print(f"trees-all/：全臺北 {len(all_trees)} 棵，分成 {shard_count} 個檔案")
     for b in beasts.values():
         t = next(t for t in trees if t["id"] == b["treeId"])
         print(f"  {b['name']}：{t['id']} {t['species']} 胸徑 {t['dbh']} cm，{t['location']}，距總部 {t['distanceM']} 公尺")
