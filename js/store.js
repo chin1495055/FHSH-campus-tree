@@ -32,6 +32,9 @@ const GUARDS = 'dsh.guards';
 /** 'local'（在地守護）、'remote'（遠端關注）或 null */
 export const getGuard = (id) => load(GUARDS, {})[id] ?? null;
 
+/** 這台裝置守護的所有樹號，包含不在地圖範圍的樹（掃樹牌打開的） */
+export const guardedIds = () => Object.keys(load(GUARDS, {}));
+
 export function setGuard(id, kind) {
   load(GUARDS, {})[id] = kind;
   save(GUARDS);
@@ -69,6 +72,9 @@ const REPORTS = 'dsh.reports';
 /** 這台裝置對某棵樹送出的回報，新的在前 */
 export const getMyReports = (treeId) =>
   load(REPORTS, []).filter((r) => r.treeId === treeId).reverse();
+
+/** 這台裝置送出的所有回報（不分樹），「我的」頁統計用 */
+export const getAllMyReports = () => load(REPORTS, []);
 
 export function addReport(report) {
   const all = load(REPORTS, []);

@@ -1,7 +1,8 @@
 // 我的守護圖鑑（關鍵畫面「我的守護圖鑑」「圖鑑｜空白狀態」，PRD F7）：#/collection。負責人：Saori
 // 列出這台裝置守護的樹：在地守護排成卡片，遠端關注排成清單。資料只來自 store.js，只有自己看得到。
 import { esc, statusTag, pageBarHtml } from './shared.js';
-import { getGuard } from './store.js';
+import { getGuard, guardedIds } from './store.js';
+import { findOutsideTree } from './lookup.js';
 import { upcomingEventsOf } from './board.js';
 import { OLD_TREE_AGE } from './tree.js';
 
@@ -78,7 +79,11 @@ function emptyHtml() {
     </div>`;
 }
 
-export async function renderCollectionPage(el, { trees }) {
+export async function renderCollectionPage(el, { trees: mapTrees }) {
+  // 地圖範圍外守護的樹（掃樹牌打開的）不在 mapTrees 裡，用樹號到全臺北的資料補上
+  const known = new Set(mapTrees.map((t) => t.id));
+  const outside = await Promise.all(guardedIds().filter((id) => !known.has(id)).map(findOutsideTree));
+  const trees = [...mapTrees, ...outside];
   const local = guardedTrees(trees, 'local');
   const remote = guardedTrees(trees, 'remote');
   const events = new Map(await Promise.all(

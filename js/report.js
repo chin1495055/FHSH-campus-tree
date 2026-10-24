@@ -5,7 +5,8 @@ import { DESKTOP, esc, pageBarHtml } from './shared.js';
 import { getGuard, getMyReports, addReport, problemsOf, vitalityOf } from './store.js';
 import { vitalHtml } from './tree.js';
 
-// 題目寫成「正常的樣子」，勾選＝沒問題；沒勾的項目送出後變成待關注事項（checks[key] = true）。
+// 題目寫成「正常的樣子」，勾選＝沒問題；預設全勾，取消勾的項目送出後變成待關注事項（checks[key] = true）。
+// 預設全勾：不然直接按送出會變成五項都有問題。
 // key 和 data/mock/mock_reports.json 的 checkItems 一樣。
 const CHECKS = [
   { key: 'rootBulge', q: '樹根周圍的地面平整，沒有隆起', hint: '根盤隆起可能是根部出了狀況' },
@@ -221,7 +222,7 @@ export async function renderReportPage(el, { tree }) {
   function checkStep() {
     const items = CHECKS.map((c) => `
       <label class="dsh-check__item">
-        <input type="checkbox" class="dsh-check__box" name="${c.key}">
+        <input type="checkbox" class="dsh-check__box" name="${c.key}" checked>
         <span class="dsh-check__q">${esc(c.q)}<span class="dsh-check__hint">${esc(c.hint)}</span></span>
       </label>`).join('');
     show(`
@@ -229,7 +230,7 @@ export async function renderReportPage(el, { tree }) {
       ${draft.photo ? `<div class="rp-thumbrow"><img class="rp-thumb" src="${esc(draft.photo)}" alt="你拍的照片"><button type="button" class="dsh-btn dsh-btn--text" data-back>重拍</button></div>` : ''}
       <form class="dsh-check">
         <h2 class="dsh-check__title" tabindex="-1" data-focus>${esc(name)}看起來還好嗎？</h2>
-        <p class="rp-lead">看到正常的樣子就打勾。沒勾的項目會變成「待關注」，請專業的人來看，你不用判斷是什麼病。</p>
+        <p class="rp-lead">先幫你全部勾好了。哪一項跟現場不一樣，就把勾取消，會變成「待關注」請專業的人來看，你不用判斷是什麼病。</p>
         ${items}
         <label class="rp-note">
           <span>想補充什麼？（選填）</span>

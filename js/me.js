@@ -2,7 +2,7 @@
 // 守護成果、隱私說明、資料來源，最下面是「關於大樹神獸」介紹頁的入口（手機版沒有頂部導覽）。
 // 數字只來自 store.js，只有自己看得到；社區活動的數字要先讀模擬活動，由 board.js 算好再補上。
 import { pageBarHtml } from './shared.js';
-import { getGuard, getMyReports } from './store.js';
+import { getGuard, guardedIds, getAllMyReports } from './store.js';
 import { joinedEventCounts } from './board.js';
 
 const README = 'https://github.com/innerwork-saori/2026-debugWithPuma#readme';
@@ -11,10 +11,11 @@ function statHtml(num, label) {
   return `<li class="me-stat"><span class="me-stat__num">${num}</span><span class="me-stat__label">${label}</span></li>`;
 }
 
-export function renderMePage(el, { trees }) {
-  const local = trees.filter((t) => getGuard(t.id) === 'local').length;
-  const remote = trees.filter((t) => getGuard(t.id) === 'remote').length;
-  const reports = trees.reduce((n, t) => n + getMyReports(t.id).length, 0);
+// 直接從 store 算，地圖範圍外的樹（掃樹牌打開的）也算進去
+export function renderMePage(el) {
+  const local = guardedIds().filter((id) => getGuard(id) === 'local').length;
+  const remote = guardedIds().filter((id) => getGuard(id) === 'remote').length;
+  const reports = getAllMyReports().length;
 
   el.innerHTML = `
     ${pageBarHtml('我的')}

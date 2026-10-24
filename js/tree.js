@@ -292,6 +292,8 @@ export async function renderTreePage(el, tree, { justGuarded = false } = {}) {
     <div class="tp-actions">${actionsHtml(tree)}</div>
     ${sheetHtml(name)}`;
   el.querySelector('.tp-scroll').scrollTop = scrollTop;
+  // 剛守護時捲到燈海，才看得到新點亮的那盞燈
+  if (justGuarded) el.querySelector('.tp-lanterns').scrollIntoView({ block: 'center' });
 
   const sheet = el.querySelector('.tp-sheet');
   const opener = el.querySelector('[data-open-sheet]');
