@@ -7,6 +7,17 @@ jobs:
   discord-notify:
     runs-on: ubuntu-latest
     steps:
+      - name: Build commit list
+        id: commits
+        env:
+          COMMITS_JSON: ${{ toJSON(github.event.commits) }}
+        run: |
+          {
+            echo 'list<<__COMMITS_END__'
+            echo "$COMMITS_JSON" | jq -r '.[] | "• " + (.message | split("\n")[0])'
+            echo '__COMMITS_END__'
+          } >> "$GITHUB_OUTPUT"
+
       - name: Send Discord Notification
         uses: Ilshidur/action-discord@master
         env:
@@ -19,6 +30,6 @@ jobs:
             **Pusher:** ${{ github.actor }}
 
             **Commits in this push:**
-            ${{ join(github.event.commits.*.message, '\n') }}
+            ${{ steps.commits.outputs.list }}
 
             [View Changes](https://github.com/${{ github.repository }}/compare/${{ github.event.before }}...${{ github.event.after }})
