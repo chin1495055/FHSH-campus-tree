@@ -37,13 +37,13 @@
 .ab-sec { padding: var(--space-12) 0; scroll-margin-top: 64px; }
 .ab-sec--alt { background: var(--surface-raised); border-block: var(--stroke-ui) solid var(--outline); }
 .ab-eyebrow { margin: 0; font-size: 14px; line-height: 20px; font-weight: 700; letter-spacing: 0.15em; color: var(--brand-text); }
-.ab-head { width: fit-content; max-width: 100%; margin: 0 auto var(--space-6); text-align: center; }
+.ab-head { width: fit-content; max-width: 100%; margin: 0 auto var(--space-8); text-align: center; }
 /* 小標題寫在屋脊上：和屋脊疊在同一格，置中在兩端燕尾之間、梁的上方 */
 .ab-head { display: grid; }
 .ab-head .ab-eyebrow, .ab-head .dsh-ridge { grid-area: 1 / 1; }
-.ab-head .ab-eyebrow { justify-self: center; align-self: end; padding: 0 var(--space-3) var(--space-4); font-size: 18px; line-height: 26px; }
+.ab-head .ab-eyebrow { justify-self: center; align-self: end; padding: 0 var(--space-3) var(--space-4); font-size: 18px; line-height: 26px; font-weight: 900; }
 .ab-head .dsh-ridge { align-self: end; }
-.ab-head .ab-h2 { margin-top: var(--space-2); }
+.ab-head .ab-h2 { margin-top: var(--space-3); }
 .ab-h2 { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 28px; line-height: 36px; }
 .ab-lead { margin: 0 auto var(--space-6); text-align: center; font-size: 18px; line-height: 30px; font-weight: 500; max-width: 46em; }
 .ab-p { margin: 0 0 var(--space-3); font-size: 16px; line-height: 28px; }
@@ -148,6 +148,7 @@
 
   .ab-sec { padding: 72px 0; }
   .ab-h2 { font-size: 36px; line-height: 46px; }
+  .ab-head { margin-bottom: var(--space-12); }
   .ab-grid--3 { grid-template-columns: repeat(3, 1fr); }
   .ab-grid--4 { grid-template-columns: repeat(4, 1fr); }
   .ab-why { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--space-6); align-items: start; }
