@@ -12,6 +12,7 @@ import { renderCollectionPage } from './collection.js';
 import { renderSharePage } from './share.js';
 import { renderMePage } from './me.js';
 import { CATEGORIES, categoryOf } from './categories.js';
+import { treeIdFrom, placeholderTree } from './lookup.js';
 
 // 路由註冊表：#/名稱 或 #/名稱/樹號 → 要畫的畫面。
 // 新增畫面：在 js/ 開一個檔案匯出 render(el, { tree, trees })，再到這裡加一行。
@@ -450,9 +451,16 @@ async function main() {
     const [, name, id] = location.hash.match(/^#\/([^/]+)(?:\/([^/]+))?/) ?? [];
     syncNav(name);
     const target = Object.hasOwn(PAGES, name) ? PAGES[name] : null;
-    const tree = id ? byId.get(decodeURIComponent(id)) : null;
+    let tree = id ? byId.get(decodeURIComponent(id)) : null;
+    // 不在地圖範圍的樹號（例如在家附近掃到的樹牌）：用樹號做一棵「樹種待查」的樹，畫面才打得開
+    const outsideId = !tree && target?.needsTree && id ? treeIdFrom(decodeURIComponent(id)) : null;
+    if (outsideId) {
+      tree = byId.get(outsideId) ?? placeholderTree(outsideId);
+      byId.set(outsideId, tree);
+    }
     if (target && (tree || !target.needsTree)) {
-      if (tree && selected !== tree) select(tree);
+      // 範圍外的樹沒有地圖標記，不用選取
+      if (tree && selected !== tree && markers.has(tree.id)) select(tree);
       // 換到別的畫面時清掉樹號，樹木頁才不會沿用上一次的捲動位置
       if (name !== 'tree') delete page.dataset.treeId;
       page.dataset.page = name;

@@ -267,7 +267,9 @@ export async function renderTreePage(el, tree, { justGuarded = false } = {}) {
       <div class="tp-cols dsh-cols">
         <div class="tp-aside dsh-cols__aside">
           ${heroHtml(tree)}
-          <div class="tp-status">${statusTag(tree.status)}<span>${STATUS_NOTE[tree.status]}</span></div>
+          ${tree.unlisted
+            ? '<div class="tp-status"><span>這棵樹不在目前地圖的範圍，樹種和位置還沒查到。你一樣可以守護祂、回報祂的樣子。</span></div>'
+            : `<div class="tp-status">${statusTag(tree.status)}<span>${STATUS_NOTE[tree.status]}</span></div>`}
           ${vitalHtml(tree, treeReports.length)}
           ${lanternsHtml(guardiansOf(tree), justGuarded)}
         </div>

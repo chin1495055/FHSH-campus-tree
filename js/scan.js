@@ -5,13 +5,10 @@
 // 相機打不開、或在電腦上錄 Demo 時，可以手動輸入樹號、從照片讀，或點 Demo 樹牌。
 import { esc, pageBarHtml } from './shared.js';
 import { markScanned } from './store.js';
+import { treeIdFrom } from './lookup.js';
 
 // iPhone 的 Safari 沒有內建 QR 辨識，用 nimiq 的 qr-scanner（瀏覽器有內建辨識時它會自己改用內建的）
 const QR_SCANNER_URL = 'https://unpkg.com/qr-scanner@1.4.2/qr-scanner.min.js';
-// 樹號：兩個英文字母＋10 位數字，例如 JJ0530051019。市府網址和我們的 #/tree/樹號 網址都讀得到
-const TREE_ID = /\b[A-Z]{2}\d{10}\b/;
-
-const treeIdFrom =(text) => String(text).toUpperCase().match(TREE_ID)?.[0] ?? null;
 
 // 離開掃描頁就關相機。這個監聽比路由先註冊，所以會在畫下一個畫面之前關掉
 let scanner = null;
@@ -29,7 +26,6 @@ async function loadQrScanner() {
 
 export async function renderScanPage(el, { trees }) {
   stopScanner();
-  const byId = new Map(trees.map((t) => [t.id, t]));
   const demoTrees = trees.filter((t) => t.beast);
   el.innerHTML = `
     ${pageBarHtml('掃描樹牌')}
@@ -82,9 +78,8 @@ export async function renderScanPage(el, { trees }) {
     const id = treeIdFrom(text);
     if (!id) {
       msg.textContent = '這不是樹牌的 QR code，換一個試試。';
-    } else if (!byId.has(id)) {
-      msg.textContent = `樹號 ${id} 還不在我們的範圍。目前只收錄競選總部周邊 800 公尺內的樹。`;
     } else {
+      // 不在地圖範圍的樹號也照樣打開，樹木頁會顯示「樹種待查」（見 lookup.js）
       stopScanner();
       markScanned(id);
       location.hash = `#/tree/${encodeURIComponent(id)}`;
