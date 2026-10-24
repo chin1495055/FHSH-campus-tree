@@ -7,6 +7,9 @@
 | `xuxugong/` | 鬚鬚公 | 榕樹 |
 | `gadang/` | 茄苳仔 | 茄苳 |
 | `queque/` | 雀雀 | 雀榕 |
+| `luan/` | 欒四季 | 臺灣欒樹 |
+
+> 欒四季（10/24 加入）**只用在介紹頁 `about.html`，App 不用**。圖由 Qmoa 用 ChatGPT 產生；「需要關心」版原圖背景是畫進去的灰白格子，由 Claude 在本機去背。
 
 > `xuxugong/healthy.png` 和 `../xuxugong-3d.png` 是同一張圖。神獸名字統一用角色設定的版本：鬚鬚公、茄苳仔、雀雀（10/22 Qmoa 決定）。
 

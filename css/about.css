@@ -1,0 +1,153 @@
+/* F10 品牌介紹頁 about.html。負責人：Qmoa。class 前綴 ab-。
+   手機優先；1024px 以上且滑鼠操作時改成桌機版面（和 desktop.css 同一個條件）。 */
+
+.ab { margin: 0; min-height: 100vh; }
+.ab [hidden] { display: none !important; }
+.ab a:not(.dsh-btn) { color: var(--brand-text); }
+.ab img { display: block; height: auto; }
+:where(.ab) img { max-width: 100%; }
+.ab-wrap { max-width: var(--content-max, 1280px); margin: 0 auto; padding: 0 var(--space-4); box-sizing: border-box; }
+
+/* 頂部 */
+.ab-top { position: sticky; top: 0; z-index: 10; background: var(--surface-raised); border-bottom: var(--stroke-ui) solid var(--outline); }
+.ab-top__in { display: flex; align-items: center; gap: var(--space-4); height: 64px; }
+.ab-top__brand img { height: 36px; width: auto; }
+.ab-top__links { display: none; }
+.ab-top__cta { margin-left: auto; min-height: 44px !important; padding: 0 var(--space-4) !important; font-size: 16px !important; text-decoration: none; }
+
+/* 開場：兩隻神獸像門神左右相對，中間匾額 */
+.ab-hero { padding: var(--space-6) 0 var(--space-8); background: var(--surface) url("../design-system/assets/patterns/lattice.svg") repeat; border-bottom: var(--stroke-ui) solid var(--outline); }
+.ab-hero__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); align-items: end; }
+.ab-hero__beast { width: 100%; max-width: 120px; justify-self: center; }
+.ab-hero__beast--r { transform: scaleX(-1); }
+.ab-hero__center { grid-column: 1 / -1; grid-row: 2; text-align: center; }
+.ab-plaque {
+  background: var(--brand-strong); color: var(--honor-on-dark);
+  border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 0 4px var(--brand-strong), inset 0 0 0 6px var(--honor-on-dark);
+  padding: var(--space-6) var(--space-4);
+}
+.ab-plaque__q { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 28px; line-height: 38px; letter-spacing: 0.04em; }
+.ab-plaque__a { margin: var(--space-3) 0 0; font-size: 18px; line-height: 28px; font-weight: 700; color: var(--ink-50); }
+.ab-hero__btns { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-6); }
+.ab-hero__btns .dsh-btn { text-decoration: none; }
+.ab-hero__meta { margin: var(--space-4) 0 0; font-size: 14px; line-height: 20px; font-weight: 700; color: var(--text-muted); }
+
+/* 區塊共用 */
+.ab-sec { padding: var(--space-12) 0; scroll-margin-top: 64px; }
+.ab-sec--alt { background: var(--surface-raised); border-block: var(--stroke-ui) solid var(--outline); }
+.ab-eyebrow { margin: 0; font-size: 14px; line-height: 20px; font-weight: 700; letter-spacing: 0.15em; color: var(--brand-text); }
+.ab-head { width: fit-content; max-width: 100%; margin: 0 auto var(--space-6); text-align: center; }
+/* 小標題寫在屋脊上：和屋脊疊在同一格，置中在兩端燕尾之間、梁的上方 */
+.ab-head { display: grid; }
+.ab-head .ab-eyebrow, .ab-head .dsh-ridge { grid-area: 1 / 1; }
+.ab-head .ab-eyebrow { justify-self: center; align-self: end; padding: 0 var(--space-3) var(--space-4); font-size: 18px; line-height: 26px; }
+.ab-head .dsh-ridge { align-self: end; }
+.ab-head .ab-h2 { margin-top: var(--space-2); }
+.ab-h2 { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 28px; line-height: 36px; }
+.ab-lead { margin: 0 auto var(--space-6); text-align: center; font-size: 18px; line-height: 30px; font-weight: 500; max-width: 46em; }
+.ab-p { margin: 0 0 var(--space-3); font-size: 16px; line-height: 28px; }
+.ab-src { margin: var(--space-4) 0 0; font-size: 13px; line-height: 20px; color: var(--text-muted); }
+.ab-src a { color: var(--text-muted); }
+
+/* 卡片 */
+.ab-card { background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md); padding: var(--space-4); box-sizing: border-box; }
+.ab-grid { display: grid; gap: var(--space-4); }
+
+/* Demo 影片：16:9，墨框；還沒有影片時顯示等待畫面 */
+.ab-video { position: relative; max-width: 960px; aspect-ratio: 16 / 9; margin: 0 auto; background: var(--surface-sunken); border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-md); overflow: hidden; }
+.ab-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.ab-video__wait { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-3); padding: var(--space-4); text-align: center; background: url("../design-system/assets/patterns/lattice.svg") repeat; }
+.ab-video__wait img { width: 72px; height: 72px; border-radius: 50%; border: var(--stroke-ui) solid var(--outline); background: var(--surface); }
+.ab-video__wait p { margin: 0; padding: var(--space-2) var(--space-3); background: var(--surface-raised); border: var(--stroke-fine) solid var(--outline); border-radius: var(--radius-sm); font-size: 15px; line-height: 24px; font-weight: 700; }
+
+/* 為何而做：數字 */
+.ab-stat__num { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 40px; line-height: 48px; color: var(--brand-strong); }
+.ab-stat__num small { font-size: 18px; margin-left: 4px; }
+.ab-stat__label { margin: var(--space-1) 0 0; font-size: 16px; line-height: 24px; font-weight: 700; }
+.ab-stat__note { margin: var(--space-2) 0 0; font-size: 14px; line-height: 22px; color: var(--text-muted); }
+.ab-gov { margin-top: var(--space-4); background: var(--surface-sunken); border: var(--stroke-ui) dashed var(--outline); border-radius: var(--radius-md); padding: var(--space-4); }
+.ab-gov h3 { margin: 0 0 var(--space-2); font-size: 16px; line-height: 24px; font-weight: 900; }
+.ab-gov ul { margin: 0; padding-left: 1.2em; font-size: 16px; line-height: 26px; }
+.ab-quote { margin: var(--space-8) 0 0; padding: var(--space-6); background: var(--surface-raised); border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-sm); }
+.ab-quote__big { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 24px; line-height: 34px; }
+.ab-quote__small { margin: var(--space-3) 0 0; font-size: 16px; line-height: 28px; }
+
+/* 怎麼做：步驟 */
+.ab-steps { counter-reset: step; list-style: none; margin: 0; padding: 0; }
+.ab-step { position: relative; display: flex; gap: var(--space-4); align-items: flex-start; }
+.ab-step img { width: 48px; height: 48px; flex: none; }
+.ab-step h3 { margin: 0; font-size: 18px; line-height: 26px; font-weight: 900; }
+.ab-step h3::before { counter-increment: step; content: counter(step) "．"; color: var(--brand-text); }
+.ab-step p { margin: var(--space-1) 0 0; font-size: 15px; line-height: 24px; color: var(--text-muted); }
+.ab-lines { margin: var(--space-8) 0 0; display: grid; gap: var(--space-3); }
+.ab-line { margin: 0; padding-left: var(--space-4); border-left: 6px solid var(--brand); font-family: var(--font-display); font-weight: 700; font-size: 20px; line-height: 30px; }
+
+/* 三隻神獸 */
+.ab-beast { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+.ab-beast img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-bottom: var(--stroke-ui) solid var(--outline); background: var(--surface); }
+.ab-beast__wait { aspect-ratio: 4 / 5; display: flex; align-items: center; justify-content: center; border-bottom: var(--stroke-ui) solid var(--outline); background: var(--surface) url("../design-system/assets/patterns/lattice.svg") repeat; font-size: 15px; font-weight: 700; color: var(--text-muted); }
+.ab-beast__body { padding: var(--space-4); }
+.ab-beast__name { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 24px; line-height: 32px; }
+.ab-beast__kind { margin: var(--space-1) 0 0; font-size: 14px; line-height: 20px; font-weight: 700; color: var(--brand-text); }
+.ab-beast__say { margin: var(--space-3) 0 0; font-size: 16px; line-height: 26px; }
+
+/* 我們相信 */
+.ab-value h3 { margin: 0; display: flex; gap: var(--space-2); align-items: center; font-size: 18px; line-height: 26px; font-weight: 900; }
+.ab-value h3 img { width: 32px; height: 32px; }
+.ab-value p { margin: var(--space-2) 0 0; font-size: 15px; line-height: 25px; color: var(--text-muted); }
+
+/* 資料怎麼來 */
+.ab-data h3 { margin: 0 0 var(--space-3); }
+.ab-data ul { margin: 0; padding-left: 1.2em; font-size: 15px; line-height: 26px; }
+.ab-note { margin: var(--space-4) 0 0; font-size: 15px; line-height: 25px; color: var(--text-muted); }
+
+/* 團隊：深綠底，雲紋只做上緣點綴 */
+.ab-team { padding-top: 72px; background: var(--brand-strong); color: var(--ink-50); border-top: var(--stroke-ui) solid var(--outline); position: relative; }
+.ab-team::before { content: ""; position: absolute; inset: 0 0 auto; height: 40px; background: url("../design-system/assets/patterns/cloud.svg") repeat-x; border-bottom: var(--stroke-fine) solid var(--outline); }
+.ab-team .ab-eyebrow { color: var(--honor-on-dark); }
+.ab-team .ab-team .ab-lead { color: var(--ink-50); }
+.ab-ark { margin: 0 0 var(--space-8); text-align: center; font-family: var(--font-display); font-weight: 900; font-size: 22px; line-height: 32px; color: var(--honor-on-dark); }
+.ab-member { color: var(--text); display: flex; gap: var(--space-4); align-items: flex-start; }
+.ab-member__avatar { flex: none; width: 72px; height: 72px; border-radius: 50%; border: var(--stroke-ui) solid var(--outline); background: var(--surface); overflow: hidden; }
+.ab-member__avatar img { width: 100%; height: 100%; object-fit: cover; }
+.ab-member__name { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 24px; line-height: 32px; }
+.ab-member__role { margin: var(--space-1) 0 0; font-size: 15px; line-height: 24px; }
+.ab-member__li { display: inline-flex; align-items: center; min-height: var(--target-min); margin-top: var(--space-2); font-weight: 700; }
+.ab-ai { margin: var(--space-6) 0 0; text-align: center; font-size: 15px; line-height: 25px; color: var(--green-100); }
+
+/* 頁尾 */
+.ab-foot { padding: var(--space-8) 0 var(--space-12); font-size: 14px; line-height: 24px; color: var(--text-muted); }
+.ab-foot p { margin: 0 0 var(--space-2); }
+.ab-foot a { color: var(--text-muted); }
+
+@media (min-width: 640px) {
+  .ab-grid--2, .ab-grid--3, .ab-grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .ab-hero__btns { flex-direction: row; justify-content: center; }
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .ab-wrap { padding: 0 var(--desk-gutter, 32px); }
+  .ab-top__in { height: var(--desk-topnav-h, 72px); gap: var(--space-8); }
+  .ab-top__brand img { height: 40px; }
+  .ab-top__links { display: flex; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+  .ab-top__links a { display: flex; align-items: center; height: 48px; padding: 0 var(--space-3); color: var(--text-muted); font-weight: 700; text-decoration: none; }
+  .ab-top__links a:hover { color: var(--brand-text); }
+
+  .ab-hero { padding: var(--space-12) 0; }
+  .ab-hero__grid { grid-template-columns: 1fr minmax(0, 640px) 1fr; gap: var(--space-8); align-items: center; }
+  .ab-hero__center { grid-column: 2; grid-row: 1; }
+  .ab-hero__beast { max-width: 260px; }
+  .ab-plaque { padding: var(--space-8) var(--space-6); }
+  .ab-plaque__q { font-size: 40px; line-height: 52px; }
+  .ab-plaque__a { font-size: 20px; line-height: 30px; }
+
+  .ab-sec { padding: 72px 0; }
+  .ab-h2 { font-size: 36px; line-height: 46px; }
+  .ab-grid--3 { grid-template-columns: repeat(3, 1fr); }
+  .ab-grid--4 { grid-template-columns: repeat(4, 1fr); }
+  .ab-why { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--space-6); align-items: start; }
+  .ab-why .ab-gov { margin-top: 0; }
+  .ab-steps.ab-grid--4 .ab-step { flex-direction: column; }
+  .ab-lines { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+}
