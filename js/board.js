@@ -25,6 +25,11 @@ async function eventsOf(tree) {
   return all.sort((a, b) => (a.date + a.startTime).localeCompare(b.date + b.startTime));
 }
 
+/** 這棵樹接下來的活動（今天以後），圖鑑卡上的「新活動」用 */
+export async function upcomingEventsOf(tree) {
+  return (await eventsOf(tree)).filter((e) => e.date >= today());
+}
+
 /** 想參加人數＝模擬的人數＋自己按的那一下 */
 const interestedOf = (e) => e.interested + (isJoined(e.id) ? 1 : 0);
 

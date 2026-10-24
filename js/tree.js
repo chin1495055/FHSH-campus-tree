@@ -7,7 +7,7 @@ import { boardTeaserHtml } from './board.js';
 const LANTERN_MAX = 30;
 const REPORTS_SHOWN = 3;
 // 推估樹齡到這裡就用稀有款神獸卡、蓋「老樹」印章（依真實身分，不是隨機）
-const OLD_TREE_AGE = 50;
+export const OLD_TREE_AGE = 50;
 
 const STATUS_NOTE = {
   ok: '狀況穩定，有鄰居看著祂。',
