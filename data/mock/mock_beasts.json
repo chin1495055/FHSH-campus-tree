@@ -64,6 +64,26 @@
         "icon": "design-system/assets/character/beasts/queque/sad-icon.webp"
       },
       "demoRole": "回報出現病徵、需要關心的情境"
+    },
+    {
+      "treeId": "JJ0205003001",
+      "slug": "luan",
+      "name": "欒四季",
+      "species": "臺灣欒樹",
+      "rarity": "普通",
+      "personality": "愛打扮、愛拍照，每一季都要換新造型。",
+      "catchphrase": "你看我今天這套怎麼樣？",
+      "story": "祂還是棵年輕的樹，每年秋天都換上黃花和紅褐色的小燈籠，等著散步的人停下來幫祂拍照。（創作故事）",
+      "funFact": "臺灣欒樹是台灣特有種，台北很多行道樹都是祂，秋天整條路會變成黃色和紅褐色。",
+      "status": "normal",
+      "vitality": 88,
+      "guardians": { "local": 9, "remote": 27 },
+      "images": {
+        "healthy": "design-system/assets/character/beasts/luan/healthy.webp",
+        "sad": "design-system/assets/character/beasts/luan/sad.webp",
+        "icon": "design-system/assets/character/beasts/luan/healthy-icon.webp"
+      },
+      "demoRole": "離你最近的年輕神獸"
     }
   ]
 }
