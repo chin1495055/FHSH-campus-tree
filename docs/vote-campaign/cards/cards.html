@@ -144,6 +144,19 @@
   .ev p { font: 400 28px/1.5 'Noto Sans TC'; color: var(--text-muted); margin-top: 4px; }
   .lights { display: grid; grid-template-columns: repeat(10, 1fr); gap: 14px; margin: 40px auto 0; width: 820px; }
   .lights i { aspect-ratio: 1; border-radius: 50%; border: 4px solid var(--outline); background: var(--ink-200); }
+  /* C9 加到主畫面教學 */
+  .home-photo { display: block; width: 560px; margin: 36px auto 0; border: 6px solid var(--outline); border-radius: 28px; }
+  .tut { display: grid; gap: 20px; margin-top: 40px; }
+  .tut__row { display: grid; grid-template-columns: 96px 1fr 120px; gap: 26px; align-items: center; text-align: left; background: var(--surface-raised); border: 5px solid var(--outline); border-radius: 14px; padding: 20px 26px; }
+  .tut__n { width: 84px; height: 84px; border-radius: 50%; background: var(--brand-strong); color: var(--honor-on-dark); border: 5px solid var(--outline); display: grid; place-items: center; font: 900 46px/1 'Noto Serif TC'; }
+  .tut__t { font: 900 40px/1.35 'Noto Serif TC'; }
+  .tut__t small { display: block; font: 400 26px/1.5 'Noto Sans TC'; color: var(--text-muted); margin-top: 4px; }
+  .tut__ic { width: 110px; height: 110px; border: 4px solid var(--outline); border-radius: 22px; background: var(--ink-50); display: grid; place-items: center; }
+  .tut__ic svg { width: 64px; height: 64px; }
+  .why { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 40px; text-align: left; }
+  .why div { background: var(--surface-raised); border: 5px solid var(--outline); border-radius: 14px; padding: 26px 28px; }
+  .why b { display: block; font: 900 38px/1.3 'Noto Serif TC'; color: var(--brand-text); margin-bottom: 8px; }
+  .why p { font: 400 28px/1.55 'Noto Sans TC'; }
   .lights i.on { background: var(--honor); box-shadow: 0 0 0 6px var(--gold-100); }
 </style>
 </head>
@@ -167,7 +180,7 @@ const DATA_NOTE = '樹木位置與樹種為臺北市開放資料，其餘為模�
 const head = (page, rev, center) => `<div class="vc__head"${center ? ' style="justify-content:center"' : ''}><img class="vc__logo" src="${rev ? LOGO_REV : LOGO}" alt="大樹神獸">${page ? `<span class="vc__page">${page}</span>` : ''}</div>`;
 const foot = (left = DATA_NOTE, center) => `<div class="vc__foot"${center ? ' style="justify-content:center;align-items:baseline;gap:28px"' : ''}><span>${left}</span><span class="vc__team">AI 方舟計畫</span></div>`;
 // 這幾張用「格紋只在外框」的底圖，字比較清楚（10/24 Qmoa 選）；其他卡用網址的 bg 參數，預設格紋
-const EDGE = new Set(['c8-1', 'c8-2', 'c8-3', 'c8-4', 'c8-5', 'og', 'c1', 'c2-2', 'c2-3', 'c2-5', 'c5', 'c7', 'c3-1', 'c3-2', 'c3-3', 'c3-4', 'c3-5']);
+const EDGE = new Set(['c9-1', 'c9-2', 'c9-3', 'c9-4', 'c8-1', 'c8-2', 'c8-3', 'c8-4', 'c8-5', 'og', 'c1', 'c2-2', 'c2-3', 'c2-5', 'c5', 'c7', 'c3-1', 'c3-2', 'c3-3', 'c3-4', 'c3-5']);
 const card = (id, inner, { cls = '', inCls = '' } = {}) => ({ id, html: `<section class="vc ${cls}" data-id="${id}"${EDGE.has(id) ? ' data-bg="edge"' : ''}><div class="vc__in ${inCls}">${inner}</div></section>` });
 
 // 褐根病三個徵兆的插圖（平塗＋墨線）
@@ -267,6 +280,18 @@ const C8_SCENE = `<svg class="c8-scene" viewBox="0 0 900 560" fill="none" stroke
     arms: `${limb('M776 404 Q760 420 740 424', '#F7F2E8', 15)}${hand(736, 424)}${limb('M808 404 Q818 432 806 444', '#F7F2E8', 15)}` })}
   <path d="M818 330 q12 -10 22 0 q10 -10 22 0" stroke="#A9CFB0" stroke-width="4"/>
 </svg>`;
+
+// C9 用的小圖示（墨線，照手機上的樣子簡化）
+const TI = {
+  safari: `<svg viewBox="0 0 64 64" fill="none" stroke="#26231F" stroke-width="4"><circle cx="32" cy="32" r="26" fill="#E3EDF6"/><path d="M42 22 L35 35 L22 42 L29 29 Z" fill="#A63A2B" stroke-linejoin="round"/></svg>`,
+  share: `<svg viewBox="0 0 64 64" fill="none" stroke="#2E6491" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 26 H16 V56 H48 V26 H42"/><path d="M32 40 V6 M22 16 L32 6 L42 16"/></svg>`,
+  add: `<svg viewBox="0 0 64 64" fill="none" stroke="#26231F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="48" height="48" rx="10"/><path d="M32 20 V44 M20 32 H44"/></svg>`,
+  icon: `<img src="../../../design-system/assets/logos/app-icons/icon-192.png" alt="" style="width:84px;height:84px;border-radius:18px;border:3px solid #26231F">`,
+  chrome: `<svg viewBox="0 0 64 64" fill="none" stroke="#26231F" stroke-width="4"><circle cx="32" cy="32" r="26" fill="#F4EFCF"/><circle cx="32" cy="32" r="10" fill="#2E6491"/></svg>`,
+  menu: `<svg viewBox="0 0 64 64" fill="#26231F"><circle cx="32" cy="14" r="6"/><circle cx="32" cy="32" r="6"/><circle cx="32" cy="50" r="6"/></svg>`,
+  install: `<svg viewBox="0 0 64 64" fill="none" stroke="#26231F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="4" width="32" height="56" rx="6"/><path d="M32 18 V40 M24 32 L32 40 L40 32"/></svg>`,
+};
+const tutRow = (n, t, sub, ic) => `<div class="tut__row"><span class="tut__n">${n}</span><div class="tut__t">${t}<small>${sub}</small></div><span class="tut__ic">${TI[ic]}</span></div>`;
 
 const CARDS = [
   // C1 主視覺／投票卡
@@ -433,6 +458,47 @@ const CARDS = [
       <img src="${B('xuxugong')}" alt="" style="height:420px;margin:34px auto 0">
       <p class="lead" style="margin-top:24px">老樹的來歷，由住在旁邊的人一起寫。<br>讓樹重新成為社區的中心。</p>
       <p class="p" style="margin-top:30px"><b>大樹神獸</b>｜線上票選至 10/31（六）18:00<br>${VOTE_SHORT}</p>
+    </div>${foot('')}`),
+
+  // C9 加到主畫面教學（4 張）：大樹神獸是 PWA，加到主畫面就像 App
+  card('c9-1', `${head('1 / 4')}
+    <div class="vc__body" style="text-align:center">
+      <h1 class="h1" style="font-size:88px">大樹神獸<br><span class="green">其實也是一個 App</span></h1>
+      <img class="home-photo" src="img/homescreen.jpg" alt="手機主畫面上的大樹神獸圖示">
+      <p class="lead" style="margin-top:30px">不用到 App Store 下載，<br>加到主畫面，點一下就打開。</p>
+    </div>${foot('往左滑，看怎麼加')}`),
+  card('c9-2', `${head('2 / 4')}
+    <div class="vc__body">
+      <h2 class="h2" style="text-align:center">iPhone<span class="green">｜用 Safari</span></h2>
+      <div class="tut">
+        ${tutRow(1, '用 Safari 打開網址', APP_SHORT, 'safari')}
+        ${tutRow(2, '點「分享」按鈕', '在畫面下方；新版也可能在「⋯」裡', 'share')}
+        ${tutRow(3, '選「加入主畫面」', '清單往下滑就會看到', 'add')}
+        ${tutRow(4, '按「加入」就完成', '主畫面會多一個鬚鬚公圖示', 'icon')}
+      </div>
+    </div>${foot('')}`),
+  card('c9-3', `${head('3 / 4')}
+    <div class="vc__body">
+      <h2 class="h2" style="text-align:center">Android<span class="green">｜用 Chrome</span></h2>
+      <div class="tut">
+        ${tutRow(1, '用 Chrome 打開網址', APP_SHORT, 'chrome')}
+        ${tutRow(2, '點右上角「⋮」', '打開瀏覽器選單', 'menu')}
+        ${tutRow(3, '選「加到主畫面」', '有些手機寫「安裝應用程式」', 'install')}
+        ${tutRow(4, '按「安裝」就完成', '主畫面會多一個鬚鬚公圖示', 'icon')}
+      </div>
+    </div>${foot('')}`),
+  card('c9-4', `${head('4 / 4')}
+    <div class="vc__body" style="text-align:center">
+      <p><span class="concept">開發幕後</span></p>
+      <h2 class="h2" style="margin-top:24px">為什麼做成 <span class="green">PWA</span>？</h2>
+      <p class="lead" style="margin-top:18px">PWA 是「可以裝到手機上的網頁」。<br>現場只有 5.5 小時，我們選了最快的路。</p>
+      <div class="why">
+        <div><b>不用上架</b><p>不用等 App Store 審核，網址打開就能用</p></div>
+        <div><b>一份程式</b><p>iPhone、Android、電腦都能用</p></div>
+        <div><b>更新最快</b><p>改完上線，大家下次打開就是新版</p></div>
+        <div><b>像 App 一樣</b><p>全螢幕開啟，有自己的圖示</p></div>
+      </div>
+      <p class="p" style="margin-top:34px"><b>試玩</b>　${APP_SHORT}<br><b>投票</b>　${VOTE_SHORT}</p>
     </div>${foot('')}`),
 ];
 
