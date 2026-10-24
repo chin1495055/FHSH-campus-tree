@@ -1,0 +1,31 @@
+/* 我參加的活動（js/myevents.js）。class 用 mev- 開頭。日期方塊沿用 design-system 的 .dsh-event__date。 */
+
+.mev-scroll > * { flex: none; }
+.mev-h { margin: 0; }
+.mev-empty { display: flex; flex-direction: column; gap: var(--space-3); }
+.mev-empty .tp-p { margin: 0; }
+.mev-empty .dsh-btn { text-decoration: none; box-sizing: border-box; }
+
+.mev-list { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+.mev-row {
+  display: grid; grid-template-columns: 68px minmax(0, 1fr); gap: var(--space-3); padding: var(--space-3);
+  background: var(--green-50); color: var(--text); text-decoration: none;
+  border: var(--stroke-fine) solid var(--outline); border-radius: var(--radius-sm);
+}
+.mev-row:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+.mev-row__body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mev-row__title { font-size: 17px; line-height: 24px; font-weight: 700; }
+.mev-row__meta { font-size: 14px; line-height: 21px; }
+.mev-row__meta b { margin-right: var(--space-2); color: var(--text-muted); }
+.mev-row__mine { font-size: 13px; line-height: 20px; color: var(--green-700); font-weight: 700; }
+
+.mev-past summary {
+  min-height: var(--target-min); display: flex; align-items: center; cursor: pointer;
+  font-size: 15px; font-weight: 700; color: var(--text-muted);
+}
+.mev-past summary:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+.mev-past .mev-row { opacity: 0.75; }
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .tree-page[data-page="myevents"] { --page-max: var(--content-max); }
+}

@@ -2,7 +2,7 @@
 // 樹下的市民活動卡＋在樹下發起活動。預設活動是模擬資料；自己發起的活動和「我想參加」存在這台裝置（store.js）。
 // 活動卡是綠色系的「市民活動」，和官方異動公告（白底、橘黑斜紋）一眼分得出來。
 import { esc, loadJson, pageBarHtml } from './shared.js';
-import { getGuard, setGuard, getMyEvents, addEvent, isJoined, setJoined } from './store.js';
+import { getGuard, setGuard, getMyEvents, getAllMyEvents, addEvent, isJoined, setJoined } from './store.js';
 
 const WEEK = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
 const TITLE_MAX = 30;
@@ -16,7 +16,7 @@ function loadEvents() {
   return mock;
 }
 
-const today = () => new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+export const today = () => new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
 const thisMonth = () => today().slice(0, 7);
 
 /** 這棵樹的活動：模擬＋自己發起的，依日期、開始時間由近到遠 */
@@ -28,6 +28,18 @@ async function eventsOf(tree) {
 /** 這棵樹接下來的活動（今天以後），圖鑑卡上的「新活動」用 */
 export async function upcomingEventsOf(tree) {
   return (await eventsOf(tree)).filter((e) => e.date >= today());
+}
+
+/** 按過「我想參加」的活動（含自己發起的），依日期、開始時間由近到遠。「我參加的活動」頁用 */
+export async function joinedEvents() {
+  const all = [...(await loadEvents()), ...getAllMyEvents()].filter((e) => isJoined(e.id));
+  return all.sort((a, b) => (a.date + a.startTime).localeCompare(b.date + b.startTime));
+}
+
+/** 「我的」頁：參加的活動數，和其中已經過了日期的數量 */
+export async function joinedEventCounts() {
+  const joined = await joinedEvents();
+  return { joined: joined.length, ended: joined.filter((e) => e.date < today()).length };
 }
 
 /** 想參加人數＝模擬的人數＋自己按的那一下 */
@@ -55,7 +67,7 @@ export async function boardTeaserHtml(tree) {
     </section>`;
 }
 
-function weekOf(date) {
+export function weekOf(date) {
   const [y, m, d] = date.split('-').map(Number);
   return WEEK[new Date(y, m - 1, d).getDay()];
 }

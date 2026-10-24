@@ -88,6 +88,9 @@ const JOINS = 'dsh.joins';
 /** 這台裝置在某棵樹下發起的活動 */
 export const getMyEvents = (treeId) => load(EVENTS, []).filter((e) => e.treeId === treeId);
 
+/** 這台裝置發起的所有活動（不分樹），「我的」頁統計用 */
+export const getAllMyEvents = () => load(EVENTS, []);
+
 export function addEvent(event) {
   load(EVENTS, []).push(event);
   save(EVENTS);

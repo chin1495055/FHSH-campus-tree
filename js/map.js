@@ -11,6 +11,7 @@ import { renderBoardPage } from './board.js';
 import { renderCollectionPage } from './collection.js';
 import { renderSharePage } from './share.js';
 import { renderMePage } from './me.js';
+import { renderMyEventsPage } from './myevents.js';
 import { CATEGORIES, categoryOf } from './categories.js';
 import { treeIdFrom, findOutsideTree } from './lookup.js';
 
@@ -26,6 +27,7 @@ const PAGES = {
   collection: { render: renderCollectionPage },
   share: { render: renderSharePage, needsTree: true },
   me: { render: renderMePage },
+  myevents: { render: renderMyEventsPage },
 };
 
 // Demo 用的「你的位置」：總部（中正區北平東路 30-1 號）附近。真實定位離太遠時退回這裡。

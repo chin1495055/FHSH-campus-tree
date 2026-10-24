@@ -12,6 +12,11 @@
 }
 .me-stat__num { font-family: var(--font-display); font-weight: 900; font-size: 28px; line-height: 36px; }
 .me-stat__label { font-size: 13px; line-height: 20px; color: var(--text-muted); }
+.me-stats--two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.me-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+/* 手機上一顆按鈕只有半寬，字多時換行而不是被切掉 */
+.me-actions .dsh-btn { padding-inline: var(--space-2); white-space: normal; text-align: center; }
+.me-sub { margin: 0; font-size: 15px; line-height: 22px; font-weight: 700; }
 
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   .tree-page[data-page="me"] { --page-max: var(--content-max); }

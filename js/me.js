@@ -1,8 +1,9 @@
 // 我的（PRD 路由表 #/me，P1）：#/me。負責人：Saori
 // 守護成果、隱私說明、資料來源，最下面是「關於大樹神獸」介紹頁的入口（手機版沒有頂部導覽）。
-// 數字只來自 store.js，只有自己看得到。
+// 數字只來自 store.js，只有自己看得到；社區活動的數字要先讀模擬活動，由 board.js 算好再補上。
 import { pageBarHtml } from './shared.js';
 import { getGuard, getMyReports } from './store.js';
+import { joinedEventCounts } from './board.js';
 
 const README = 'https://github.com/innerwork-saori/2026-debugWithPuma#readme';
 
@@ -25,7 +26,15 @@ export function renderMePage(el, { trees }) {
           ${statHtml(remote, '遠端關注')}
           ${statHtml(reports, '次回報')}
         </ul>
-        <a class="dsh-btn dsh-btn--secondary dsh-btn--block" href="#/collection">看我的守護圖鑑</a>
+        <h3 class="me-sub">社區活動</h3>
+        <ul class="me-stats me-stats--two" data-events>
+          ${statHtml('–', '已參加')}
+          ${statHtml('–', '已結束')}
+        </ul>
+        <div class="me-actions">
+          <a class="dsh-btn dsh-btn--secondary dsh-btn--block" href="#/myevents">看我參加的活動</a>
+          <a class="dsh-btn dsh-btn--secondary dsh-btn--block" href="#/collection">看我的守護圖鑑</a>
+        </div>
       </section>
 
       <section class="tp-box" aria-labelledby="me-privacy">
@@ -42,4 +51,10 @@ export function renderMePage(el, { trees }) {
 
       <a class="dsh-btn dsh-btn--primary dsh-btn--block me-about" href="about.html">關於大樹神獸</a>
     </div>`;
+
+  joinedEventCounts().then(({ joined, ended }) => {
+    const nums = el.querySelectorAll('[data-events] .me-stat__num');
+    nums[0].textContent = joined;
+    nums[1].textContent = ended;
+  });
 }
