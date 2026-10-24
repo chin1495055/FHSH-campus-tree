@@ -114,4 +114,4 @@ Day 2 錄影時照這個順序點，不要即興：
 2. **上傳到誰的 YouTube 帳號？公開設定用「公開」還是「不公開（有連結的人才能看）」？** 要看主辦審核和票選的需求，可以在 #市政debug松服務台 問。
 3. **字幕用哪一種？** 畫面字幕（預設）或 YouTube 的 `.srt`，二選一。
 4. **要不要配音、加音樂？** 先只放字幕最保險；音樂上傳後從 YouTube 音效庫加。
-5. **片尾 QR code**：作品網址已經有了（`https://2026-debugwithpuma.tree-god.workers.dev/`），QR code 還沒產生，目前是佔位框加網址文字。
+5. **片尾 QR code**：已放上正式網址 `https://2026-debugwithpuma.tree-god.workers.dev/` 的 QR code（10/24 換成 Cloudflare 網址）。
