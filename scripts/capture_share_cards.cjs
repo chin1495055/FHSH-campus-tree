@@ -15,7 +15,7 @@ const ROOT = path.join(__dirname, '..');
 const DESIGN = path.join(ROOT, 'docs/design/大樹神獸關鍵畫面.html');
 const OUT = path.join(ROOT, 'assets/share');
 const CHROME = process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
-const HELP_URL = 'https://2026-debugwithpuma.tree-god.workers.dev/t/JS0155103034-help.html';
+const HELP_URL = 'https://2026-debugwithpuma.tree-god.workers.dev/t/JS0155103034-help';
 
 // 設計稿的文字 → 換成的文字（整段文字完全相同才換）。
 // 資料來源：data/trees.json（華山公園、依胸徑推估約 85 年）、data/mock/mock_notices.json（公共工程、11/3 預計移除）。

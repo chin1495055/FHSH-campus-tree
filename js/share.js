@@ -1,7 +1,8 @@
 // 分享卡（關鍵畫面第 13～16 頁「守護籤」「求援籤」，PRD F9）：#/share/樹號。負責人：Saori
 // #/share/樹號/guard、#/share/樹號/help 指定要哪一張；沒指定時，公示中的樹先給求援籤。
 // 卡片是固定圖檔（scripts/capture_share_cards.cjs 從設計稿截的），只有鬚鬚公有；其他樹用神獸卡代替、只分享連結。
-// 分享出去的網址是 t/樹號.html（scripts/make_og_pages.cjs 產生），LINE、Threads 才讀得到預覽圖。
+// 分享出去的網址是 t/樹號（檔案是 t/樹號.html，scripts/make_og_pages.cjs 產生），LINE、Threads 才讀得到預覽圖。
+// 網址不帶 .html：Cloudflare 會把 .html 轉址到沒有副檔名的網址，有些平台抓預覽時不跟轉址。
 import { esc, DESKTOP, loadJson, pageBarHtml } from './shared.js';
 import { guardiansOf, totalOf } from './store.js';
 import { heroHtml } from './tree.js';
@@ -23,7 +24,7 @@ async function noticeOf(tree) {
 /** 分享出去的網址：神獸有自己的 OG 跳轉頁，一般樹直接連到樹木頁 */
 function urlOf(tree, kind) {
   if (!tree.beast) return `${SITE}#/tree/${encodeURIComponent(tree.id)}`;
-  return `${SITE}t/${encodeURIComponent(tree.id)}${kind === 'help' ? '-help' : ''}.html`;
+  return `${SITE}t/${encodeURIComponent(tree.id)}${kind === 'help' ? '-help' : ''}`;
 }
 
 /** 分享的文字只寫事實：狀態、原因、期限，不加未證實的說法 */

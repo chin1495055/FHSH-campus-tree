@@ -1,6 +1,7 @@
 // 替每隻神獸產生 t/樹號.html：只放 OG 標籤和跳轉，給 LINE、Threads、FB、Discord 抓連結預覽。
 // 它們讀不到 #/tree/樹號 這種 hash 網址的內容，所以分享出去的網址要用這些頁面。
 // 公示中的神獸另外產生 t/樹號-help.html（求援籤的預覽）。
+// Cloudflare 會把 .html 網址轉址到沒有副檔名的網址，所以對外的網址（og:url、分享連結）都不帶 .html。
 // 負責人：Saori。改了神獸或公告資料就重跑：node scripts/make_og_pages.cjs
 
 const fs = require('fs');
@@ -37,7 +38,7 @@ function page({ file, title, description, image, target }) {
 <meta property="og:site_name" content="大樹神獸">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
-<meta property="og:url" content="${SITE}t/${file}">
+<meta property="og:url" content="${SITE}t/${file.replace(/\.html$/, '')}">
 <meta property="og:image" content="${SITE}${image}">
 <meta property="og:image:width" content="${w}">
 <meta property="og:image:height" content="${h}">
