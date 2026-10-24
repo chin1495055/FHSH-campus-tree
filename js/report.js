@@ -1,7 +1,7 @@
 // 回報頁（關鍵畫面 ③）：#/report/樹號。負責人：Saori
 // 在地守護者三步驟：1 拍照 → 2 健康檢查 → 3 完成，送出後元氣值跟著更新。
 // 回報存在這台裝置（store.js），不會真的送到市府。
-import { esc, pageBarHtml } from './shared.js';
+import { DESKTOP, esc, pageBarHtml } from './shared.js';
 import { getGuard, getMyReports, addReport, problemsOf, vitalityOf } from './store.js';
 import { vitalHtml } from './tree.js';
 
@@ -23,6 +23,8 @@ const PROBLEM = {
   pitFilled: '樹穴被填',
 };
 const STEPS = ['拍照', '檢查', '完成'];
+// 電腦版第一步是上傳照片
+const DESK_STEPS = ['照片', '檢查', '完成'];
 // 照片縮到最長邊這麼大再存，原圖不保存
 const PHOTO_SIZE = 320;
 
@@ -79,7 +81,7 @@ const today = () => new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
 
 const stepsHtml = (current) => `
   <ol class="rp-steps">
-    ${STEPS.map((s, i) => `<li${i === current ? ' aria-current="step"' : ''}${i < current ? ' class="is-done"' : ''}><span>${i + 1}</span>${s}</li>`).join('')}
+    ${(DESKTOP.matches ? DESK_STEPS : STEPS).map((s, i) => `<li${i === current ? ' aria-current="step"' : ''}${i < current ? ' class="is-done"' : ''}><span>${i + 1}</span>${s}</li>`).join('')}
   </ol>`;
 
 const beastImg = (tree, mood) => (tree.beast
@@ -113,7 +115,8 @@ export async function renderReportPage(el, { tree }) {
     return;
   }
 
-  const draft = { photo: null };
+  // date：拍攝日期。電腦版是回家才上傳，讓人填照片是哪天在樹旁拍的
+  const draft = { photo: null, date: today() };
 
   function show(html) {
     body.innerHTML = html;
@@ -123,15 +126,17 @@ export async function renderReportPage(el, { tree }) {
 
   // ── 步驟 1：拍照 ──
   async function shotStep() {
+    // 電腦版不開相機（筆電鏡頭對著人），改成選照片上傳
+    const desk = DESKTOP.matches;
     show(`
       ${stepsHtml(0)}
-      <h2 class="tp-h" tabindex="-1" data-focus>拍一張${esc(name)}現在的樣子</h2>
+      <h2 class="tp-h" tabindex="-1" data-focus>${desk ? '放一張' : '拍一張'}${esc(name)}現在的樣子</h2>
       <div class="rp-finder">
         <video class="rp-video" playsinline muted></video>
         <img class="rp-preview" alt="剛拍的照片" hidden>
         <div class="rp-nocam" hidden>
           <img src="design-system/assets/icons/camera.svg" alt="" width="48" height="48">
-          <p>這裡打不開相機，改用手機內建的相機拍。</p>
+          <p>${desk ? '選一張你在樹旁拍的照片。' : '這裡打不開相機，改用手機內建的相機拍。'}</p>
         </div>
         <div class="rp-frame" aria-hidden="true"></div>
         <p class="rp-finder__hint">把整棵樹放進框裡，樹根也要拍到</p>
@@ -139,14 +144,20 @@ export async function renderReportPage(el, { tree }) {
       <div class="rp-controls" data-mode="loading">
         <button type="button" class="rp-shutter" data-show="live" aria-label="拍照"></button>
         <label class="dsh-btn dsh-btn--secondary dsh-btn--block rp-file" data-show="nocam">
-          <img src="design-system/assets/icons/camera.svg" alt="" width="28" height="28">打開相機
-          <input type="file" accept="image/*" capture="environment" class="rp-file__input">
+          <img src="design-system/assets/icons/camera.svg" alt="" width="28" height="28">${desk ? '選擇照片' : '打開相機'}
+          <input type="file" accept="image/*"${desk ? '' : ' capture="environment"'} class="rp-file__input">
         </label>
+        ${desk ? `
+          <label class="dsh-field rp-date">
+            <span>拍攝日期</span>
+            <input type="date" class="dsh-input" name="photoDate" value="${draft.date}" max="${today()}" required>
+          </label>
+          <p class="tp-small">照片的位置資訊會在上傳前移除。</p>` : ''}
         <div class="rp-row" data-show="taken">
-          <button type="button" class="dsh-btn dsh-btn--text" data-retake>重拍</button>
+          <button type="button" class="dsh-btn dsh-btn--text" data-retake>${desk ? '換一張' : '重拍'}</button>
           <button type="button" class="dsh-btn dsh-btn--secondary rp-grow" data-next>下一步：檢查</button>
         </div>
-        <button type="button" class="dsh-btn dsh-btn--text dsh-btn--block" data-show="live nocam" data-skip>先不拍照，直接檢查</button>
+        <button type="button" class="dsh-btn dsh-btn--text dsh-btn--block" data-show="live nocam" data-skip>${desk ? '先不放照片，直接檢查' : '先不拍照，直接檢查'}</button>
       </div>`);
 
     const video = body.querySelector('.rp-video');
@@ -170,6 +181,8 @@ export async function renderReportPage(el, { tree }) {
     setMode('loading');
     if (draft.photo) {
       taken(draft.photo);
+    } else if (desk) {
+      setMode('nocam');
     } else {
       camOk = await startCamera(video);
       if (!video.isConnected) return;
@@ -183,6 +196,9 @@ export async function renderReportPage(el, { tree }) {
     body.querySelector('.rp-file__input').addEventListener('change', async (e) => {
       const file = e.target.files?.[0];
       if (file) taken(await fileToThumb(file));
+    });
+    body.querySelector('[name="photoDate"]')?.addEventListener('change', (e) => {
+      if (e.target.value) draft.date = e.target.value;
     });
     body.querySelector('[data-retake]').addEventListener('click', () => {
       draft.photo = null;
@@ -226,7 +242,7 @@ export async function renderReportPage(el, { tree }) {
       const report = {
         id: `R-ME-${Date.now()}`,
         treeId: tree.id,
-        date: today(),
+        date: draft.date,
         nickname: '你（這台裝置）',
         checks,
         note: form.elements.note.value.trim(),

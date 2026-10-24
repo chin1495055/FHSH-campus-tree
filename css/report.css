@@ -81,3 +81,10 @@
 .rp-done .tp-p { margin: 0; }
 .rp-todo b { display: block; font-size: 15px; }
 .rp-todo ul { margin: var(--space-1) 0 var(--space-2); padding-left: 1.2em; font-weight: 700; }
+
+/* 電腦版（1024px 以上、滑鼠操作）：不開相機，改成選照片上傳＋拍攝日期 */
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .rp-finder { width: min(100%, 270px); max-height: none; align-self: center; }
+  .rp-date { width: 100%; max-width: var(--desk-btn-max); }
+  .rp-controls .tp-small { margin: 0; text-align: center; }
+}

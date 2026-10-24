@@ -187,3 +187,87 @@ body { background: var(--surface-sunken); }
 .tp-lantern.is-new { transform-origin: 50% 0; animation: tp-light 700ms ease-out 150ms both; }
 .dsh-lanterns__num.is-bump { display: inline-block; animation: tp-bump 500ms ease-out 300ms; }
 @media (prefers-reduced-motion: reduce) { .tp-lantern.is-new, .dsh-lanterns__num.is-bump { animation: none; } }
+
+/* 附近的樹清單只在電腦版左欄出現 */
+.nearby, .nearby-title, .tree-card__go-label { display: none; }
+
+/* 樹木頁的兩欄外框：手機版攤平成一欄，公示通知條排最上面 */
+.tp-cols, .tp-aside, .tp-main { display: contents; }
+.tp-notice { order: -1; }
+
+/* ── 平板與寬視窗（768px 以上）：沿用手機版，內容置中最寬 720px ── */
+@media (min-width: 768px) {
+  .app { max-width: none; border-left: none; border-right: none; }
+  .topbar { left: max(var(--space-4), (100% - 720px) / 2); right: max(var(--space-4), (100% - 720px) / 2); }
+  .tree-card { margin-inline: max(var(--space-3), (100% - 720px) / 2); }
+  .tree-page { --page-max: 720px; }
+  .tree-page .tp-bar, .tree-page .tp-scroll, .tree-page .tp-actions { padding-inline: max(var(--space-4), (100% - var(--page-max)) / 2); }
+  .tp-sheet__panel { max-width: 720px; margin-inline: auto; }
+}
+
+/* ── 電腦版（1024px 以上、滑鼠操作）：頂部導覽＋左欄｜地圖｜右側面板，見 design-system/desktop.css ── */
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  body { display: flex; flex-direction: column; }
+  .dsh-topnav { flex: none; }
+  .app {
+    flex: 1; min-height: 0; height: auto; width: 100%; margin: 0;
+    display: grid; grid-template-columns: var(--desk-rail) minmax(0, 1fr) var(--desk-panel); grid-template-rows: minmax(0, 1fr);
+  }
+
+  /* 左欄：搜尋、篩選、附近的樹 */
+  .topbar {
+    position: static; grid-column: 1; grid-row: 1; min-height: 0; overflow-y: auto;
+    gap: var(--space-4); padding: var(--space-6); box-sizing: border-box;
+    background: var(--surface); border-right: var(--stroke-ui) solid var(--outline);
+  }
+  .topbar > * { flex: none; }
+  .filters { flex-wrap: wrap; overflow: visible; }
+  .chip { height: 40px; padding: 0 var(--space-4); font-size: 15px; }
+  .nearby-title { display: block; margin: var(--space-2) 0 0; font-family: var(--font-display); font-weight: 900; font-size: 20px; line-height: 28px; }
+  .nearby { display: flex; }
+  .dsh-treelist__item:hover { background: var(--surface-sunken); }
+  .dsh-treelist__item:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: -3px; }
+
+  /* 中間：地圖。定位鈕放在地圖右下角（右側面板的左邊） */
+  .map { position: relative; inset: auto; grid-column: 2; grid-row: 1; }
+  .locate { right: calc(var(--desk-panel) + var(--space-6)); bottom: var(--space-6); }
+  .leaflet-bottom.leaflet-right { bottom: 0; }
+
+  /* 右側面板：點選的樹（手機版的底部卡片），地圖不會被蓋住 */
+  .bottom {
+    position: static; grid-column: 3; grid-row: 1; min-height: 0; overflow-y: auto;
+    padding: var(--space-6); box-sizing: border-box;
+    background: var(--surface-raised); border-left: var(--stroke-ui) solid var(--outline);
+  }
+  .tree-card { margin: 0; padding: var(--space-6); flex-direction: column; align-items: stretch; gap: var(--space-4); text-align: center; background: var(--surface); }
+  .tree-card__art { width: 120px; height: 120px; align-self: center; }
+  .tree-card__head { justify-content: center; }
+  .tree-card__name { font-size: 28px; line-height: 36px; }
+  .tree-card__go {
+    width: 100%; height: var(--target-min); gap: var(--space-2);
+    color: var(--text); font-size: 18px; font-weight: 900; text-decoration: none;
+    box-shadow: inset 0 0 0 3px var(--surface-raised), inset 0 0 0 4px var(--outline);
+  }
+  .tree-card__go:hover { background: var(--surface-sunken); }
+  .tree-card__go-label { display: inline; }
+
+  /* 樹木頁：左欄神獸與燈海、右欄公告故事回報，內容最寬 --content-max */
+  .tree-page[data-page="tree"] { --page-max: var(--content-max); }
+  .tree-page .tp-scroll { padding-top: var(--space-8); padding-bottom: var(--space-8); }
+  .tp-cols, .tp-aside, .tp-main { display: flex; }
+  .tp-cols { flex: none; }
+
+  /* 守護方式：置中的對話框，兩個選項並排 */
+  .tp-sheet { align-items: center; justify-content: center; }
+  .tp-sheet__panel {
+    width: 640px; max-width: calc(100% - var(--space-12)); margin: 0;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4);
+    padding: var(--space-6) var(--space-8) var(--space-8);
+    border: var(--stroke-bold) solid var(--outline); border-radius: var(--radius-md);
+  }
+  .tp-sheet__panel > :not(.tp-choice) { grid-column: 1 / -1; }
+  .tp-sheet__panel .tp-h { font-size: 28px; line-height: 36px; }
+  .tp-choice { padding: var(--space-4); }
+  .tp-choice b { font-family: var(--font-display); font-size: 22px; line-height: 28px; }
+  .tp-choice:hover { background: var(--green-50); }
+}

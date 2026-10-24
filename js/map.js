@@ -1,7 +1,7 @@
 // 地圖首頁（關鍵畫面 ①）：真實樹木位置＋模擬的神獸、樹況、守護人數。
 // 也負責 hash 路由：#/tree/樹號 打開樹木頁，其他網址回到地圖。
 // 負責人：Saori。兩人共用（新增畫面要在 PAGES 加一行），要改先在 Discord 講一聲。
-import { STATUS, esc, statusTag, loadJson } from './shared.js';
+import { STATUS, DESKTOP, esc, statusTag, loadJson } from './shared.js';
 import { guardiansOf, totalOf } from './store.js';
 import { renderTreePage } from './tree.js';
 import { renderReportPage } from './report.js';
@@ -29,6 +29,9 @@ const FAR_ZOOM = 19;
 const Z_SELECTED = 2000;
 const Z_BEAST = { notice: 1500, watch: 1200 };
 const zFor = (tree) => (tree.beast ? Z_BEAST[tree.status] ?? 1000 : 0);
+
+// 電腦版左欄「附近的樹」列幾棵
+const NEARBY_MAX = 20;
 
 async function loadTrees() {
   const [real, beasts, guardians] = await Promise.all([
@@ -90,9 +93,35 @@ function renderCard(el, tree, here) {
       <p class="tree-card__count"><b>${totalOf(guardiansOf(tree))}</b> 位鄰居守護</p>
     </div>
     <a class="tree-card__go" href="#/tree/${encodeURIComponent(tree.id)}" aria-label="看${esc(name)}">
+      <span class="tree-card__go-label">看祂的檔案</span>
       <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M6 3 L12 9 L6 15" fill="none" stroke="#26231f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>`;
   el.hidden = false;
+}
+
+/** 電腦版左欄：離你最近的樹，點了在地圖上選取 */
+function renderNearby(el, shown, selected, here, onPick) {
+  const near = shown
+    .map((tree) => ({ tree, dist: L.latLng(here).distanceTo([tree.lat, tree.lng]) }))
+    .sort((a, b) => a.dist - b.dist)
+    .slice(0, NEARBY_MAX);
+  el.innerHTML = near.map(({ tree, dist }) => {
+    const name = tree.beast?.name ?? tree.species;
+    const img = tree.beast ? tree.beast.images.icon : 'design-system/assets/icons/tree.svg';
+    const meta = [tree.beast ? tree.species : null, `${Math.round(dist)} 公尺`].filter(Boolean).join('・');
+    return `
+      <li><a class="dsh-treelist__item" href="#/" data-id="${esc(tree.id)}"${tree === selected ? ' aria-current="true"' : ''}>
+        <img src="${esc(img)}" alt="" width="48" height="48">
+        <div><p class="dsh-treelist__name">${esc(name)}</p><p class="dsh-treelist__meta">${esc(meta)}</p></div>
+        <span class="dsh-treelist__count">${totalOf(guardiansOf(tree))} 人</span>
+      </a></li>`;
+  }).join('');
+  el.querySelectorAll('[data-id]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      onPick(near.find(({ tree }) => tree.id === a.dataset.id).tree);
+    });
+  });
 }
 
 async function main() {
@@ -100,6 +129,7 @@ async function main() {
   const card = document.getElementById('card');
   const bottom = document.querySelector('.bottom');
   const app = document.querySelector('.app');
+  const nearby = document.getElementById('nearby');
 
   const map = L.map(mapEl, { zoomControl: false, attributionControl: true }).setView(HOME, 17);
   // OpenFreeMap 向量底圖（免金鑰），透過 maplibre-gl-leaflet 放進 Leaflet。
@@ -139,6 +169,17 @@ async function main() {
   let selected = null;
   let filter = 'all';
   let query = '';
+  let shown = trees;
+
+  // 框選範圍時避開蓋在地圖上的東西：手機是上方搜尋列和底部卡片；電腦版左右欄不蓋地圖
+  const mapPadding = (topLeft, bottomExtra) => (DESKTOP.matches
+    ? { paddingTopLeft: [40, 40], paddingBottomRight: [40, 40] }
+    : { paddingTopLeft: topLeft, paddingBottomRight: [topLeft[0], bottom.offsetHeight + bottomExtra] });
+
+  const syncNearby = () => {
+    if (DESKTOP.matches) renderNearby(nearby, shown, selected, here, pick);
+  };
+  DESKTOP.addEventListener('change', syncNearby);
 
   const markers = new Map();
   for (const tree of trees) {
@@ -162,10 +203,17 @@ async function main() {
     m.setIcon(iconFor(tree, true));
     m.setZIndexOffset(Z_SELECTED);
     renderCard(card, tree, here);
+    syncNearby();
+  }
+
+  // 從左欄清單點選：選取並把地圖移過去
+  function pick(tree) {
+    select(tree);
+    map.panTo([tree.lat, tree.lng]);
   }
 
   function applyFilter() {
-    const shown = [];
+    shown = [];
     for (const tree of trees) {
       const m = markers.get(tree.id);
       if (matches(tree, filter, query)) {
@@ -177,9 +225,10 @@ async function main() {
     }
     if ((filter !== 'all' || query) && shown.length) {
       const bounds = L.latLngBounds(shown.map((t) => [t.lat, t.lng]));
-      map.fitBounds(bounds, { paddingTopLeft: [24, 140], paddingBottomRight: [24, bottom.offsetHeight + 24], maxZoom: 18 });
+      map.fitBounds(bounds, { ...mapPadding([24, 140], 24), maxZoom: 18 });
       if (shown.length === 1 || !shown.includes(selected)) select(shown.find((t) => t.beast) ?? shown[0]);
     }
+    syncNearby();
   }
 
   document.querySelectorAll('.chip').forEach((chip) => {
@@ -207,6 +256,7 @@ async function main() {
           here = p;
           meMarker.setLatLng(here);
           if (selected) renderCard(card, selected, here);
+          syncNearby();
         }
         back();
       },
@@ -220,11 +270,7 @@ async function main() {
   const hero = trees.find((t) => t.beast?.slug === 'xuxugong') ?? trees[0];
   select(hero);
   const beastSpots = trees.filter((t) => t.beast).map((t) => [t.lat, t.lng]);
-  map.fitBounds(L.latLngBounds([HOME, ...beastSpots]), {
-    paddingTopLeft: [40, 160],
-    paddingBottomRight: [40, bottom.offsetHeight + 60],
-    maxZoom: 18,
-  });
+  map.fitBounds(L.latLngBounds([HOME, ...beastSpots]), { ...mapPadding([40, 160], 60), maxZoom: 18 });
 
   // 路由：依 PAGES 把畫面畫進同一個全螢幕的 #page，蓋在地圖上面
   const page = document.getElementById('page');
@@ -234,8 +280,19 @@ async function main() {
     page.hidden = !on;
     behindPage.forEach((c) => { c.inert = on; });
   }
+  // 底部導覽列和電腦版頂部導覽，標出現在在哪一頁（沒有對應的畫面都算地圖）
+  const navLinks = document.querySelectorAll('.dsh-nav__item[href], .dsh-topnav__item');
+  function syncNav(name) {
+    const current = Object.hasOwn(PAGES, name) && name !== 'tree' && name !== 'report' ? `#/${name}` : '#/';
+    navLinks.forEach((a) => {
+      if (a.getAttribute('href') === current) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+  }
+
   async function route() {
     const [, name, id] = location.hash.match(/^#\/([^/]+)(?:\/([^/]+))?/) ?? [];
+    syncNav(name);
     const target = Object.hasOwn(PAGES, name) ? PAGES[name] : null;
     const tree = id ? byId.get(decodeURIComponent(id)) : null;
     if (target && (tree || !target.needsTree)) {

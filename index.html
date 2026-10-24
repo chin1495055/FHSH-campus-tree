@@ -21,6 +21,8 @@
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
 <link rel="stylesheet" href="design-system/tokens.css">
 <link rel="stylesheet" href="design-system/components.css">
+<!-- 電腦版（1024px 以上、滑鼠操作）才套用；手機和平板維持 PWA 手機版 -->
+<link rel="stylesheet" href="design-system/desktop.css">
 <link rel="stylesheet" href="css/app.css">
 <!-- 每個畫面各自一個樣式檔，兩個人同時開發才不會改到同一個檔案 -->
 <link rel="stylesheet" href="css/report.css">
@@ -28,6 +30,18 @@
 <link rel="stylesheet" href="css/scan.css">
 </head>
 <body class="dsh-root">
+<!-- 電腦版的頂部導覽，取代底部導覽列；電腦上沒有掃描 -->
+<header class="dsh-topnav">
+  <a class="dsh-topnav__brand" href="#/"><img src="design-system/assets/logos/logo-horizontal.svg" alt="大樹神獸"></a>
+  <nav aria-label="主要導覽">
+    <ul class="dsh-topnav__links">
+      <li><a class="dsh-topnav__item" href="#/" aria-current="page"><span class="dsh-nav__icon dsh-nav__icon--map" aria-hidden="true"></span>地圖</a></li>
+      <li><a class="dsh-topnav__item" href="#/collection"><span class="dsh-nav__icon dsh-nav__icon--collection" aria-hidden="true"></span>圖鑑</a></li>
+      <li><a class="dsh-topnav__item" href="#/notices"><span class="dsh-nav__icon dsh-nav__icon--bell" aria-hidden="true"></span>通知</a></li>
+      <li><a class="dsh-topnav__item" href="#/me"><span class="dsh-nav__icon dsh-nav__icon--me" aria-hidden="true"></span>我的</a></li>
+    </ul>
+  </nav>
+</header>
 <div class="app">
   <div id="map" class="map" aria-label="樹木地圖"></div>
 
@@ -43,6 +57,9 @@
       <button type="button" class="chip" data-filter="watch" aria-pressed="false">需關注</button>
       <button type="button" class="chip" data-filter="notice" aria-pressed="false">公示中</button>
     </div>
+    <!-- 附近的樹：只在電腦版的左欄顯示 -->
+    <h2 class="nearby-title">附近的樹</h2>
+    <ul class="dsh-treelist nearby" id="nearby" aria-label="附近的樹"></ul>
   </div>
 
   <button type="button" class="locate" id="locate" aria-label="回到我的位置">

@@ -258,15 +258,22 @@ export async function renderTreePage(el, tree, { justGuarded = false } = {}) {
   el.innerHTML = `
     ${pageBarHtml('樹的檔案')}
     <div class="tp-scroll">
-      ${notice ? noticeBannerHtml(notice) : ''}
-      ${heroHtml(tree)}
-      <div class="tp-status">${statusTag(tree.status)}<span>${STATUS_NOTE[tree.status]}</span></div>
-      ${vitalHtml(tree, treeReports.length)}
-      ${lanternsHtml(guardiansOf(tree), justGuarded)}
-      ${notice ? officialHtml(notice) : ''}
-      ${storyHtml(tree.beast)}
-      ${reportsHtml(treeReports, checkItems)}
-      ${factsHtml(tree)}
+      <!-- 電腦版左右兩欄；手機版兩欄攤平成一欄，公示通知條排最上面（見 app.css） -->
+      <div class="tp-cols dsh-cols">
+        <div class="tp-aside dsh-cols__aside">
+          ${heroHtml(tree)}
+          <div class="tp-status">${statusTag(tree.status)}<span>${STATUS_NOTE[tree.status]}</span></div>
+          ${vitalHtml(tree, treeReports.length)}
+          ${lanternsHtml(guardiansOf(tree), justGuarded)}
+        </div>
+        <div class="tp-main dsh-cols__main">
+          ${notice ? noticeBannerHtml(notice) : ''}
+          ${notice ? officialHtml(notice) : ''}
+          ${storyHtml(tree.beast)}
+          ${reportsHtml(treeReports, checkItems)}
+          ${factsHtml(tree)}
+        </div>
+      </div>
     </div>
     <div class="tp-actions">${actionsHtml(tree)}</div>
     ${sheetHtml(name)}`;

@@ -11,6 +11,9 @@ const STATUS_ICON = {
   move: '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7 H11 M8 4 L11 7 L8 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
 };
 
+// 電腦版的條件，和 design-system/desktop.css 一樣：寬度 1024px 以上、滑鼠操作
+export const DESKTOP = matchMedia('(min-width: 1024px) and (hover: hover) and (pointer: fine)');
+
 export const esc = (s) => dshEscape(s ?? '');
 
 export const statusTag = (status) =>
