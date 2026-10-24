@@ -92,6 +92,7 @@
 
 - 模擬暱稱一律明顯是假的（例如「早起散步的松鼠（模擬）」），沒有使用任何真實個資。
 - 守護人數 = 模擬的基礎人數 ＋ 你自己按的那一下。
+- 分享卡（[assets/share/](assets/share/)）是固定圖檔，上面的守護人數（129）、公告內容都是模擬資料；求援籤標示「模擬公示」。
 - 沒有對市府或任何第三方系統做自動抓取或掃描。
 
 ## 技術
@@ -121,6 +122,8 @@ python -m http.server 8000
 | [data/](data/) | 樹木資料、模擬資料、背景研究 |
 | [design-system/](design-system/) | 視覺設計系統（配色、字體、元件、神獸圖） |
 | [demo/qrcodes.html](demo/qrcodes.html) | Demo 用的模擬樹木 QR code |
+| [assets/share/](assets/share/) | 分享卡與 OG 預覽圖（從設計稿截圖，`scripts/capture_share_cards.cjs`） |
+| [t/](t/) | 分享連結用的跳轉頁，讓 LINE、Threads 讀得到預覽圖（`scripts/make_og_pages.cjs` 產生） |
 | [docs/](docs/) | PRD、User Stories、設計稿、提案與 Demo 影片腳本 |
 
 ## 用到的開源套件與 AI 工具
@@ -138,6 +141,13 @@ python -m http.server 8000
 | [Noto Sans TC、Noto Serif TC](https://fonts.google.com/) | — | 字型（Google Fonts） | SIL Open Font License |
 
 資料前處理腳本只用 Python 標準函式庫。
+
+產生分享卡圖檔的腳本另外用到下面兩個套件。它們只在團隊電腦上跑一次，不在 App 裡執行：
+
+| 名稱 | 版本 | 用途 | 授權 |
+|---|---|---|---|
+| [Puppeteer](https://pptr.dev/)（puppeteer-core） | 23.11.1 | 用本機 Chrome 把設計稿的分享卡截成圖檔 | Apache-2.0 |
+| [node-qrcode](https://github.com/soldair/node-qrcode) | 1.5.4 | 求援籤上的 QR code | MIT |
 
 ### AI 工具
 

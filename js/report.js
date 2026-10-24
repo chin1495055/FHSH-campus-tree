@@ -282,6 +282,7 @@ export async function renderReportPage(el, { tree }) {
             正式上線後會轉給管理單位，並通知其他守護者一起留意。（Demo 不會真的送出）
           </div>
         </div>` : '<p class="tp-p rp-center">一切看起來都好。下次經過，再來看看祂。</p>'}
+      <a class="dsh-btn dsh-btn--primary dsh-btn--block" href="#/share/${encodeURIComponent(tree.id)}/guard">分享守護籤</a>
       <a class="dsh-btn dsh-btn--secondary dsh-btn--block" href="${treeHref}">回到樹的檔案</a>
       <a class="dsh-btn dsh-btn--text dsh-btn--block" href="#/">回地圖</a>`);
   }

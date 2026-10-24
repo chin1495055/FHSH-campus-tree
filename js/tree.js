@@ -35,7 +35,7 @@ function daysUntil(date) {
 const shortDate = (date) => date.slice(5).replace('-', '/');
 const orPending = (v, unit = '') => (v == null ? '［待補］' : `${v}${unit}`);
 
-function heroHtml(tree) {
+export function heroHtml(tree) {
   const b = tree.beast;
   const age = tree.ageEstimated ? `約 ${tree.ageEstimated} 年（推估）` : null;
   if (!b) {
@@ -97,6 +97,7 @@ function officialHtml(notice) {
         <dt>說明會</dt><dd>${h ? esc(`${h.date} ${h.time}・${h.place}`) : '［待補］'}</dd>
       </dl>
       <div class="dsh-official__foot">
+        <a class="dsh-btn dsh-btn--secondary dsh-btn--block sh-entry" href="#/share/${encodeURIComponent(notice.treeId)}/help">分享求援籤，請朋友一起關心</a>
         <p class="tp-small">這是模擬公告，沒有原始公告連結。</p>
       </div>
     </article>`;
@@ -214,12 +215,15 @@ function factsHtml(tree) {
 function actionsHtml(tree) {
   const mine = getGuard(tree.id);
   const report = `<a class="dsh-btn dsh-btn--secondary dsh-btn--block" href="#/report/${encodeURIComponent(tree.id)}"><img src="design-system/assets/icons/report.svg" alt="" width="28" height="28">回報樹況</a>`;
+  // 守護之後才出現分享：神獸有分享卡，一般樹分享網址
+  const share = `<a class="dsh-btn dsh-btn--text dsh-btn--block sh-entry" href="#/share/${encodeURIComponent(tree.id)}"><img src="design-system/assets/icons/share.svg" alt="" width="24" height="24">分享祂，找更多鄰居</a>`;
   if (mine === 'local') {
-    return `${report}<p class="tp-actions__hint">你是在地守護者。經過時拍張照、看看祂的狀況。</p>`;
+    return `${report}${share}<p class="tp-actions__hint">你是在地守護者。經過時拍張照、看看祂的狀況。</p>`;
   }
   if (mine === 'remote') {
     return `
       <button type="button" class="dsh-btn dsh-btn--secondary dsh-btn--block" disabled>已關注</button>
+      ${share}
       <p class="tp-actions__hint">有異動時會通知你。人在樹旁邊時，可以<button type="button" class="tp-link" data-guard="local">改成在地守護</button>來回報樹況。</p>`;
   }
   return `

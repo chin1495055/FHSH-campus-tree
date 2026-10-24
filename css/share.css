@@ -1,0 +1,30 @@
+/* 分享卡（js/share.js）。class 用 sh- 開頭。顏色、字體、元件都用 design-system 的 token 與 class。 */
+
+.sh-scroll > * { flex: none; }
+.sh-cols { display: flex; flex-direction: column; gap: var(--space-4); }
+.sh-preview, .sh-main { display: flex; flex-direction: column; gap: var(--space-3); }
+
+.sh-kinds { display: flex; gap: var(--space-2); }
+.sh-card {
+  display: block; width: 100%; max-width: 420px; height: auto; margin-inline: auto; box-sizing: border-box;
+  border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm);
+}
+.sh-note { margin: 0; text-align: center; }
+
+.sh-main .tp-box .tp-p { margin: 0; }
+.sh-url { margin: var(--space-2) 0 0; font-size: 13px; line-height: 20px; color: var(--text-muted); overflow-wrap: anywhere; user-select: all; }
+.sh-actions { display: flex; flex-direction: column; gap: var(--space-2); }
+.sh-actions a.dsh-btn { text-decoration: none; box-sizing: border-box; }
+.sh-status { margin: 0; min-height: 20px; font-size: 14px; line-height: 20px; font-weight: 700; color: var(--brand-text); text-align: center; }
+.sh-status:empty { min-height: 0; }
+
+/* ── 電腦版：左邊預覽圖、右邊動作 ── */
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .tree-page[data-page="share"] { --page-max: var(--content-max); }
+  .sh-cols { flex-direction: row; }
+  .sh-card { max-width: none; }
+}
+
+/* 樹木頁上的分享入口（js/tree.js） */
+a.sh-entry { text-decoration: none; box-sizing: border-box; }
+.dsh-official__foot .sh-entry { margin-bottom: var(--space-2); }
