@@ -106,15 +106,19 @@
 .ab-team { padding-top: 72px; background: var(--brand-strong); color: var(--ink-50); border-top: var(--stroke-ui) solid var(--outline); position: relative; }
 .ab-team::before { content: ""; position: absolute; inset: 0 0 auto; height: 40px; background: url("../design-system/assets/patterns/cloud.svg") repeat-x; border-bottom: var(--stroke-fine) solid var(--outline); }
 .ab-team .ab-eyebrow { color: var(--honor-on-dark); }
-.ab-team .ab-team .ab-lead { color: var(--ink-50); }
+.ab-team .dsh-ridge { color: var(--ink-50); }
+.ab-team .ab-lead { color: var(--ink-50); }
 .ab-ark { margin: 0 0 var(--space-8); text-align: center; font-family: var(--font-display); font-weight: 900; font-size: 22px; line-height: 32px; color: var(--honor-on-dark); }
+.ab-intro { max-width: 44em; margin: var(--space-8) auto 0; text-align: center; font-size: 14px; line-height: 24px; color: var(--green-100); }
+.ab-intro p { margin: 0 0 var(--space-2); }
+.ab-intro p:last-child { margin-bottom: 0; }
+.ab .ab-intro a { color: var(--honor-on-dark); font-weight: 700; }
 .ab-member { color: var(--text); display: flex; gap: var(--space-4); align-items: flex-start; }
 .ab-member__avatar { flex: none; width: 72px; height: 72px; border-radius: 50%; border: var(--stroke-ui) solid var(--outline); background: var(--surface); overflow: hidden; }
 .ab-member__avatar img { width: 100%; height: 100%; object-fit: cover; }
 .ab-member__name { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 24px; line-height: 32px; }
 .ab-member__role { margin: var(--space-1) 0 0; font-size: 15px; line-height: 24px; }
 .ab-member__li { display: inline-flex; align-items: center; min-height: var(--target-min); margin-top: var(--space-2); font-weight: 700; }
-.ab-ai { margin: var(--space-6) 0 0; text-align: center; font-size: 15px; line-height: 25px; color: var(--green-100); }
 
 /* 頁尾 */
 .ab-foot { padding: var(--space-8) 0 var(--space-12); font-size: 14px; line-height: 24px; color: var(--text-muted); }
