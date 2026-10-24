@@ -9,12 +9,12 @@ OUT="$DIR/out"
 mkdir -p "$OUT"
 IDS=("$@")
 if [ ${#IDS[@]} -eq 0 ]; then
-  IDS=(c1 c2-1 c2-2 c2-3 c2-4 c2-5 c3-1 c3-2 c3-3 c3-4 c3-5 c4-xuxugong c4-gadang c4-queque c4-luan c5 c6-3d c6-1d c6-3h c7)
+  IDS=(c1 c2-1 c2-2 c2-3 c2-4 c2-5 c3-1 c3-2 c3-3 c3-4 c3-5 c4-xuxugong c4-gadang c4-queque c4-luan c5 c6-3d c6-1d c6-3h c7 og)
 fi
 for id in "${IDS[@]}"; do
-  case "$id" in c6-*) H=1920 ;; *) H=1350 ;; esac
+  case "$id" in c6-*) W=1080 H=1920 ;; og) W=1200 H=630 ;; *) W=1080 H=1350 ;; esac
   "$CHROME" --headless=new --disable-gpu --hide-scrollbars --allow-file-access-from-files \
-    --force-device-scale-factor=1 --window-size=1080,$H --virtual-time-budget=8000 \
+    --force-device-scale-factor=1 --window-size=$W,$H --virtual-time-budget=8000 \
     --screenshot="$OUT/$id.png" "file://$DIR/cards.html?c=$id" >/dev/null 2>&1
   echo "已輸出 $id.png"
 done

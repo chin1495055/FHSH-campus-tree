@@ -18,6 +18,8 @@
   /* 卡片外框：墨色粗框＋窗花格紋底，和 App 的分享卡一樣 */
   .vc { position: relative; width: 1080px; height: 1350px; overflow: hidden; background: var(--ink-900); padding: 14px; flex: none; }
   .vc.story { height: 1920px; }
+  .vc.og { width: 1200px; height: 630px; }
+  .og .vc__in { flex-direction: row; align-items: center; padding: 56px 80px 56px 130px; gap: 20px; }
   .vc__in { position: relative; width: 100%; height: 100%; background: var(--surface) url(../../../design-system/assets/patterns/lattice.svg) 0 0 / 56px; display: flex; flex-direction: column; padding: 64px 72px 52px; }
   .vc__in.plain { background: var(--surface); }
   /* 底圖選項：網址加 &bg=名稱（深綠的卡不受影響） */
@@ -147,7 +149,7 @@ const DATA_NOTE = '樹木位置與樹種為臺北市開放資料，其餘為模�
 const head = (page, rev, center) => `<div class="vc__head"${center ? ' style="justify-content:center"' : ''}><img class="vc__logo" src="${rev ? LOGO_REV : LOGO}" alt="大樹神獸">${page ? `<span class="vc__page">${page}</span>` : ''}</div>`;
 const foot = (left = DATA_NOTE, center) => `<div class="vc__foot"${center ? ' style="justify-content:center;align-items:baseline;gap:28px"' : ''}><span>${left}</span><span class="vc__team">AI 方舟計畫</span></div>`;
 // 這幾張用「格紋只在外框」的底圖，字比較清楚（10/24 Qmoa 選）；其他卡用網址的 bg 參數，預設格紋
-const EDGE = new Set(['c1', 'c2-2', 'c2-3', 'c2-5', 'c5', 'c7', 'c3-1', 'c3-2', 'c3-3', 'c3-4', 'c3-5']);
+const EDGE = new Set(['og', 'c1', 'c2-2', 'c2-3', 'c2-5', 'c5', 'c7', 'c3-1', 'c3-2', 'c3-3', 'c3-4', 'c3-5']);
 const card = (id, inner, { cls = '', inCls = '' } = {}) => ({ id, html: `<section class="vc ${cls}" data-id="${id}"${EDGE.has(id) ? ' data-bg="edge"' : ''}><div class="vc__in ${inCls}">${inner}</div></section>` });
 
 // 褐根病三個徵兆的插圖（平塗＋墨線）
@@ -174,6 +176,16 @@ const steps = [
 
 const CARDS = [
   // C1 主視覺／投票卡
+  // 官網 OG 預覽圖 1200×630（首頁、關於我們頁用），輸出後複製到 assets/share/og-site.png
+  card('og', `
+    <div style="flex:1;text-align:left">
+      <img src="${LOGO}" alt="大樹神獸" style="height:72px">
+      <h1 style="font:900 62px/1.25 'Noto Serif TC';margin-top:28px">讓台北每棵樹<br>都有一群<br><span class="green">守護祂的鄰居</span></h1>
+      <p style="font:500 28px/1.5 'Noto Sans TC';margin-top:20px;color:var(--text-muted)">用遊戲的方式守護家附近的樹</p>
+      <p class="vc__team" style="margin-top:18px">AI 方舟計畫</p>
+    </div>
+    <div style="flex:none;width:470px;display:flex;flex-direction:column;align-items:center;margin-right:30px"><div class="c1-beasts" style="margin:0;position:relative;z-index:1"><img src="${B('gadang')}" alt="" style="height:265px"><img src="${B('xuxugong')}" alt="" style="height:380px;margin:0 -40px"><img src="${B('queque')}" alt="" style="height:265px"></div><div style="width:440px;height:34px;margin-top:-22px;border-radius:50%;background:rgba(38,35,31,.22);filter:blur(8px)"></div></div>`, { cls: 'og' }),
+
   // C1 主視覺：只留一句話、神獸、投票期限三件事，其他資訊放貼文
   card('c1', `${head('', false, true)}
     <div class="vc__body" style="text-align:center">
