@@ -47,7 +47,9 @@ async function startCamera(video) {
     }
     stream = s;
     video.srcObject = s;
-    await video.play().catch(() => {});
+    // 不等 play()：iPad 的 PWA 裡影片還藏著時，play() 可能一直不回應，畫面就卡在載入中。
+    // 影片有 autoplay，顯示出來就會自己播
+    video.play().catch(() => {});
     return true;
   } catch {
     return false;
@@ -132,7 +134,7 @@ export async function renderReportPage(el, { tree }) {
       ${stepsHtml(0)}
       <h2 class="tp-h" tabindex="-1" data-focus>${desk ? '放一張' : '拍一張'}${esc(name)}現在的樣子</h2>
       <div class="rp-finder">
-        <video class="rp-video" playsinline muted></video>
+        <video class="rp-video" autoplay playsinline muted></video>
         <img class="rp-preview" alt="剛拍的照片" hidden>
         <div class="rp-nocam" hidden>
           <img src="design-system/assets/icons/camera.svg" alt="" width="48" height="48">
@@ -143,7 +145,7 @@ export async function renderReportPage(el, { tree }) {
       </div>
       <div class="rp-controls" data-mode="loading">
         <button type="button" class="rp-shutter" data-show="live" aria-label="拍照"></button>
-        <label class="dsh-btn dsh-btn--secondary dsh-btn--block rp-file" data-show="nocam">
+        <label class="dsh-btn dsh-btn--secondary dsh-btn--block rp-file" data-show="loading nocam">
           <img src="design-system/assets/icons/camera.svg" alt="" width="28" height="28">${desk ? '選擇照片' : '打開相機'}
           <input type="file" accept="image/*"${desk ? '' : ' capture="environment"'} class="rp-file__input">
         </label>
@@ -157,13 +159,12 @@ export async function renderReportPage(el, { tree }) {
           <button type="button" class="dsh-btn dsh-btn--text" data-retake>${desk ? '換一張' : '重拍'}</button>
           <button type="button" class="dsh-btn dsh-btn--secondary rp-grow" data-next>下一步：檢查</button>
         </div>
-        <button type="button" class="dsh-btn dsh-btn--text dsh-btn--block" data-show="live nocam" data-skip>${desk ? '先不放照片，直接檢查' : '先不拍照，直接檢查'}</button>
+        <button type="button" class="dsh-btn dsh-btn--text dsh-btn--block" data-show="loading live nocam" data-skip>${desk ? '先不放照片，直接檢查' : '先不拍照，直接檢查'}</button>
       </div>`);
 
     const video = body.querySelector('.rp-video');
     const preview = body.querySelector('.rp-preview');
     const controls = body.querySelector('.rp-controls');
-    let camOk = false;
     const setMode = (mode) => {
       controls.dataset.mode = mode;
       controls.querySelectorAll('[data-show]').forEach((c) => { c.hidden = !c.dataset.show.split(' ').includes(mode); });
@@ -177,17 +178,6 @@ export async function renderReportPage(el, { tree }) {
       stopCamera();
       setMode('taken');
     };
-
-    setMode('loading');
-    if (draft.photo) {
-      taken(draft.photo);
-    } else if (desk) {
-      setMode('nocam');
-    } else {
-      camOk = await startCamera(video);
-      if (!video.isConnected) return;
-      setMode(camOk ? 'live' : 'nocam');
-    }
 
     body.querySelector('.rp-shutter').addEventListener('click', () => {
       if (!video.videoWidth) return;
@@ -209,6 +199,22 @@ export async function renderReportPage(el, { tree }) {
       stopCamera();
       checkStep();
     });
+
+    // 按鈕先接好再開相機：等相機權限時，「打開相機」和「先不拍照」也按得動
+    setMode('loading');
+    if (draft.photo) {
+      taken(draft.photo);
+    } else if (desk) {
+      setMode('nocam');
+    } else {
+      const camOk = await startCamera(video);
+      // 人已經離開這頁，或等相機時已經用內建相機拍好了
+      if (!video.isConnected || controls.dataset.mode !== 'loading') {
+        if (camOk) stopCamera();
+        return;
+      }
+      setMode(camOk ? 'live' : 'nocam');
+    }
   }
 
   // ── 步驟 2：健康檢查 ──
