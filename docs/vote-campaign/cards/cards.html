@@ -127,6 +127,24 @@
   .story .vc__foot { justify-content: center; }
   .count { font: 900 300px/1 'Noto Serif TC'; color: var(--honor-on-dark); }
   .count small { font-size: 120px; }
+
+  /* C8 社區凝聚力（概念）*/
+  .concept { display: inline-block; font: 700 26px/1 'Noto Sans TC'; color: var(--honor-text); background: var(--gold-50); border: 3px solid var(--outline); border-radius: 999px; padding: 10px 20px; }
+  .c8-scene { display: block; width: 100%; height: auto; }
+  .bubbles { display: flex; flex-direction: column; gap: 22px; margin-top: 44px; }
+  .bub { max-width: 78%; background: var(--surface-raised); border: 5px solid var(--outline); border-radius: 22px; padding: 22px 30px; text-align: left; font: 500 34px/1.5 'Noto Sans TC'; }
+  .bub small { display: block; font: 700 24px/1 'Noto Sans TC'; color: var(--text-muted); margin-bottom: 10px; }
+  .bub.r { align-self: flex-end; background: var(--green-50); }
+  .evs { display: grid; gap: 22px; margin-top: 44px; }
+  .ev { display: grid; grid-template-columns: 120px 1fr; gap: 26px; align-items: center; text-align: left; border: 5px solid var(--outline); border-radius: 14px; padding: 20px 26px; outline: 3px dashed var(--green-400); outline-offset: -14px; }
+  .ev:nth-child(1) { background: var(--green-200); } .ev:nth-child(2) { background: var(--green-100); } .ev:nth-child(3) { background: var(--green-50); }
+  .ev__date { background: var(--surface-raised); border: 4px solid var(--outline); border-radius: 8px; text-align: center; padding: 10px 0; font: 900 24px/1.2 'Noto Sans TC'; }
+  .ev__date b { display: block; font: 900 46px/1.1 'Noto Serif TC'; }
+  .ev h4 { font: 900 42px/1.3 'Noto Serif TC'; }
+  .ev p { font: 400 28px/1.5 'Noto Sans TC'; color: var(--text-muted); margin-top: 4px; }
+  .lights { display: grid; grid-template-columns: repeat(10, 1fr); gap: 14px; margin: 40px auto 0; width: 820px; }
+  .lights i { aspect-ratio: 1; border-radius: 50%; border: 4px solid var(--outline); background: var(--ink-200); }
+  .lights i.on { background: var(--honor); box-shadow: 0 0 0 6px var(--gold-100); }
 </style>
 </head>
 <body>
@@ -149,7 +167,7 @@ const DATA_NOTE = '樹木位置與樹種為臺北市開放資料，其餘為模�
 const head = (page, rev, center) => `<div class="vc__head"${center ? ' style="justify-content:center"' : ''}><img class="vc__logo" src="${rev ? LOGO_REV : LOGO}" alt="大樹神獸">${page ? `<span class="vc__page">${page}</span>` : ''}</div>`;
 const foot = (left = DATA_NOTE, center) => `<div class="vc__foot"${center ? ' style="justify-content:center;align-items:baseline;gap:28px"' : ''}><span>${left}</span><span class="vc__team">AI 方舟計畫</span></div>`;
 // 這幾張用「格紋只在外框」的底圖，字比較清楚（10/24 Qmoa 選）；其他卡用網址的 bg 參數，預設格紋
-const EDGE = new Set(['og', 'c1', 'c2-2', 'c2-3', 'c2-5', 'c5', 'c7', 'c3-1', 'c3-2', 'c3-3', 'c3-4', 'c3-5']);
+const EDGE = new Set(['c8-1', 'c8-2', 'c8-3', 'c8-4', 'c8-5', 'og', 'c1', 'c2-2', 'c2-3', 'c2-5', 'c5', 'c7', 'c3-1', 'c3-2', 'c3-3', 'c3-4', 'c3-5']);
 const card = (id, inner, { cls = '', inCls = '' } = {}) => ({ id, html: `<section class="vc ${cls}" data-id="${id}"${EDGE.has(id) ? ' data-bg="edge"' : ''}><div class="vc__in ${inCls}">${inner}</div></section>` });
 
 // 褐根病三個徵兆的插圖（平塗＋墨線）
@@ -173,6 +191,82 @@ const steps = [
   { shot: '06-異動警報', t: '有異動，大家都知道', d: '樹被公告移除前，守護者都會收到通知。' },
   { shot: '07-求援籤', t: '分享求援籤', d: '分享到 LINE、IG、Threads，找更多人來看祂。' },
 ];
+
+// C8-1 插圖「大樹下的聚會所」：平塗＋墨線，人物用下面幾個小函式畫（手腳是「墨色粗線＋上色細線」疊出來的描邊）
+const INK = '#26231F';
+const limb = (d, c, w = 16) => `<path d="${d}" stroke="${INK}" stroke-width="${w + 8}" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" stroke="${c}" stroke-width="${w}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+const hairPath = (x, y, r, type) => {
+  const cap = `M${x - r - 1} ${y + 2} Q${x - r - 2} ${y - r - 8} ${x} ${y - r - 7} Q${x + r + 2} ${y - r - 8} ${x + r + 1} ${y + 2} Q${x + r * 0.7} ${y - r * 0.45} ${x + r * 0.15} ${y - r * 0.55} Q${x - r * 0.5} ${y - r * 0.4} ${x - r - 1} ${y + 2} Z`;
+  if (type === 'bun') return cap + ` M${x - 4} ${y - r - 4} a12 12 0 1 1 1 0 Z`;
+  if (type === 'bald') return `M${x - r - 1} ${y + 4} Q${x - r} ${y - r * 0.5} ${x - r * 0.55} ${y - r * 0.55} L${x - r * 0.6} ${y + 2} Z M${x + r + 1} ${y + 4} Q${x + r} ${y - r * 0.5} ${x + r * 0.55} ${y - r * 0.55} L${x + r * 0.6} ${y + 2} Z`;
+  if (type === 'tails') return cap + ` M${x - r - 4} ${y - 6} q-16 6 -12 24 q10 -4 14 -16 Z M${x + r + 4} ${y - 6} q16 6 12 24 q-10 -4 -14 -16 Z`;
+  return cap;
+};
+// 頭：look 是臉朝向（-1 左、0 正、1 右），glasses 給長輩
+const face = (x, y, r, { skin = '#F1E3BF', hair = '#38332C', type = 'short', look = 0, glasses = false } = {}) => {
+  const fx = x + look * r * 0.22, ey = y + 1;
+  return `<circle cx="${x}" cy="${y}" r="${r}" fill="${skin}" stroke="${INK}" stroke-width="5"/>
+    <path d="${hairPath(x, y, r, type)}" fill="${hair}" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>
+    <circle cx="${fx - r * 0.55}" cy="${ey + r * 0.32}" r="${r * 0.16}" fill="#E5ABA0"/><circle cx="${fx + r * 0.55}" cy="${ey + r * 0.32}" r="${r * 0.16}" fill="#E5ABA0"/>
+    ${glasses
+      ? `<circle cx="${fx - r * 0.32}" cy="${ey}" r="${r * 0.2}" fill="#fff" stroke="${INK}" stroke-width="3"/><circle cx="${fx + r * 0.32}" cy="${ey}" r="${r * 0.2}" fill="#fff" stroke="${INK}" stroke-width="3"/><path d="M${fx - r * 0.12} ${ey} h${r * 0.24}" stroke="${INK}" stroke-width="3"/><circle cx="${fx - r * 0.32}" cy="${ey}" r="2.6" fill="${INK}"/><circle cx="${fx + r * 0.32}" cy="${ey}" r="2.6" fill="${INK}"/>`
+      : `<path d="M${fx - r * 0.42} ${ey} q${r * 0.12} -${r * 0.14} ${r * 0.24} 0 M${fx + r * 0.18} ${ey} q${r * 0.12} -${r * 0.14} ${r * 0.24} 0" stroke="${INK}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`}
+    <path d="M${fx - r * 0.22} ${ey + r * 0.42} q${r * 0.22} ${r * 0.24} ${r * 0.44} 0" stroke="${INK}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
+};
+// 坐著的人：(hx, hy) 是屁股，f 是朝向，gy 是地面；arms 自己給
+const seated = (hx, hy, f, gy, { shirt, pants, arms = '', ...h }) => `
+  ${limb(`M${hx} ${hy - 8} L${hx + f * 44} ${hy - 8} L${hx + f * 48} ${gy - 10}`, pants, 18)}
+  <ellipse cx="${hx + f * 56}" cy="${gy - 5}" rx="15" ry="7" fill="${INK}"/>
+  <path d="M${hx - 23} ${hy} L${hx - 21} ${hy - 50} Q${hx - 20} ${hy - 66} ${hx} ${hy - 66} Q${hx + 20} ${hy - 66} ${hx + 21} ${hy - 50} L${hx + 23} ${hy} Z" fill="${shirt}" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>
+  ${arms}
+  ${face(hx, hy - 92, 25, h)}`;
+// 站著的人：(x, gy) 是兩腳中間
+const standing = (x, gy, { shirt, pants, arms = '', ...h }) => `
+  ${limb(`M${x - 9} ${gy - 66} L${x - 10} ${gy - 10}`, pants, 16)}${limb(`M${x + 9} ${gy - 66} L${x + 10} ${gy - 10}`, pants, 16)}
+  <ellipse cx="${x - 13}" cy="${gy - 5}" rx="12" ry="6" fill="${INK}"/><ellipse cx="${x + 13}" cy="${gy - 5}" rx="12" ry="6" fill="${INK}"/>
+  <path d="M${x - 24} ${gy - 62} L${x - 22} ${gy - 116} Q${x - 20} ${gy - 130} ${x} ${gy - 130} Q${x + 20} ${gy - 130} ${x + 22} ${gy - 116} L${x + 24} ${gy - 62} Z" fill="${shirt}" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>
+  ${arms}
+  ${face(x, gy - 156, 27, h)}`;
+const hand = (x, y, skin = '#F1E3BF') => `<circle cx="${x}" cy="${y}" r="8" fill="${skin}" stroke="${INK}" stroke-width="4"/>`;
+
+const GY = 505;
+const C8_SCENE = `<svg class="c8-scene" viewBox="0 0 900 560" fill="none" stroke-linejoin="round" stroke-linecap="round">
+  <ellipse cx="450" cy="${GY + 12}" rx="430" ry="24" fill="#DDD4C3"/>
+  <!-- 樹 -->
+  <path d="M408 ${GY + 8} Q404 ${GY - 30} 420 300 Q450 284 480 300 Q496 ${GY - 30} 492 ${GY + 8} Z" fill="#8C6B2E" stroke="${INK}" stroke-width="6"/>
+  <path d="M396 ${GY + 8} q14 -18 24 -6 M504 ${GY + 8} q-14 -18 -24 -6" stroke="${INK}" stroke-width="6"/>
+  <path d="M438 340 V420 M462 352 V440" stroke="#F1E3BF" stroke-width="5"/>
+  <path d="M416 372 Q450 392 484 372 L488 394 Q450 412 412 394 Z" fill="#A63A2B" stroke="${INK}" stroke-width="5"/><path d="M470 398 l14 34 l-10 -4 l-8 8 Z" fill="#A63A2B" stroke="${INK}" stroke-width="4"/>
+  <path d="M424 318 Q380 310 346 352 M476 318 Q522 310 556 354" stroke="${INK}" stroke-width="6"/>
+  <path d="M150 250 Q120 120 270 100 Q300 20 420 40 Q470 0 540 40 Q660 20 680 110 Q800 120 760 240 Q790 320 680 330 Q620 380 520 330 Q450 360 380 330 Q280 380 220 320 Q120 320 150 250 Z" fill="#3F7A4A" stroke="${INK}" stroke-width="6"/>
+  <path d="M250 205 Q290 175 330 205 M520 150 Q560 120 600 150 M395 105 Q435 85 475 105 M620 255 Q660 235 700 265 M235 285 Q265 265 295 285 M455 220 Q495 200 535 222" stroke="#76AE82" stroke-width="5"/>
+  <g stroke="${INK}" stroke-width="4"><path d="M640 120 q14 -16 30 -4 q-6 14 -22 14 Z" fill="#F7F2E8"/><path d="M668 112 l10 -2" /><circle cx="660" cy="114" r="2" fill="${INK}"/></g>
+  <path d="M312 92 l8 -8 M300 70 l2 -10 M600 64 l8 -6" stroke="#D6B76C" stroke-width="4"/>
+
+  <!-- 左：長椅上的阿公和阿嬤 -->
+  <rect x="108" y="438" width="222" height="18" rx="5" fill="#AD863A" stroke="${INK}" stroke-width="5"/>
+  <rect x="112" y="396" width="214" height="14" rx="5" fill="#AD863A" stroke="${INK}" stroke-width="5"/>
+  <path d="M128 456 V${GY} M310 456 V${GY} M128 410 V438 M310 410 V438" stroke="${INK}" stroke-width="6"/>
+  ${seated(165, 440, 1, GY, { shirt: '#76AE82', pants: '#514A40', hair: '#DDD4C3', type: 'bald', look: 1, glasses: true,
+    arms: `${limb('M182 384 Q202 408 214 414', '#76AE82', 15)}${hand(218, 414)}<path d="M210 398 h20 l-3 18 h-14 Z" fill="#F7F2E8" stroke="${INK}" stroke-width="4"/><path d="M214 392 q4 -8 0 -14 M222 392 q4 -8 0 -14" stroke="#BDB3A1" stroke-width="3"/>` })}
+  ${seated(268, 440, -1, GY, { shirt: '#D07C6C', pants: '#336540', hair: '#DDD4C3', type: 'bun', look: -1,
+    arms: `${limb('M252 384 Q236 400 228 386', '#D07C6C', 15)}${hand(226, 380)}<path d="M226 380 L198 352 Q214 336 236 344 Z" fill="#E4CD92" stroke="${INK}" stroke-width="4"/><path d="M226 380 L208 348 M226 380 L222 342" stroke="${INK}" stroke-width="2.5"/>` })}
+
+  <!-- 右：樹下下象棋，小朋友在旁邊看 -->
+  ${standing(690, GY, { shirt: '#E4CD92', pants: '#2E6491', hair: '#38332C', type: 'tails', look: 0,
+    arms: `${limb('M670 386 Q660 412 668 430', '#E4CD92', 13)}${limb('M710 386 Q722 410 714 428', '#E4CD92', 13)}` }).replace(/^/, `<g transform="translate(690 ${GY}) scale(.7) translate(-690 -${GY})">`)}</g>
+  <rect x="628" y="446" width="124" height="16" rx="4" fill="#AD863A" stroke="${INK}" stroke-width="5"/>
+  <path d="M646 462 V${GY} M734 462 V${GY}" stroke="${INK}" stroke-width="6"/>
+  <rect x="640" y="432" width="100" height="16" rx="3" fill="#F1E3BF" stroke="${INK}" stroke-width="4"/>
+  ${[652, 672, 700, 724].map((cx, k) => `<ellipse cx="${cx}" cy="428" rx="9" ry="5" fill="#FCFAF5" stroke="${k % 2 ? '#A63A2B' : INK}" stroke-width="3.5"/>`).join('')}
+  <rect x="566" y="456" width="44" height="12" rx="4" fill="#8C6B2E" stroke="${INK}" stroke-width="4"/><path d="M574 468 V${GY} M602 468 V${GY}" stroke="${INK}" stroke-width="5"/>
+  ${seated(588, 456, 1, GY, { shirt: '#336540', pants: '#514A40', hair: '#BDB3A1', type: 'short', look: 1,
+    arms: `${limb('M604 404 Q632 420 652 424', '#336540', 15)}${hand(656, 424)}` })}
+  <rect x="770" y="456" width="44" height="12" rx="4" fill="#8C6B2E" stroke="${INK}" stroke-width="4"/><path d="M778 468 V${GY} M806 468 V${GY}" stroke="${INK}" stroke-width="5"/>
+  ${seated(792, 456, -1, GY, { shirt: '#F7F2E8', pants: '#6E6557', hair: '#38332C', type: 'short', look: -1,
+    arms: `${limb('M776 404 Q760 420 740 424', '#F7F2E8', 15)}${hand(736, 424)}${limb('M808 404 Q818 432 806 444', '#F7F2E8', 15)}` })}
+  <path d="M818 330 q12 -10 22 0 q10 -10 22 0" stroke="#A9CFB0" stroke-width="4"/>
+</svg>`;
 
 const CARDS = [
   // C1 主視覺／投票卡
@@ -293,6 +387,53 @@ const CARDS = [
       <div class="plaque" style="margin:40px auto 0">10/31（六）18:00 截止</div>
       <p class="lead" style="margin-top:30px">Google 或 LINE 登入，每人可投 3 件作品<br><b>${VOTE_SHORT}</b></p>
     </div>${foot('')}`, { cls: 'story', inCls: 'dark' })),
+
+  // C8 社區凝聚力（概念，5 張）：不放實機畫面，講「樹讓鄰居認識彼此」的構想
+  card('c8-1', `${head('1 / 5')}
+    <div class="vc__body" style="text-align:center">
+      <p><span class="concept">社區凝聚力・構想</span></p>
+      <h1 class="h1" style="margin-top:30px">一棵樹，<br><span class="green">一群鄰居</span></h1>
+      <div style="margin:40px 0 0">${C8_SCENE}</div>
+      <p class="lead" style="margin-top:30px">大樹下，本來就是鄰居乘涼、聊天、下棋的地方。</p>
+    </div>${foot('往左滑')}`),
+  card('c8-2', `${head('2 / 5')}
+    <div class="vc__body">
+      <p style="text-align:center"><span class="concept">構想 ①</span></p>
+      <h2 class="h2" style="margin-top:24px;text-align:center">守護同一棵樹的人，<br>就是<span class="green">「樹友」</span></h2>
+      <div class="bubbles">
+        <div class="bub"><small>樹友 A</small>今天經過，雀雀頭上又停滿白頭翁了</div>
+        <div class="bub r"><small>樹友 B</small>樹根旁邊有新的施工圍籬，大家經過幫忙看一下</div>
+        <div class="bub"><small>在地守護者</small>收到！週六早上我去拍照回報</div>
+      </div>
+      <p class="p muted" style="margin-top:36px;text-align:center">每棵樹有自己的留言板。預設匿名，想讓大家認識你再公開暱稱。</p>
+    </div>${foot('示意對話，非真實留言')}`),
+  card('c8-3', `${head('3 / 5')}
+    <div class="vc__body">
+      <p style="text-align:center"><span class="concept">構想 ②</span></p>
+      <h2 class="h2" style="margin-top:24px;text-align:center">線上號召，<br><span class="green">樹下見面</span></h2>
+      <div class="evs">
+        <div class="ev"><div class="ev__date">週六<b>早上</b></div><div><h4>一起來巡樹</h4><p>邊散步邊看樹根、樹幹、枝葉</p></div></div>
+        <div class="ev"><div class="ev__date">春天<b>植樹</b></div><div><h4>社區植樹日</h4><p>找出可以種樹的角落，一起種下去</p></div></div>
+        <div class="ev"><div class="ev__date">每年<b>生日</b></div><div><h4>大樹公生日</h4><p>綁紅布、說故事，敬樹不傷樹</p></div></div>
+      </div>
+      <p class="p muted" style="margin-top:36px;text-align:center">里長、社區發展協會、在地守護者都能發起。活動選在公開場所。</p>
+    </div>${foot('示意活動')}`),
+  card('c8-4', `${head('4 / 5')}
+    <div class="vc__body" style="text-align:center">
+      <p><span class="concept">構想 ③</span></p>
+      <h2 class="h2" style="margin-top:24px">比的是一起完成，<br><span class="green">不是個人排名</span></h2>
+      <p class="lead" style="margin-top:30px">「我們里這個月，一起守護了 <b>32</b> / 50 棵樹」</p>
+      <div class="lights">${Array.from({ length: 50 }, (_, i) => `<i${i < 32 ? ' class="on"' : ''}></i>`).join('')}</div>
+      <p class="p muted" style="margin-top:36px">每一次守護和回報，都在社區的燈海裡點亮一盞燈。</p>
+    </div>${foot('數字為示意')}`),
+  card('c8-5', `${head('5 / 5')}
+    <div class="vc__body" style="text-align:center">
+      <p><span class="concept">構想 ④</span></p>
+      <h2 class="h2" style="margin-top:24px">長輩說故事，<br><span class="green">小孩記下來</span></h2>
+      <img src="${B('xuxugong')}" alt="" style="height:420px;margin:34px auto 0">
+      <p class="lead" style="margin-top:24px">老樹的來歷，由住在旁邊的人一起寫。<br>讓樹重新成為社區的中心。</p>
+      <p class="p" style="margin-top:30px"><b>大樹神獸</b>｜線上票選至 10/31（六）18:00<br>${VOTE_SHORT}</p>
+    </div>${foot('')}`),
 ];
 
 const only = new URLSearchParams(location.search).get('c');
