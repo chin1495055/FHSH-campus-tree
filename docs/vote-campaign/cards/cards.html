@@ -20,6 +20,15 @@
   .vc.story { height: 1920px; }
   .vc__in { position: relative; width: 100%; height: 100%; background: var(--surface) url(../../../design-system/assets/patterns/lattice.svg) 0 0 / 56px; display: flex; flex-direction: column; padding: 64px 72px 52px; }
   .vc__in.plain { background: var(--surface); }
+  /* 底圖選項：網址加 &bg=名稱（深綠的卡不受影響） */
+  [data-bg="paper"] .vc__in:not(.dark) { background: var(--surface); }
+  [data-bg="faint"] .vc__in:not(.dark) { background: linear-gradient(rgba(247,242,232,.82), rgba(247,242,232,.82)), var(--surface) url(../../../design-system/assets/patterns/lattice.svg) 0 0 / 56px; }
+  [data-bg="edge"] .vc__in:not(.dark) { background: var(--surface) url(../../../design-system/assets/patterns/lattice.svg) 0 0 / 56px; }
+  [data-bg="edge"] .vc__in:not(.dark)::before { content: ''; position: absolute; inset: 36px; background: var(--surface); border: 4px solid var(--outline); border-radius: 10px; }
+  [data-bg="edge"] .vc__in:not(.dark) > * { position: relative; }
+  [data-bg="edge"] .vc__in:not(.dark) { padding-bottom: 72px; }
+  [data-bg="green"] .vc__in:not(.dark) { background: var(--green-50); }
+  [data-bg="raised"] .vc__in:not(.dark) { background: var(--surface-raised); }
   .vc__in.dark { background: linear-gradient(rgba(32,63,42,.88), rgba(32,63,42,.88)), var(--brand-strong) url(../../../design-system/assets/patterns/cloud.svg) center / 320px; color: var(--ink-50); }
 
   .vc__head { display: flex; align-items: center; justify-content: space-between; }
@@ -58,8 +67,8 @@
 
   /* C1 主視覺 */
   .c1-beasts { display: flex; justify-content: center; align-items: flex-end; gap: 0; margin: 10px 0 0; }
-  .c1-beasts img:nth-child(2) { height: 320px; margin: 0 -30px; position: relative; z-index: 1; }
-  .c1-beasts img:nth-child(1), .c1-beasts img:nth-child(3) { height: 240px; }
+  .c1-beasts img:nth-child(2) { height: 290px; margin: 0 -30px; position: relative; z-index: 1; }
+  .c1-beasts img:nth-child(1), .c1-beasts img:nth-child(3) { height: 215px; }
   .c1-ground { height: 10px; background: var(--outline); border-radius: 5px; margin: -6px 40px 0; }
   .c1-vote { display: flex; align-items: center; justify-content: space-between; gap: 32px; margin-top: 36px; }
 
@@ -130,7 +139,9 @@ const DATA_NOTE = '樹木位置與樹種為臺北市開放資料，其餘為模�
 
 const head = (page, rev) => `<div class="vc__head"><img class="vc__logo" src="${rev ? LOGO_REV : LOGO}" alt="大樹神獸">${page ? `<span class="vc__page">${page}</span>` : ''}</div>`;
 const foot = (left = DATA_NOTE) => `<div class="vc__foot"><span>${left}</span><span class="vc__team">AI 方舟計畫</span></div>`;
-const card = (id, inner, { cls = '', inCls = '' } = {}) => ({ id, html: `<section class="vc ${cls}" data-id="${id}"><div class="vc__in ${inCls}">${inner}</div></section>` });
+// 這幾張用「格紋只在外框」的底圖，字比較清楚（10/24 Qmoa 選）；其他卡用網址的 bg 參數，預設格紋
+const EDGE = new Set(['c1', 'c2-2', 'c2-3', 'c2-5']);
+const card = (id, inner, { cls = '', inCls = '' } = {}) => ({ id, html: `<section class="vc ${cls}" data-id="${id}"${EDGE.has(id) ? ' data-bg="edge"' : ''}><div class="vc__in ${inCls}">${inner}</div></section>` });
 
 // 褐根病三個徵兆的插圖（平塗＋墨線）
 const SIGN_SVG = {
@@ -156,20 +167,15 @@ const steps = [
 
 const CARDS = [
   // C1 主視覺／投票卡
+  // C1 主視覺：只留一句話、神獸、投票期限三件事，其他資訊放貼文
   card('c1', `${head()}
-    <div class="vc__body">
-      <p class="lead muted">你家門口的樹不見了，你多久會發現？</p>
-      <h1 class="h1" style="margin-top:16px">讓台北每棵樹<br>都有一群<br><span class="green">守護祂的鄰居</span></h1>
-      <div class="c1-beasts"><img src="${B('gadang')}" alt=""><img src="${B('xuxugong')}" alt=""><img src="${B('queque')}" alt=""></div>
+    <div class="vc__body" style="text-align:center">
+      <h1 class="h1">讓台北每棵樹<br>都有一群<br><span class="green">守護祂的鄰居</span></h1>
+      <div class="c1-beasts" style="margin-top:44px"><img src="${B('gadang')}" alt="" style="height:280px"><img src="${B('xuxugong')}" alt="" style="height:380px"><img src="${B('queque')}" alt="" style="height:280px"></div>
       <div class="c1-ground"></div>
-      <div class="c1-vote">
-        <div>
-          <div class="plaque">票選至 10/31（六）18:00</div>
-          <p class="p" style="margin-top:18px">Google 或 LINE 登入，每人可投 3 件作品<br><b>投票：${VOTE_SHORT}</b></p>
-        </div>
-        <div style="text-align:center"><div class="qr" data-qr="${APP}" data-size="200"></div><p class="note" style="margin-top:8px;color:var(--text)">掃我，先守護一棵樹</p></div>
-      </div>
-    </div>${foot()}`),
+      <div class="plaque" style="margin:52px auto 0">線上票選至 10/31（六）18:00</div>
+      <p class="lead" style="margin-top:22px;font-weight:700">${VOTE_SHORT}</p>
+    </div>${foot('')}`),
 
   // C2 為什麼要做（5 張）
   card('c2-1', `${head('1 / 5')}
@@ -272,6 +278,7 @@ const CARDS = [
 
 const only = new URLSearchParams(location.search).get('c');
 document.body.className = only ? 'single' : 'gallery';
+document.body.dataset.bg = new URLSearchParams(location.search).get('bg') || 'lattice';
 document.getElementById('root').outerHTML = CARDS.filter((c) => !only || c.id === only).map((c) => c.html).join('');
 document.querySelectorAll('[data-qr]').forEach((el) => {
   const s = +el.dataset.size;
