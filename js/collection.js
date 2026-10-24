@@ -1,7 +1,8 @@
 // 我的守護圖鑑（關鍵畫面「我的守護圖鑑」「圖鑑｜空白狀態」，PRD F7）：#/collection。負責人：Saori
 // 列出這台裝置守護的樹：在地守護排成卡片，遠端關注排成清單。資料只來自 store.js，只有自己看得到。
+// 第二個分頁「樹種圖鑑」（P1 設計稿「樹種圖鑑・剪影」，US-09）：#/collection/species。
 import { esc, statusTag, pageBarHtml } from './shared.js';
-import { getGuard, guardedIds } from './store.js';
+import { getGuard, guardedIds, seenBySpecies } from './store.js';
 import { findOutsideTree } from './lookup.js';
 import { upcomingEventsOf } from './board.js';
 import { OLD_TREE_AGE } from './tree.js';
@@ -79,7 +80,103 @@ function emptyHtml() {
     </div>`;
 }
 
+// 樹種圖鑑收幾種：地圖上棵數最多的樹種，神獸的樹種一定在裡面
+const DEX_SIZE = 12;
+
+const TABS = [
+  { id: '', name: '我守護的樹' },
+  { id: 'species', name: '樹種圖鑑' },
+];
+
+function tabsHtml(current) {
+  return `
+    <nav class="col-tabs" aria-label="圖鑑分類">
+      ${TABS.map((t) => `<a class="col-tab" href="#/collection${t.id ? `/${t.id}` : ''}"${t.id === current ? ' aria-current="page"' : ''}>${t.name}</a>`).join('')}
+    </nav>`;
+}
+
+/** 圖鑑要列的樹種：神獸的樹種排前面，其他照地圖上的棵數 */
+function dexSpecies(trees) {
+  const count = new Map();
+  for (const t of trees) {
+    if (t.species !== '樹種待查') count.set(t.species, (count.get(t.species) ?? 0) + 1);
+  }
+  const beastSpecies = [...new Set(trees.filter((t) => t.beast).map((t) => t.species))];
+  const others = [...count.keys()].filter((s) => !beastSpecies.includes(s)).sort((a, b) => count.get(b) - count.get(a));
+  return [...beastSpecies, ...others].slice(0, DEX_SIZE).map((species) => ({ species, nearby: count.get(species) ?? 0 }));
+}
+
+function dexCellHtml({ species, nearby }, seenIds, trees) {
+  // 認識過這種樹的神獸，才當稀有款顯示
+  const beastTree = trees.find((t) => t.beast && t.species === species && seenIds.includes(t.id));
+  if (beastTree) {
+    return `
+      <a class="col-dex__cell col-dex__cell--rare" href="${treeHref(beastTree)}">
+        <img src="${esc(beastTree.beast.images.icon)}" alt="" width="64" height="64">
+        <span class="col-dex__name">${esc(species)}</span>
+        <span class="col-dex__meta">神獸・${esc(beastTree.beast.name)}</span>
+      </a>`;
+  }
+  if (seenIds.length) {
+    return `
+      <a class="col-dex__cell" href="#/tree/${encodeURIComponent(seenIds[0])}">
+        <img src="design-system/assets/icons/tree.svg" alt="" width="64" height="64">
+        <span class="col-dex__name">${esc(species)}</span>
+        <span class="col-dex__meta">認識了 ${seenIds.length} 棵</span>
+      </a>`;
+  }
+  return `
+    <div class="col-dex__cell col-dex__cell--unknown">
+      <img src="design-system/assets/icons/tree.svg" alt="" width="64" height="64">
+      <span class="col-dex__name">？？？</span>
+      <span class="col-dex__meta">附近有 ${nearby} 棵</span>
+    </div>`;
+}
+
+function speciesHtml(trees) {
+  const seen = seenBySpecies();
+  // 守護過的樹也算認識（守護功能比圖鑑早上線，那時打開過的樹沒有記下來）
+  const guarded = new Set(guardedIds());
+  const seenOf = (species) => [...new Set([
+    ...(seen[species] ?? []),
+    ...trees.filter((t) => t.species === species && guarded.has(t.id)).map((t) => t.id),
+  ])];
+
+  const dex = dexSpecies(trees).map((d) => ({ ...d, seenIds: seenOf(d.species) }));
+  const known = dex.filter((d) => d.seenIds.length).length;
+  const segs = Array.from({ length: dex.length }, (_, i) => `<span class="dsh-vital__seg${i < known ? ' is-on' : ''}"></span>`).join('');
+
+  return `
+    <div class="dsh-vital col-dex__progress">
+      <div class="dsh-vital__head">
+        <span class="dsh-vital__label">已認識的樹種</span>
+        <span class="dsh-vital__value">${known}<small>／${dex.length} 種</small></span>
+      </div>
+      <div class="dsh-vital__track" style="grid-template-columns: repeat(${dex.length}, minmax(0, 1fr))" aria-hidden="true">${segs}</div>
+    </div>
+    <div class="col-dex">${dex.map((d) => dexCellHtml(d, d.seenIds, trees)).join('')}</div>
+    ${known < dex.length ? `
+      <section class="col-dex__hint">
+        <p class="col-dex__hint-title">下一種可能就在路口</p>
+        <p class="tp-small">附近還有 ${dex.length - known} 種樹你還沒認識。點開地圖上的樹、打開祂的檔案，就會收進圖鑑。</p>
+        <a class="dsh-btn dsh-btn--secondary dsh-btn--block" href="#/">去地圖找樹</a>
+      </section>` : `
+      <section class="col-dex__hint">
+        <p class="col-dex__hint-title">附近的樹種都認識了</p>
+        <p class="tp-small">換個區域走走，還有更多樹在等你。</p>
+      </section>`}
+    <p class="tp-small tp-muted">樹種和棵數來自臺北市行道樹開放資料；「認識」是你自己的紀錄，只存在這台裝置。</p>`;
+}
+
 export async function renderCollectionPage(el, { trees: mapTrees }) {
+  const tab = location.hash.match(/^#\/collection\/([^/]+)/)?.[1] === 'species' ? 'species' : '';
+  if (tab === 'species') {
+    el.innerHTML = `
+      ${pageBarHtml('樹種圖鑑')}
+      <div class="tp-scroll col-scroll">${tabsHtml(tab)}${speciesHtml(mapTrees)}</div>`;
+    return;
+  }
+
   // 地圖範圍外守護的樹（掃樹牌打開的）不在 mapTrees 裡，用樹號到全臺北的資料補上
   const known = new Set(mapTrees.map((t) => t.id));
   const outside = await Promise.all(guardedIds().filter((id) => !known.has(id)).map(findOutsideTree));
@@ -109,5 +206,5 @@ export async function renderCollectionPage(el, { trees: mapTrees }) {
 
   el.innerHTML = `
     ${pageBarHtml('我的守護圖鑑')}
-    <div class="tp-scroll col-scroll">${body}</div>`;
+    <div class="tp-scroll col-scroll">${tabsHtml(tab)}${body}</div>`;
 }

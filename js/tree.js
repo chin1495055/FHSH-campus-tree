@@ -1,7 +1,7 @@
 // 樹木頁／神獸頁（關鍵畫面 ②）：#/tree/樹號。負責人：Saori
 // 樹號、樹種、位置是真實開放資料；神獸、故事、樹況、公示、回報、守護人數是模擬資料。
 import { esc, statusTag, loadJson, pageBarHtml } from './shared.js';
-import { getGuard, setGuard, guardiansOf, totalOf, getMyReports, vitalityOf } from './store.js';
+import { getGuard, setGuard, guardiansOf, totalOf, getMyReports, vitalityOf, markSeen } from './store.js';
 import { boardTeaserHtml } from './board.js';
 
 const LANTERN_MAX = 30;
@@ -256,6 +256,8 @@ const sheetHtml = (name) => `
 
 /** 把一棵樹畫進樹木頁。justGuarded：剛按下守護，播一次點燈動畫 */
 export async function renderTreePage(el, tree, { justGuarded = false } = {}) {
+  // 打開樹的檔案就收進樹種圖鑑（collection.js）
+  markSeen(tree);
   const [{ notices, reports, checkItems }, boardTeaser] = await Promise.all([loadExtras(), boardTeaserHtml(tree)]);
   const notice = tree.status === 'notice' ? notices.find((n) => n.treeId === tree.id) : null;
   // 自己的回報排在同一天的模擬回報前面（sort 是穩定排序）

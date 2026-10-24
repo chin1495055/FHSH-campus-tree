@@ -63,6 +63,22 @@ export function markScanned(id) {
   save(SCANS);
 }
 
+// ── 認識的樹種（樹種圖鑑） ─────────────────────
+// 打開過樹木頁就算認識這棵樹。存 { 樹種: [樹號…] }，不記時間和位置。
+
+const SEEN = 'dsh.seen';
+
+export function markSeen(tree) {
+  if (tree.lat == null) return; // 查不到資料的「樹種待查」不算
+  const ids = (load(SEEN, {})[tree.species] ??= []);
+  if (ids.includes(tree.id)) return;
+  ids.push(tree.id);
+  save(SEEN);
+}
+
+/** 樹種 → 認識的樹號（先認識的在前） */
+export const seenBySpecies = () => load(SEEN, {});
+
 // ── 回報 ──────────────────────────────────────
 // 格式和 data/mock/mock_reports.json 一樣：checks 的 true 代表「有看到這個問題」。
 // photo 是縮成小圖的 JPEG data URL（約 20KB），原圖不保存。
