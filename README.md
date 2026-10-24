@@ -4,7 +4,7 @@
 
 - **線上試玩**：https://2026-debugwithpuma.tree-god.workers.dev/ （手機打開可「加到主畫面」）
 - **關於這個作品**：https://2026-debugwithpuma.tree-god.workers.dev/about.html
-- **Demo 影片**：（YouTube 連結待補）
+- **Demo 影片**：https://youtu.be/EBRw7Knmt9M
 
 這是黑客松作品，不是市府官方服務，也沒有串接市府系統。畫面上的守護人數、回報、異動公告都是**模擬資料**，詳見下方「[資料來源](#資料來源真實開放資料與模擬資料)」。
 
