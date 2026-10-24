@@ -6,7 +6,7 @@ import { esc, DESKTOP, loadJson, pageBarHtml } from './shared.js';
 import { guardiansOf, totalOf } from './store.js';
 import { heroHtml } from './tree.js';
 
-const SITE = 'https://innerwork-saori.github.io/2026-debugWithPuma/';
+const SITE = 'https://2026-debugwithpuma.tree-god.workers.dev/';
 const CARDS = {
   xuxugong: { guard: 'assets/share/xuxugong-guard.png', help: 'assets/share/xuxugong-help.png' },
 };

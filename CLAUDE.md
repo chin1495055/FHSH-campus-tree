@@ -243,10 +243,10 @@
 
 - **作品必須是 PWA**：要有 `manifest.json`、Service Worker、HTTPS 部署，可以加到手機主畫面。細節見 [docs/system-analysis/MVP.md](docs/system-analysis/MVP.md) 的「技術」一節。
 - Service Worker 快取要加版本號，HTML 用網路優先，避免部署後隊友看到舊版。
-- **技術選型（10/22）**：純前端靜態網站，不做後端、不用建置工具。原生 JavaScript ＋ Leaflet，資料放靜態 JSON，使用者操作存 localStorage，部署到 GitHub Pages。完整理由和關鍵畫面的做法見 MVP.md「技術選型」。
+- **技術選型（10/22）**：純前端靜態網站，不做後端、不用建置工具。原生 JavaScript ＋ Leaflet，資料放靜態 JSON，使用者操作存 localStorage，部署到 Cloudflare Workers。完整理由和關鍵畫面的做法見 MVP.md「技術選型」。
 - 分享卡不要用 html2canvas（直排籤詩會排錯），先用固定 PNG。
 - **本機執行**：在 repo 根目錄跑 `python -m http.server 8000`，打開 http://localhost:8000/ 。不能直接雙擊 index.html（讀不到 JSON）。
-- **部署**：GitHub Pages 從 `main` 分支根目錄發布，push 後約 1～2 分鐘上線：https://innerwork-saori.github.io/2026-debugWithPuma/ 。手機測相機、加到主畫面都要用這個 HTTPS 網址。
+- **部署**：Cloudflare Workers，設定在 [wrangler.jsonc](wrangler.jsonc)，網址 https://2026-debugwithpuma.tree-god.workers.dev/ 。手機測相機、加到主畫面都用這個 HTTPS 網址；分享連結、QR code、OG 標籤也一律用它，不要再用 GitHub Pages 的舊網址。
 - **PWA**：[manifest.json](manifest.json)、[sw.js](sw.js)，圖示用 `design-system/assets/logos/app-icons/`。sw.js 對自己網站的檔案是網路優先，改程式不用動它；**新增 JS、CSS、資料檔時，把路徑加進 sw.js 的 `PRECACHE`，並把 `VERSION` 加一號**。
 - **新增畫面**：在 `js/` 開一個檔案匯出 `render(el, { tree, trees })`，到 [js/map.js](js/map.js) 的 `PAGES` 註冊表加一行；樣式放自己的 `css/畫面名.css`，class 用自己的前綴。每個畫面一個檔案，兩人同時開發才不會衝突。
 - **分工（10/23，依 PRD 的 P0 功能 F1–F9）**：Saori 負責 F1 地圖、F2 樹木頁、F3 守護它、F4 掃描、F5 回報（[js/report.js](js/report.js)）、路由和 PWA，以及 F6 社區佈告欄、F7 守護圖鑑（F6、F7 待兩人確認）、F9 分享卡與 OG 預覽圖（10/24 從 Qmoa 改由 Saori 負責）；Qmoa 負責 F8 異動警報（[js/notices.js](js/notices.js)）。完整的功能、網址、檔案和進度表見 [協作新手備忘.md](docs/team-collaboration/協作新手備忘.md) 的「團隊協作約定」。要改對方的檔案（尤其 map.js、store.js）先在 Discord 講一聲。

@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const SITE = 'https://innerwork-saori.github.io/2026-debugWithPuma/';
+const SITE = 'https://2026-debugwithpuma.tree-god.workers.dev/';
 // 有從設計稿截 OG 圖的神獸（scripts/capture_share_cards.cjs）；其他用 App 圖示
 const OG_IMAGES = {
   xuxugong: { guard: 'assets/share/og-xuxugong-guard.png', help: 'assets/share/og-xuxugong-help.png' },
