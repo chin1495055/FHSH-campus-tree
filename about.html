@@ -279,7 +279,7 @@
           <div>
             <h3 class="ab-member__name">Qmoa</h3>
             <p class="ab-member__role">產品構想、故事創作、品牌塑造、介面設計、Demo 簡報與影片製作</p>
-            <a class="ab-member__li" data-link="linkedinQmoa" href="" target="_blank" rel="noopener" hidden>LinkedIn</a>
+            <a class="dsh-btn dsh-btn--secondary ab-member__li" data-link="linkedinQmoa" href="" target="_blank" rel="noopener" hidden>LinkedIn</a>
           </div>
         </article>
         <article class="ab-card ab-member">
@@ -287,7 +287,7 @@
           <div>
             <h3 class="ab-member__name">Saori</h3>
             <p class="ab-member__role">軟體工程師，C# 資歷最深。曾任副理，帶電商團隊從零開發到上線；現任系統分析師。</p>
-            <a class="ab-member__li" data-link="linkedinSaori" href="" target="_blank" rel="noopener" hidden>LinkedIn</a>
+            <a class="dsh-btn dsh-btn--secondary ab-member__li" data-link="linkedinSaori" href="" target="_blank" rel="noopener" hidden>個人連結</a>
           </div>
         </article>
       </div>
@@ -314,8 +314,8 @@
   const LINKS = {
     vote: '',          // 票選頁網址（主辦公布後補上）
     youtube: 'EBRw7Knmt9M', // Demo 影片：YouTube 網址或影片 ID
-    linkedinQmoa: '',
-    linkedinSaori: '',
+    linkedinQmoa: 'https://www.linkedin.com/in/qmoaliu/',
+    linkedinSaori: 'https://linktr.ee/socratescafetw',
   };
   document.querySelectorAll('[data-link]').forEach((a) => {
     const url = LINKS[a.dataset.link];
