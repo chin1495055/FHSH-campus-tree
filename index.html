@@ -82,6 +82,18 @@
     </nav>
   </div>
 
+  <!-- 載入中：寫在 HTML 裡，JS 還沒下載完就看得到。js/map.js 讀完樹資料、畫好底圖後收起 -->
+  <div class="loading" id="loading" role="status" aria-live="polite">
+    <img class="loading__beast" src="design-system/assets/character/beasts/xuxugong/healthy-icon.webp" alt="" width="112" height="112">
+    <h2 class="loading__title">正在叫醒大樹神獸…</h2>
+    <ul class="loading__steps">
+      <li data-step="trees">讀取台北的樹木資料</li>
+      <li data-step="map">畫出地圖</li>
+    </ul>
+    <p class="loading__hint">第一次打開要讀將近兩千棵樹，大約需要幾秒</p>
+    <button type="button" class="dsh-btn dsh-btn--primary loading__retry" hidden onclick="location.reload()">重新整理</button>
+  </div>
+
   <!-- 蓋在地圖上的全螢幕畫面：樹木頁、回報頁、通知頁…都畫在這裡，見 js/map.js 的 PAGES -->
   <section class="tree-page" id="page" hidden></section>
 </div>

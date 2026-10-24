@@ -36,6 +36,37 @@ const zFor = (tree) => (tree.beast ? Z_BEAST[tree.status] ?? 1000 : 0);
 // 電腦版左欄「附近的樹」列幾棵
 const NEARBY_MAX = 20;
 
+// 載入畫面（index.html 的 #loading）：樹資料和底圖都好了才收起。
+// 底圖卡住時，樹資料讀完後最多再等這麼久就先收起，地圖讓它自己慢慢畫。
+const LOADING_MAP_WAIT_MS = 8000;
+const loadingEl = document.getElementById('loading');
+const loadingPending = new Set(['trees', 'map']);
+
+function hideLoading() {
+  if (loadingEl.classList.contains('is-done') || loadingEl.classList.contains('is-error')) return;
+  loadingEl.classList.add('is-done');
+  // 減少動態效果時沒有淡出，所以不等 transitionend，時間到直接收起
+  setTimeout(() => {
+    if (loadingEl.classList.contains('is-done')) loadingEl.hidden = true;
+  }, 400);
+}
+
+function loadingStep(name) {
+  loadingEl.querySelector(`[data-step="${name}"]`)?.classList.add('is-done');
+  loadingPending.delete(name);
+  if (!loadingPending.size) hideLoading();
+}
+
+function showLoadingError(message) {
+  loadingEl.hidden = false;
+  loadingEl.classList.remove('is-done');
+  loadingEl.classList.add('is-error');
+  loadingEl.querySelector('.loading__beast').src = 'design-system/assets/character/beasts/xuxugong/sad-icon.webp';
+  loadingEl.querySelector('.loading__title').textContent = '資料載入失敗';
+  loadingEl.querySelector('.loading__hint').textContent = message;
+  loadingEl.querySelector('.loading__retry').hidden = false;
+}
+
 async function loadTrees() {
   const [real, beasts, guardians] = await Promise.all([
     loadJson('data/trees.json'),
@@ -239,6 +270,7 @@ async function main() {
   // 底色改成設計系統的宣紙米色（surface-sunken）
   const gl = base.getMaplibreMap();
   gl.on('load', () => {
+    loadingStep('map');
     if (gl.getLayer('background')) gl.setPaintProperty('background', 'background-color', '#ede6d8');
     // 路名、地名只顯示中文（預設會中英並列）
     for (const layer of gl.getStyle().layers) {
@@ -264,6 +296,8 @@ async function main() {
   }).addTo(map);
 
   const trees = await loadTrees();
+  loadingStep('trees');
+  setTimeout(hideLoading, LOADING_MAP_WAIT_MS);
   let selected = null;
   let filter = 'all';
   let query = '';
@@ -432,6 +466,5 @@ async function main() {
 
 main().catch((err) => {
   console.error(err);
-  document.getElementById('card').hidden = false;
-  document.getElementById('card').textContent = '資料載入失敗，請用本機伺服器開啟（不能直接雙擊 index.html）。';
+  showLoadingError('請檢查網路後重新整理。在自己電腦上要用本機伺服器開啟（不能直接雙擊 index.html）。');
 });
