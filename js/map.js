@@ -9,6 +9,7 @@ import { renderNoticesPage } from './notices.js';
 import { renderScanPage } from './scan.js';
 import { renderBoardPage } from './board.js';
 import { renderCollectionPage } from './collection.js';
+import { renderSharePage } from './share.js';
 import { CATEGORIES, categoryOf } from './categories.js';
 
 // 路由註冊表：#/名稱 或 #/名稱/樹號 → 要畫的畫面。
@@ -22,6 +23,7 @@ const PAGES = {
   scan: { render: renderScanPage },
   board: { render: renderBoardPage, needsTree: true },
   collection: { render: renderCollectionPage },
+  share: { render: renderSharePage, needsTree: true },
 };
 
 // Demo 用的「你的位置」：總部（中正區北平東路 30-1 號）附近。真實定位離太遠時退回這裡。
@@ -436,7 +438,7 @@ async function main() {
   // 底部導覽列和電腦版頂部導覽，標出現在在哪一頁（沒有對應的畫面都算地圖）
   const navLinks = document.querySelectorAll('.dsh-nav__item[href], .dsh-topnav__item');
   function syncNav(name) {
-    const current = Object.hasOwn(PAGES, name) && !['tree', 'report', 'board'].includes(name) ? `#/${name}` : '#/';
+    const current = Object.hasOwn(PAGES, name) && !['tree', 'report', 'board', 'share'].includes(name) ? `#/${name}` : '#/';
     navLinks.forEach((a) => {
       if (a.getAttribute('href') === current) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');
