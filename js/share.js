@@ -56,7 +56,7 @@ async function copyText(text) {
   }
 }
 
-/** 有圖就連圖一起分享，不支援就只分享文字和網址，都不行就複製連結 */
+/** 有圖就連圖一起分享，不支援就只分享文字和網址，都不行就複製文字和連結 */
 async function share({ img, title, text, url }) {
   const file = files.get(img);
   try {
@@ -72,13 +72,13 @@ async function share({ img, title, text, url }) {
   } catch (err) {
     if (err.name === 'AbortError') return 'cancel';
   }
-  return (await copyText(url)) ? 'copied' : 'failed';
+  return (await copyText(`${text}\n${url}`)) ? 'copied' : 'failed';
 }
 
 const STATUS_TEXT = {
   shared: '分享出去了，謝謝你幫祂找到更多鄰居。',
-  copied: '已複製連結，可以貼到 LINE、Threads 或 IG 限動。',
-  failed: '這台裝置不能自動複製，請長按下面的網址複製。',
+  copied: '已複製文字和連結，可以貼到 LINE、Threads 或 IG 限動。',
+  failed: '這台裝置不能自動複製，請長按上面的文字和網址複製。',
   cancel: '',
 };
 
@@ -119,7 +119,7 @@ export async function renderSharePage(el, { tree }) {
             <div class="sh-actions">
               <button type="button" class="dsh-btn dsh-btn--primary dsh-btn--block" data-share>${img ? '分享圖片和連結' : '分享連結'}</button>
               ${img ? `<a class="dsh-btn dsh-btn--secondary dsh-btn--block" href="${esc(img)}" download="${esc(`${name}-${KIND_LABEL[kind]}.png`)}">下載圖片</a>` : ''}
-              <button type="button" class="dsh-btn dsh-btn--text dsh-btn--block" data-copy>複製連結</button>
+              <button type="button" class="dsh-btn dsh-btn--text dsh-btn--block" data-copy>複製文字和連結</button>
               <p class="sh-status" role="status"></p>
             </div>
             ${img && DESKTOP.matches ? '<p class="tp-small">IG 不能從電腦直接分享：先下載圖片，再用手機上傳。</p>' : ''}
@@ -133,7 +133,7 @@ export async function renderSharePage(el, { tree }) {
       status.textContent = STATUS_TEXT[await share({ img, title, text, url })];
     });
     el.querySelector('[data-copy]').addEventListener('click', async () => {
-      status.textContent = STATUS_TEXT[(await copyText(url)) ? 'copied' : 'failed'];
+      status.textContent = STATUS_TEXT[(await copyText(`${text}\n${url}`)) ? 'copied' : 'failed'];
     });
     el.querySelectorAll('[data-kind]').forEach((btn) => {
       btn.addEventListener('click', () => {
