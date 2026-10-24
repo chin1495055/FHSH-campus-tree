@@ -7,7 +7,7 @@
 //
 // 改了下面的 PRECACHE 清單就把 VERSION 加一號，舊快取會在新版啟用時清掉。
 
-const VERSION = 'dsh-v5';
+const VERSION = 'dsh-v6';
 const NETWORK_TIMEOUT_MS = 4000;
 const CDN_HOSTS = ['cdnjs.cloudflare.com', 'unpkg.com', 'fonts.googleapis.com', 'fonts.gstatic.com'];
 
@@ -24,6 +24,7 @@ const PRECACHE = [
   'css/board.css',
   'about.html',
   'js/map.js',
+  'js/categories.js',
   'js/marker.js',
   'js/shared.js',
   'js/store.js',

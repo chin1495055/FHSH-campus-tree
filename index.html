@@ -53,11 +53,14 @@
       <input id="q" type="search" placeholder="搜尋樹名、樹種或地點" autocomplete="off">
     </label>
     <div class="filters" role="group" aria-label="篩選">
+      <button type="button" class="cat-select" id="category" aria-haspopup="listbox" aria-expanded="false" aria-controls="category-menu" aria-label="樹種類別">所有樹種</button>
       <button type="button" class="chip" data-filter="all" aria-pressed="true">全部</button>
       <button type="button" class="chip" data-filter="beast" aria-pressed="false">神獸</button>
       <button type="button" class="chip" data-filter="watch" aria-pressed="false">需關注</button>
       <button type="button" class="chip" data-filter="notice" aria-pressed="false">公示中</button>
     </div>
+    <!-- 樹種類別選單：放在 .filters 外面，才不會被橫向捲動的 chip 列裁掉 -->
+    <ul class="cat-menu" id="category-menu" role="listbox" aria-label="樹種類別" tabindex="-1" hidden></ul>
     <!-- 附近的樹：只在電腦版的左欄顯示 -->
     <h2 class="nearby-title">附近的樹</h2>
     <ul class="dsh-treelist nearby" id="nearby" aria-label="附近的樹"></ul>

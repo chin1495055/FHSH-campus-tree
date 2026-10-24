@@ -8,6 +8,7 @@ import { renderReportPage } from './report.js';
 import { renderNoticesPage } from './notices.js';
 import { renderScanPage } from './scan.js';
 import { renderBoardPage } from './board.js';
+import { CATEGORIES, categoryOf } from './categories.js';
 
 // 路由註冊表：#/名稱 或 #/名稱/樹號 → 要畫的畫面。
 // 新增畫面：在 js/ 開一個檔案匯出 render(el, { tree, trees })，再到這裡加一行。
@@ -49,16 +50,18 @@ async function loadTrees() {
       ...t,
       beast,
       status: STATUS[beast?.status] ?? 'ok',
+      category: categoryOf(t.species),
       guardians: g,
     };
   });
 }
 
-function matches(tree, filter, query) {
+function matches(tree, filter, query, category) {
+  if (category !== 'all' && tree.category.id !== category) return false;
   if (filter === 'beast' && !tree.beast) return false;
   if ((filter === 'watch' || filter === 'notice') && tree.status !== filter) return false;
   if (!query) return true;
-  const text = [tree.beast?.name, tree.species, tree.location, tree.id].join(' ');
+  const text = [tree.beast?.name, tree.species, tree.category.name, tree.location, tree.id].join(' ');
   return text.includes(query);
 }
 
@@ -126,6 +129,99 @@ function renderNearby(el, shown, selected, here, onPick) {
   });
 }
 
+/**
+ * 樹種類別選單：chip 樣式的按鈕＋自己畫的清單（原生 select 打開後的樣子沒辦法配合設計系統）。
+ * 鍵盤：↑↓ Home End 移動、Enter 或空白鍵選取、Esc 關閉。回傳關閉選單的函式。
+ */
+function setupCategoryMenu(button, menu, items, onChange) {
+  let current = 'all';
+  let active = 0;
+  menu.innerHTML = items.map((item, i) => `
+    <li class="cat-menu__item" id="cat-opt-${i}" role="option" aria-selected="${item.id === current}" data-index="${i}">
+      <span class="cat-menu__emoji" aria-hidden="true">${item.emoji}</span>
+      <span class="cat-menu__name">${esc(item.name)}</span>
+      <span class="cat-menu__count">${item.count} 棵</span>
+      <span class="cat-menu__check" aria-hidden="true"></span>
+    </li>`).join('');
+  const rows = [...menu.children];
+
+  const label = (item) => (item.emoji ? `${item.emoji} ${item.name}` : item.name);
+
+  function setActive(i) {
+    active = (i + rows.length) % rows.length;
+    rows.forEach((row, j) => row.classList.toggle('is-active-desc', j === active));
+    menu.setAttribute('aria-activedescendant', rows[active].id);
+    rows[active].scrollIntoView({ block: 'nearest' });
+  }
+
+  function open() {
+    // 對齊按鈕：選單放在 .topbar 裡，按鈕所在的 chip 列可能被橫向捲動過
+    menu.hidden = false;
+    const box = button.getBoundingClientRect();
+    const parent = menu.offsetParent;
+    const pBox = parent.getBoundingClientRect();
+    menu.style.top = `${box.bottom - pBox.top + parent.scrollTop + 6}px`;
+    menu.style.left = `${Math.max(0, box.left - pBox.left)}px`;
+    // 螢幕太矮時清單自己捲動，不超出畫面底部
+    menu.style.maxHeight = `${Math.max(160, innerHeight - box.bottom - 16)}px`;
+    button.setAttribute('aria-expanded', 'true');
+    setActive(items.findIndex((item) => item.id === current));
+    menu.focus({ preventScroll: true });
+  }
+
+  function close(refocus) {
+    if (menu.hidden) return;
+    menu.hidden = true;
+    button.setAttribute('aria-expanded', 'false');
+    if (refocus) button.focus({ preventScroll: true });
+  }
+
+  function choose(i) {
+    const item = items[i];
+    current = item.id;
+    rows.forEach((row, j) => row.setAttribute('aria-selected', String(j === i)));
+    button.textContent = label(item);
+    button.classList.toggle('is-active', current !== 'all');
+    close(true);
+    onChange(current);
+  }
+
+  button.addEventListener('click', () => (menu.hidden ? open() : close(true)));
+  button.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      open();
+    }
+  });
+  const keys = {
+    ArrowDown: () => setActive(active + 1),
+    ArrowUp: () => setActive(active - 1),
+    Home: () => setActive(0),
+    End: () => setActive(rows.length - 1),
+    Enter: () => choose(active),
+    ' ': () => choose(active),
+    Escape: () => close(true),
+  };
+  menu.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') return close(false);
+    if (!keys[e.key]) return;
+    e.preventDefault();
+    keys[e.key]();
+  });
+  menu.addEventListener('click', (e) => {
+    const row = e.target.closest('[data-index]');
+    if (row) choose(Number(row.dataset.index));
+  });
+  menu.addEventListener('pointermove', (e) => {
+    const row = e.target.closest('[data-index]');
+    if (row && Number(row.dataset.index) !== active) setActive(Number(row.dataset.index));
+  });
+  document.addEventListener('pointerdown', (e) => {
+    if (!menu.contains(e.target) && !button.contains(e.target)) close(false);
+  });
+  return () => close(false);
+}
+
 async function main() {
   const mapEl = document.getElementById('map');
   const card = document.getElementById('card');
@@ -171,6 +267,7 @@ async function main() {
   let selected = null;
   let filter = 'all';
   let query = '';
+  let category = 'all';
   let shown = trees;
 
   // 框選範圍時避開蓋在地圖上的東西：手機是上方搜尋列和底部卡片；電腦版左右欄不蓋地圖
@@ -218,14 +315,14 @@ async function main() {
     shown = [];
     for (const tree of trees) {
       const m = markers.get(tree.id);
-      if (matches(tree, filter, query)) {
+      if (matches(tree, filter, query, category)) {
         m.addTo(map);
         shown.push(tree);
       } else {
         m.remove();
       }
     }
-    if ((filter !== 'all' || query) && shown.length) {
+    if ((filter !== 'all' || query || category !== 'all') && shown.length) {
       const bounds = L.latLngBounds(shown.map((t) => [t.lat, t.lng]));
       map.fitBounds(bounds, { ...mapPadding([24, 140], 24), maxZoom: 18 });
       if (shown.length === 1 || !shown.includes(selected)) select(shown.find((t) => t.beast) ?? shown[0]);
@@ -240,6 +337,24 @@ async function main() {
       applyFilter();
     });
   });
+
+  // 樹種類別選單：棵數從資料算，沒有樹的類別不列
+  const catCount = {};
+  for (const tree of trees) catCount[tree.category.id] = (catCount[tree.category.id] ?? 0) + 1;
+  const catItems = [
+    { id: 'all', emoji: '', name: '所有樹種', count: trees.length },
+    ...CATEGORIES.filter((c) => catCount[c.id]).map((c) => ({ ...c, count: catCount[c.id] })),
+  ];
+  const closeCatMenu = setupCategoryMenu(
+    document.getElementById('category'),
+    document.getElementById('category-menu'),
+    catItems,
+    (id) => {
+      category = id;
+      applyFilter();
+    },
+  );
+  map.on('movestart', closeCatMenu);
 
   const q = document.getElementById('q');
   q.addEventListener('input', () => {
