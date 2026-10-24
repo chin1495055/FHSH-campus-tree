@@ -161,3 +161,17 @@
   .ab-steps.ab-grid--4 .ab-step { flex-direction: column; }
   .ab-lines { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
 }
+
+/* 票選 CTA */
+.ab-vote { text-align: center; }
+.ab-vote__p { margin: 0 auto var(--space-6); max-width: 36em; font-size: 17px; line-height: 28px; }
+.ab-vote__btn { text-decoration: none; min-width: min(100%, 320px); }
+/* 票選倒數：四格像匾額的小牌子 */
+.ab-count { margin: 0 auto var(--space-6); }
+.ab-count__label { margin: 0 0 var(--space-3); font-size: 15px; line-height: 22px; font-weight: 700; color: var(--brand-text); }
+.ab-count__row { display: flex; justify-content: center; gap: var(--space-2); }
+.ab-count__cell { display: flex; flex-direction: column; align-items: center; min-width: 72px; padding: var(--space-2) var(--space-3) var(--space-3);
+  background: var(--brand-strong); color: var(--honor-on-dark); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm);
+  font-size: 14px; line-height: 20px; font-weight: 700; }
+.ab-count__cell b { font-family: var(--font-display); font-weight: 900; font-size: 36px; line-height: 44px; font-variant-numeric: tabular-nums; color: var(--ink-50); }
+.ab-count__done { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 20px; line-height: 30px; }

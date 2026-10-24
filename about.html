@@ -296,6 +296,27 @@
       </div>
     </div>
   </section>
+  <!-- 票選 CTA：連到主辦票選頁上我們的作品頁（LINKS.vote） -->
+  <section class="ab-sec ab-vote" id="vote">
+    <div class="ab-wrap">
+      <div class="ab-head">
+        <p class="ab-eyebrow">線上票選</p>
+        <div class="dsh-ridge" aria-hidden="true"><span class="dsh-ridge__beam"></span></div>
+        <h2 class="ab-h2">喜歡大樹神獸嗎？</h2>
+      </div>
+      <p class="ab-vote__p">幫我們投一票，讓更多人知道台北的樹需要鄰居。<br>票選到 10/31（六）18:00，用 Google 或 LINE 登入就能投。</p>
+      <div class="ab-count" data-deadline="2026-10-31T18:00:00+08:00" role="timer" aria-live="off">
+        <p class="ab-count__label">距離票選截止還有</p>
+        <div class="ab-count__row">
+          <span class="ab-count__cell"><b data-unit="d">--</b>天</span>
+          <span class="ab-count__cell"><b data-unit="h">--</b>時</span>
+          <span class="ab-count__cell"><b data-unit="m">--</b>分</span>
+          <span class="ab-count__cell"><b data-unit="s">--</b>秒</span>
+        </div>
+      </div>
+      <a class="dsh-btn dsh-btn--primary ab-vote__btn" data-link="vote" href="" target="_blank" rel="noopener" hidden>幫大樹神獸投一票</a>
+    </div>
+  </section>
 </main>
 
 <!-- 8 頁尾 -->
@@ -310,7 +331,7 @@
 <script>
   // 外部連結填在這裡；留空的按鈕不顯示。
   const LINKS = {
-    vote: '',          // 票選頁網址（主辦公布後補上）
+    vote: 'https://puma.taipei/hackathon/works/14', // 主辦票選頁上我們的作品頁
     youtube: 'EBRw7Knmt9M', // Demo 影片：YouTube 網址或影片 ID
     linkedinQmoa: 'https://www.linkedin.com/in/qmoaliu/',
     linkedinSaori: 'https://linktr.ee/socratescafetw',
@@ -319,6 +340,28 @@
     const url = LINKS[a.dataset.link];
     if (url) { a.href = url; a.hidden = false; }
   });
+
+  // 票選倒數：截止時間寫在 data-deadline（台北時間），過了就改成感謝的話
+  const countEl = document.querySelector('.ab-count');
+  if (countEl) {
+    const end = new Date(countEl.dataset.deadline).getTime();
+    const units = Object.fromEntries([...countEl.querySelectorAll('[data-unit]')].map((b) => [b.dataset.unit, b]));
+    const pad = (n) => String(n).padStart(2, '0');
+    const tick = () => {
+      const left = Math.max(0, Math.floor((end - Date.now()) / 1000));
+      if (left === 0) {
+        countEl.innerHTML = '<p class="ab-count__done">票選已經截止，謝謝每一位投票、守護過一棵樹的人。</p>';
+        clearInterval(timer);
+        return;
+      }
+      units.d.textContent = Math.floor(left / 86400);
+      units.h.textContent = pad(Math.floor(left / 3600) % 24);
+      units.m.textContent = pad(Math.floor(left / 60) % 60);
+      units.s.textContent = pad(left % 60);
+    };
+    const timer = setInterval(tick, 1000);
+    tick();
+  }
 
   // YouTube：接受 watch?v=、youtu.be/、shorts/ 網址或直接貼影片 ID；用 nocookie 網域，點了才載入追蹤
   const ytId = (LINKS.youtube.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([\w-]{11})/) ?? [])[1]
