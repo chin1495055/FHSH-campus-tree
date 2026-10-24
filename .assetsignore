@@ -1,0 +1,9 @@
+# Cloudflare 部署時不要上傳的檔案（單檔上限 25 MiB，.git 的 pack 檔會超過）
+.git
+.github
+.gitignore
+.assetsignore
+.claude
+wrangler.jsonc
+node_modules
+data/source/open-data
