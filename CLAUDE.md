@@ -249,7 +249,7 @@
 - **部署**：GitHub Pages 從 `main` 分支根目錄發布，push 後約 1～2 分鐘上線：https://innerwork-saori.github.io/2026-debugWithPuma/ 。手機測相機、加到主畫面都要用這個 HTTPS 網址。
 - **PWA**：[manifest.json](manifest.json)、[sw.js](sw.js)，圖示用 `design-system/assets/logos/app-icons/`。sw.js 對自己網站的檔案是網路優先，改程式不用動它；**新增 JS、CSS、資料檔時，把路徑加進 sw.js 的 `PRECACHE`，並把 `VERSION` 加一號**。
 - **新增畫面**：在 `js/` 開一個檔案匯出 `render(el, { tree, trees })`，到 [js/map.js](js/map.js) 的 `PAGES` 註冊表加一行；樣式放自己的 `css/畫面名.css`，class 用自己的前綴。每個畫面一個檔案，兩人同時開發才不會衝突。
-- **分工（10/23，依 PRD 的 P0 功能 F1–F9）**：Saori 負責 F1 地圖、F2 樹木頁、F3 守護它、F4 掃描、F5 回報（[js/report.js](js/report.js)）、路由和 PWA，以及 F6 社區佈告欄、F7 守護圖鑑（F6、F7 待兩人確認）；Qmoa 負責 F8 異動警報（[js/notices.js](js/notices.js)）和 F9 分享卡與 OG 預覽圖。完整的功能、網址、檔案和進度表見 [協作新手備忘.md](docs/team-collaboration/協作新手備忘.md) 的「團隊協作約定」。要改對方的檔案（尤其 map.js、store.js）先在 Discord 講一聲。
+- **分工（10/23，依 PRD 的 P0 功能 F1–F9）**：Saori 負責 F1 地圖、F2 樹木頁、F3 守護它、F4 掃描、F5 回報（[js/report.js](js/report.js)）、路由和 PWA，以及 F6 社區佈告欄、F7 守護圖鑑（F6、F7 待兩人確認）、F9 分享卡與 OG 預覽圖（10/24 從 Qmoa 改由 Saori 負責）；Qmoa 負責 F8 異動警報（[js/notices.js](js/notices.js)）。完整的功能、網址、檔案和進度表見 [協作新手備忘.md](docs/team-collaboration/協作新手備忘.md) 的「團隊協作約定」。要改對方的檔案（尤其 map.js、store.js）先在 Discord 講一聲。
 
 ## 協作方式
 
