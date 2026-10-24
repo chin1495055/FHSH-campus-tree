@@ -59,8 +59,13 @@
   .tag { display: inline-block; font: 700 30px/1 'Noto Sans TC'; border: 3px solid var(--outline); border-radius: 6px; padding: 12px 18px; background: var(--state-ok-bg); color: var(--state-ok-text); }
   .qr { background: #fff; border: 5px solid var(--outline); border-radius: 10px; padding: 14px; }
   .qr img, .qr canvas { display: block; }
-  .ridge { height: 34px; margin: 28px 0; background: url(../../../design-system/assets/patterns/ridge-end.svg) left center / auto 100% no-repeat, url(../../../design-system/assets/patterns/ridge-end.svg) right center / auto 100% no-repeat; position: relative; }
-  .ridge::after { content: ''; position: absolute; left: 60px; right: 60px; top: 50%; height: 6px; margin-top: -3px; background: var(--outline); }
+  /* 燕尾屋脊（照 design-system Ridge）：左右燕尾＋中間伸縮的梁，右端鏡像；顏色跟著 color。
+     燕尾用內嵌 SVG，不用 mask，因為 file:// 截圖時遮罩圖會被擋 */
+  .ridge { display: flex; align-items: flex-end; height: 36px; color: var(--outline); }
+  .ridge svg { width: 48px; height: 36px; flex: none; display: block; }
+  .ridge svg:last-child { transform: scaleX(-1); }
+  .ridge__beam { flex: 1; height: 6px; margin-bottom: 0; background: currentColor; }
+  .dark .ridge { color: var(--ink-50); }
   .beast { display: block; object-fit: contain; }
   .note { font: 400 22px/1.5 'Noto Sans TC'; color: var(--text-muted); }
   .dark .note { color: var(--ink-300); }
@@ -88,10 +93,10 @@
   .stepicon { width: 230px; height: 230px; }
   .shot { border: 6px solid var(--outline); border-radius: 14px; display: block; }
   /* 實機截圖：墨框手機，只露出上半部 */
-  .phone { width: 420px; height: 680px; margin: 0 auto; border: 8px solid var(--outline); border-radius: 44px; overflow: hidden; background: var(--surface-raised); outline: 3px solid var(--outline); outline-offset: 6px; flex: none; }
+  .phone { width: 400px; height: 630px; margin: 0 auto; border: 8px solid var(--outline); border-radius: 44px; overflow: hidden; background: var(--surface-raised); outline: 3px solid var(--outline); outline-offset: 6px; flex: none; }
   .phone img { width: 100%; display: block; }
-  .phones { display: flex; justify-content: center; gap: 28px; margin-top: 44px; }
-  .phones .phone { width: 296px; height: 700px; border-width: 6px; border-radius: 32px; outline: none; }
+  .phones { display: flex; justify-content: center; gap: 24px; margin-top: 44px; }
+  .phones .phone { width: 276px; height: 540px; border-width: 6px; border-radius: 32px; outline: none; }
   .phones p { text-align: center; font: 900 32px/1.3 'Noto Serif TC'; margin-top: 18px; }
 
   /* 神獸卡 */
@@ -131,16 +136,18 @@ const LOGO_REV = DS + 'logos/logo-horizontal-reverse.svg';
 const B = (slug, mood = 'healthy') => `${DS}character/beasts/${slug}/${mood}-cutout.png`;
 const ICON = (n) => `${DS}icons/${n}.svg`;
 const SHOT = (n) => `../screenshots/${n}.png`;
+// 燕尾一端，和 design-system/assets/patterns/ridge-end.svg 同一個路徑，改用 currentColor
+const RIDGE_END = '<svg viewBox="0 0 32 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M32 22 H14 C8 22 4 16 2 3"/><path d="M2 3 C8 12 14 16 26 18"/></svg>';
 const APP = 'https://2026-debugwithpuma.tree-god.workers.dev/';
 const APP_SHORT = '2026-debugwithpuma.tree-god.workers.dev';
 // 投票網址（10/24 確認）。改這裡要重新輸出 C1、C2-5、C6
 const VOTE_SHORT = 'puma.taipei/hackathon/vote';
 const DATA_NOTE = '樹木位置與樹種為臺北市開放資料，其餘為模擬資料';
 
-const head = (page, rev) => `<div class="vc__head"><img class="vc__logo" src="${rev ? LOGO_REV : LOGO}" alt="大樹神獸">${page ? `<span class="vc__page">${page}</span>` : ''}</div>`;
-const foot = (left = DATA_NOTE) => `<div class="vc__foot"><span>${left}</span><span class="vc__team">AI 方舟計畫</span></div>`;
+const head = (page, rev, center) => `<div class="vc__head"${center ? ' style="justify-content:center"' : ''}><img class="vc__logo" src="${rev ? LOGO_REV : LOGO}" alt="大樹神獸">${page ? `<span class="vc__page">${page}</span>` : ''}</div>`;
+const foot = (left = DATA_NOTE, center) => `<div class="vc__foot"${center ? ' style="justify-content:center;align-items:baseline;gap:28px"' : ''}><span>${left}</span><span class="vc__team">AI 方舟計畫</span></div>`;
 // 這幾張用「格紋只在外框」的底圖，字比較清楚（10/24 Qmoa 選）；其他卡用網址的 bg 參數，預設格紋
-const EDGE = new Set(['c1', 'c2-2', 'c2-3', 'c2-5']);
+const EDGE = new Set(['c1', 'c2-2', 'c2-3', 'c2-5', 'c5', 'c7', 'c3-1', 'c3-2', 'c3-3', 'c3-4', 'c3-5']);
 const card = (id, inner, { cls = '', inCls = '' } = {}) => ({ id, html: `<section class="vc ${cls}" data-id="${id}"${EDGE.has(id) ? ' data-bg="edge"' : ''}><div class="vc__in ${inCls}">${inner}</div></section>` });
 
 // 褐根病三個徵兆的插圖（平塗＋墨線）
@@ -168,7 +175,7 @@ const steps = [
 const CARDS = [
   // C1 主視覺／投票卡
   // C1 主視覺：只留一句話、神獸、投票期限三件事，其他資訊放貼文
-  card('c1', `${head()}
+  card('c1', `${head('', false, true)}
     <div class="vc__body" style="text-align:center">
       <h1 class="h1">讓台北每棵樹<br>都有一群<br><span class="green">守護祂的鄰居</span></h1>
       <div class="c1-beasts" style="margin-top:44px"><img src="${B('gadang')}" alt="" style="height:280px"><img src="${B('xuxugong')}" alt="" style="height:380px"><img src="${B('queque')}" alt="" style="height:280px"></div>
@@ -198,7 +205,7 @@ const CARDS = [
   card('c2-4', `${head('4 / 5', true)}
     <div class="vc__body" style="text-align:center">
       <h1 class="h1">不是沒人在乎，<br><span class="gold">是沒人知道。</span></h1>
-      <div class="ridge" style="margin:64px 80px;filter:invert(1)"></div>
+      <div class="ridge" style="margin:64px 80px">${RIDGE_END}<span class="ridge__beam"></span>${RIDGE_END}</div>
       <p class="lead">新種的小樹，樹冠要很多年才長得回來。<br>比起事後補種，<br>更要先守住現有的大樹。</p>
     </div>${foot('')}`, { inCls: 'dark' }),
   card('c2-5', `${head('5 / 5')}
@@ -209,16 +216,16 @@ const CARDS = [
       <div class="c1-ground"></div>
       <div style="display:flex;justify-content:center;align-items:center;gap:36px;margin-top:40px">
         <div class="qr" data-qr="${APP}" data-size="170"></div>
-        <div style="text-align:left"><div class="btn">去守護一棵樹</div><p class="p" style="margin-top:14px">投票：${VOTE_SHORT}</p></div>
+        <div style="text-align:center"><div class="btn">去守護一棵樹</div><p class="p" style="margin-top:14px">投票：${VOTE_SHORT}</p></div>
       </div>
-    </div>${foot()}`),
+    </div>${foot(DATA_NOTE, true)}`),
 
   // C3 怎麼玩（5 張）
   ...steps.map((s, i) => card(`c3-${i + 1}`, `${head(`${i + 1} / 5`)}
     <div class="vc__body">
-      ${i === 0 ? '<p class="lead green" style="font-weight:900">大樹神獸怎麼玩？</p>' : ''}
-      <div style="display:flex;align-items:center;gap:30px;margin:${i === 0 ? 14 : 0}px 0 20px"><span class="stepnum" style="width:120px;height:120px;font-size:68px">${i + 1}</span><h2 class="h2" style="font-size:68px">${s.t}</h2></div>
-      <p class="lead" style="margin-bottom:40px">${s.d}</p>
+      ${i === 0 ? '<p class="lead green" style="font-weight:900;text-align:center">大樹神獸怎麼玩？</p>' : ''}
+      <div style="display:flex;align-items:center;justify-content:center;gap:30px;margin:${i === 0 ? 14 : 0}px 0 20px"><span class="stepnum" style="width:120px;height:120px;font-size:68px">${i + 1}</span><h2 class="h2" style="font-size:68px">${s.t}</h2></div>
+      <p class="lead" style="margin-bottom:40px;text-align:center">${s.d}</p>
       <div class="phone"><img src="${SHOT(s.shot)}" alt=""></div>
     </div>${foot(i === 4 ? APP_SHORT : 'App 實機畫面｜' + DATA_NOTE)}`)),
 
@@ -232,7 +239,7 @@ const CARDS = [
         <div><div class="phone"><img src="${SHOT('02-神獸頁')}" alt=""></div><p>守護祂</p></div>
         <div><div class="phone"><img src="${SHOT('05-回報完成')}" alt=""></div><p>回報樹況</p></div>
       </div>
-      <p class="p" style="text-align:center;margin-top:30px"><b>${APP_SHORT}</b></p>
+      <p style="text-align:center;margin-top:64px;font:500 28px/1.4 'Noto Sans TC'">馬上試玩：<b>${APP_SHORT}</b></p>
     </div>${foot('App 實機畫面｜' + DATA_NOTE)}`),
 
   // C4 神獸介紹（4 張）
@@ -266,11 +273,11 @@ const CARDS = [
     </div>${foot('大樹神獸｜' + APP_SHORT)}`),
 
   // C6 限動倒數（9:16）
-  ...[['c6-3d', '剩', '3', '天'], ['c6-1d', '最後', '24', '小時'], ['c6-3h', '最後', '3', '小時']].map(([id, pre, n, unit]) => card(id, `${head('', true)}
+  ...[['c6-3d', '剩', '3', '天', 'luan'], ['c6-1d', '最後', '24', '小時', 'queque'], ['c6-3h', '最後', '3', '小時', 'xuxugong']].map(([id, pre, n, unit, beast]) => card(id, `${head('', true)}
     <div class="vc__body">
       <p class="h3" style="color:var(--ink-50)">線上票選</p>
       <div class="count" style="margin:36px 0 10px"><small>${pre}</small>${n}<small>${unit}</small></div>
-      <img src="${B('xuxugong')}" alt="" style="height:560px;margin:30px auto 0">
+      <img src="${B(beast)}" alt="" style="height:560px;margin:30px auto 0">
       <div class="plaque" style="margin:40px auto 0">10/31（六）18:00 截止</div>
       <p class="lead" style="margin-top:30px">Google 或 LINE 登入，每人可投 3 件作品<br><b>${VOTE_SHORT}</b></p>
     </div>${foot('')}`, { cls: 'story', inCls: 'dark' })),
