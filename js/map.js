@@ -30,6 +30,9 @@ const PAGES = {
   myevents: { render: renderMyEventsPage },
 };
 
+// 這幾頁蓋在地圖上時，手機版底部導覽列照常顯示；樹木頁、回報、掃描這類內容頁不顯示（底部有自己的按鈕）
+const WITH_NAV = ['collection', 'notices', 'me', 'myevents'];
+
 // Demo 用的「你的位置」：總部（中正區北平東路 30-1 號）附近。真實定位離太遠時退回這裡。
 const HOME = [25.0459, 121.5243];
 const NEAR_LIMIT_M = 2000;
@@ -435,9 +438,12 @@ async function main() {
   const page = document.getElementById('page');
   const byId = new Map(trees.map((t) => [t.id, t]));
   const behindPage = [...app.children].filter((c) => c !== page);
-  function showPage(on) {
+  function showPage(on, name) {
+    const nav = on && WITH_NAV.includes(name);
     page.hidden = !on;
-    behindPage.forEach((c) => { c.inert = on; });
+    app.classList.toggle('has-nav', nav);
+    behindPage.forEach((c) => { c.inert = on && !(nav && c === bottom); });
+    card.inert = nav;
   }
   // 底部導覽列和電腦版頂部導覽，標出現在在哪一頁（沒有對應的畫面都算地圖）
   const navLinks = document.querySelectorAll('.dsh-nav__item[href], .dsh-topnav__item');
@@ -470,7 +476,7 @@ async function main() {
       if (name !== 'tree') delete page.dataset.treeId;
       page.dataset.page = name;
       await target.render(page, { tree, trees });
-      showPage(true);
+      showPage(true, name);
       page.querySelector('.tp-back')?.focus({ preventScroll: true });
     } else {
       showPage(false);

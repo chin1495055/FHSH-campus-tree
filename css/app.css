@@ -132,6 +132,13 @@ body { background: var(--surface-sunken); }
   background: var(--surface);
 }
 .tree-page[hidden] { display: none; }
+/* 圖鑑、通知、我的、我參加的活動（js/map.js 的 WITH_NAV）：手機版底部導覽列浮到畫面上面，畫面底部讓出導覽列的高度。
+   樹卡藏起來後 --bottom-h 只剩導覽列的高度。電腦版用頂部導覽，不套用 */
+@media not all and (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .app.has-nav .bottom { z-index: 850; }
+  .app.has-nav .tree-card { display: none; }
+  .app.has-nav .tree-page { bottom: var(--bottom-h, 0px); }
+}
 .tp-bar {
   flex: none; display: flex; align-items: center; gap: var(--space-2);
   padding: calc(var(--space-2) + env(safe-area-inset-top, 0px)) var(--space-4) var(--space-2);
