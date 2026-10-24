@@ -79,6 +79,30 @@ export function addReport(report) {
   save(REPORTS);
 }
 
+// ── 社區活動 ──────────────────────────────────
+// 自己發起的活動格式和 data/mock/mock_events.json 一樣，只存在這台裝置，別人看不到。
+
+const EVENTS = 'dsh.events';
+const JOINS = 'dsh.joins';
+
+/** 這台裝置在某棵樹下發起的活動 */
+export const getMyEvents = (treeId) => load(EVENTS, []).filter((e) => e.treeId === treeId);
+
+export function addEvent(event) {
+  load(EVENTS, []).push(event);
+  save(EVENTS);
+}
+
+/** 有沒有按「我想參加」 */
+export const isJoined = (eventId) => Boolean(load(JOINS, {})[eventId]);
+
+export function setJoined(eventId, on) {
+  const joins = load(JOINS, {});
+  if (on) joins[eventId] = true;
+  else delete joins[eventId];
+  save(JOINS);
+}
+
 // ── 元氣 ──────────────────────────────────────
 // 每筆回報先換成一個分數（每看到一個問題扣 15 分），再和原本的元氣值加權平均，
 // 所以一次回報只會讓元氣慢慢變化，不會一下子歸零。沒有基礎值的一般樹，第一筆回報就是元氣值。

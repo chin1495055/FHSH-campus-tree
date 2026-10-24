@@ -2,6 +2,7 @@
 // 樹號、樹種、位置是真實開放資料；神獸、故事、樹況、公示、回報、守護人數是模擬資料。
 import { esc, statusTag, loadJson, pageBarHtml } from './shared.js';
 import { getGuard, setGuard, guardiansOf, totalOf, getMyReports, vitalityOf } from './store.js';
+import { boardTeaserHtml } from './board.js';
 
 const LANTERN_MAX = 30;
 const REPORTS_SHOWN = 3;
@@ -245,7 +246,7 @@ const sheetHtml = (name) => `
 
 /** 把一棵樹畫進樹木頁。justGuarded：剛按下守護，播一次點燈動畫 */
 export async function renderTreePage(el, tree, { justGuarded = false } = {}) {
-  const { notices, reports, checkItems } = await loadExtras();
+  const [{ notices, reports, checkItems }, boardTeaser] = await Promise.all([loadExtras(), boardTeaserHtml(tree)]);
   const notice = tree.status === 'notice' ? notices.find((n) => n.treeId === tree.id) : null;
   // 自己的回報排在同一天的模擬回報前面（sort 是穩定排序）
   const treeReports = [...getMyReports(tree.id), ...reports.filter((r) => r.treeId === tree.id)]
@@ -270,6 +271,7 @@ export async function renderTreePage(el, tree, { justGuarded = false } = {}) {
           ${notice ? noticeBannerHtml(notice) : ''}
           ${notice ? officialHtml(notice) : ''}
           ${storyHtml(tree.beast)}
+          ${boardTeaser}
           ${reportsHtml(treeReports, checkItems)}
           ${factsHtml(tree)}
         </div>

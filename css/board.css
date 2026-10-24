@@ -1,0 +1,81 @@
+/* 社區佈告欄（js/board.js）。class 用 board- 開頭。顏色、字體、元件都用 design-system 的 token 與 class。 */
+
+.board-scroll [hidden] { display: none !important; }
+.board-scroll .dsh-btn { text-decoration: none; box-sizing: border-box; }
+.board-scroll > * { flex: none; }
+
+/* 手機版：活動列表和發起表單輪流顯示 */
+.board-cols, .board-main, .board-aside { display: flex; flex-direction: column; gap: var(--space-4); }
+.board-scroll[data-mode="list"] .board-aside,
+.board-scroll[data-mode="form"] .board-main { display: none; }
+
+.board-head { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--space-3); }
+.board-summary { margin: 0; font-size: 16px; line-height: 24px; font-weight: 700; color: var(--brand-text); }
+.board-order { flex: none; font-size: 13px; line-height: 18px; }
+.board-open { align-self: flex-start; gap: var(--space-2); }
+
+/* 活動卡貼在花窗格紋的佈告欄上 */
+.board-list {
+  display: flex; flex-direction: column; gap: var(--space-4);
+  margin-inline: calc(var(--space-4) * -1); padding: var(--space-4);
+  border-block: 1px solid var(--line);
+}
+.board-list > .tp-p { margin: 0; }
+.board-past summary {
+  min-height: var(--target-min); display: flex; align-items: center; cursor: pointer;
+  font-size: 15px; font-weight: 700; color: var(--text-muted);
+}
+.board-past summary:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+.board-past .dsh-event { opacity: 0.75; }
+
+/* 剛貼上的活動亮一下 */
+.board-new { animation: board-pop 1.2s ease-out; }
+@keyframes board-pop {
+  0% { transform: scale(0.96); box-shadow: 0 0 0 6px var(--honor); }
+  100% { transform: none; box-shadow: 0 0 0 0 transparent; }
+}
+@media (prefers-reduced-motion: reduce) { .board-new { animation: none; } }
+
+/* 樹木頁上的入口 */
+.board-teaser .tp-h__count { margin-left: 0; }
+
+/* 發起表單 */
+.board-form { display: flex; flex-direction: column; gap: var(--space-3); }
+.board-form__head .tp-h { margin: 0; }
+.board-form__head .tp-small { margin: 0; }
+.board-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.board-field label, .board-label { padding: 0; font-size: 15px; line-height: 22px; font-weight: 900; }
+.board-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+.board-input {
+  width: 100%; min-width: 0; height: 48px; padding: 0 var(--space-3); box-sizing: border-box;
+  background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm);
+  font-family: inherit; font-size: 16px; color: var(--text);
+}
+textarea.board-input { height: auto; padding: 10px var(--space-3); line-height: 24px; resize: vertical; }
+.board-input:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+.board-place {
+  display: flex; align-items: center; gap: var(--space-2); min-height: 44px; padding: 0 var(--space-3); box-sizing: border-box;
+  border: 2px dashed var(--ink-400); border-radius: var(--radius-sm); font-size: 15px; color: var(--text-muted);
+}
+.board-host { margin: 0; padding: 0; border: none; display: flex; flex-direction: column; gap: var(--space-1); }
+.board-host label { display: flex; align-items: center; gap: var(--space-2); min-height: 40px; font-size: 15px; cursor: pointer; }
+.board-host input[type="radio"] { width: 20px; height: 20px; margin: 0; accent-color: var(--brand); }
+.board-error { margin: 0; font-size: 15px; line-height: 22px; font-weight: 700; color: var(--state-watch-text); }
+
+/* ── 電腦版：左邊活動、右邊發起表單（或遠端關注的說明），照桌機設計稿 ── */
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .tree-page[data-page="board"] { --page-max: var(--content-max); }
+  .board-cols { flex-direction: row; flex-wrap: wrap; gap: var(--desk-gap); }
+  .board-main { gap: var(--space-6); }
+  .board-scroll[data-mode] .board-main,
+  .board-scroll[data-mode] .board-aside { display: flex; }
+  .board-open, .board-cancel { display: none; }
+  .board-gate:has(.board-open) { display: none; }
+  .board-list { margin-inline: 0; border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md); }
+  .board-summary { font-size: 18px; line-height: 28px; }
+  .board-aside .board-form {
+    padding: var(--space-6); background: var(--surface-raised);
+    border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md);
+  }
+  .board-aside .board-form .tp-h { font-size: 24px; line-height: 32px; }
+}
