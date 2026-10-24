@@ -1,0 +1,18 @@
+/* 我的（js/me.js）。class 用 me- 開頭。顏色、字體、元件都用 design-system 的 token 與 class。 */
+
+.me-scroll > * { flex: none; }
+.me-scroll .dsh-btn { text-decoration: none; box-sizing: border-box; }
+.me-scroll .tp-box { display: flex; flex-direction: column; gap: var(--space-3); }
+.me-scroll .tp-h, .me-scroll .tp-p { margin: 0; }
+
+.me-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+.me-stat {
+  display: flex; flex-direction: column; align-items: center; padding: var(--space-3) var(--space-1);
+  background: var(--green-50); border: var(--stroke-fine) solid var(--outline); border-radius: var(--radius-sm);
+}
+.me-stat__num { font-family: var(--font-display); font-weight: 900; font-size: 28px; line-height: 36px; }
+.me-stat__label { font-size: 13px; line-height: 20px; color: var(--text-muted); }
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .tree-page[data-page="me"] { --page-max: var(--content-max); }
+}
