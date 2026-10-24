@@ -27,12 +27,12 @@ function loadExtras() {
   return extras;
 }
 
-function daysUntil(date) {
+export function daysUntil(date) {
   const ms = new Date(`${date}T00:00:00+08:00`) - Date.now();
   return Math.max(0, Math.ceil(ms / 86400000));
 }
 
-const shortDate = (date) => date.slice(5).replace('-', '/');
+export const shortDate = (date) => date.slice(5).replace('-', '/');
 const orPending = (v, unit = '') => (v == null ? '［待補］' : `${v}${unit}`);
 
 export function heroHtml(tree) {
