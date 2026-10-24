@@ -456,7 +456,8 @@ async function main() {
     const outsideId = !tree && target?.needsTree && id ? treeIdFrom(decodeURIComponent(id)) : null;
     if (outsideId) {
       tree = byId.get(outsideId) ?? await findOutsideTree(outsideId);
-      byId.set(outsideId, tree);
+      // 查不到的「樹種待查」不記住，下次打開再查一次（可能只是網路不穩讀不到）
+      if (tree.lat != null) byId.set(outsideId, tree);
       // 等資料的時候網址已經換了，就不畫這一頁
       if (location.hash.match(/^#\/[^/]+\/([^/]+)/)?.[1] !== id) return;
     }
