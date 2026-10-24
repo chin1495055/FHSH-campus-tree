@@ -14,6 +14,7 @@ import { renderMePage } from './me.js';
 import { renderMyEventsPage } from './myevents.js';
 import { CATEGORIES, categoryOf } from './categories.js';
 import { treeIdFrom, findOutsideTree } from './lookup.js';
+import { HOME_REGION, loadRegionTrees, setupRegionSheet } from './regions.js';
 
 // 路由註冊表：#/名稱 或 #/名稱/樹號 → 要畫的畫面。
 // 新增畫面：在 js/ 開一個檔案匯出 render(el, { tree, trees })，再到這裡加一行。
@@ -94,11 +95,14 @@ async function loadTrees() {
       status: STATUS[beast?.status] ?? 'ok',
       category: categoryOf(t.species),
       guardians: g,
+      region: HOME_REGION.id,
     };
   });
 }
 
-function matches(tree, filter, query, category) {
+function matches(tree, region, filter, query, category) {
+  // 地圖一次只畫一個區域（切換區域見 regions.js）
+  if (tree.region !== region) return false;
   if (category !== 'all' && tree.category.id !== category) return false;
   if (filter === 'beast' && !tree.beast) return false;
   if ((filter === 'watch' || filter === 'notice') && tree.status !== filter) return false;
@@ -117,14 +121,14 @@ function iconFor(tree, selected) {
   });
 }
 
+/** here 是 null（看的是別的區域）就不顯示距離 */
 function renderCard(el, tree, here) {
   const b = tree.beast;
   const name = b ? b.name : tree.species;
-  const dist = Math.round(L.latLng(here).distanceTo([tree.lat, tree.lng]));
   const meta = [
     b ? tree.species : tree.location,
     tree.ageEstimated ? `約 ${tree.ageEstimated} 年（推估）` : null,
-    `距你 ${dist} 公尺`,
+    here ? `距你 ${Math.round(L.latLng(here).distanceTo([tree.lat, tree.lng]))} 公尺` : null,
   ].filter(Boolean).join('・');
   const art = b
     ? `<div class="tree-card__art"><img src="${esc(b.images.icon)}" alt="" width="64" height="64"></div>`
@@ -175,19 +179,30 @@ function renderNearby(el, shown, selected, here, onPick) {
  * 樹種類別選單：chip 樣式的按鈕＋自己畫的清單（原生 select 打開後的樣子沒辦法配合設計系統）。
  * 鍵盤：↑↓ Home End 移動、Enter 或空白鍵選取、Esc 關閉。回傳關閉選單的函式。
  */
-function setupCategoryMenu(button, menu, items, onChange) {
+function setupCategoryMenu(button, menu, initialItems, onChange) {
   let current = 'all';
   let active = 0;
-  menu.innerHTML = items.map((item, i) => `
+  let items = [];
+  let rows = [];
+
+  const label = (item) => (item.emoji ? `${item.emoji} ${item.name}` : item.name);
+
+  /** 換一組類別（切換區域時棵數不同），選取回到「所有樹種」 */
+  function setItems(next) {
+    items = next;
+    current = 'all';
+    button.textContent = label(items[0]);
+    button.classList.remove('is-active');
+    menu.innerHTML = items.map((item, i) => `
     <li class="cat-menu__item" id="cat-opt-${i}" role="option" aria-selected="${item.id === current}" data-index="${i}">
       <span class="cat-menu__emoji" aria-hidden="true">${item.emoji}</span>
       <span class="cat-menu__name">${esc(item.name)}</span>
       <span class="cat-menu__count">${item.count} 棵</span>
       <span class="cat-menu__check" aria-hidden="true"></span>
     </li>`).join('');
-  const rows = [...menu.children];
-
-  const label = (item) => (item.emoji ? `${item.emoji} ${item.name}` : item.name);
+    rows = [...menu.children];
+  }
+  setItems(initialItems);
 
   function setActive(i) {
     active = (i + rows.length) % rows.length;
@@ -261,7 +276,17 @@ function setupCategoryMenu(button, menu, items, onChange) {
   document.addEventListener('pointerdown', (e) => {
     if (!menu.contains(e.target) && !button.contains(e.target)) close(false);
   });
-  return () => close(false);
+  return { close: () => close(false), setItems };
+}
+
+/** 類別選單的項目：棵數從資料算，沒有樹的類別不列 */
+function categoryItems(list) {
+  const count = {};
+  for (const tree of list) count[tree.category.id] = (count[tree.category.id] ?? 0) + 1;
+  return [
+    { id: 'all', emoji: '', name: '所有樹種', count: list.length },
+    ...CATEGORIES.filter((c) => count[c.id]).map((c) => ({ ...c, count: count[c.id] })),
+  ];
 }
 
 async function main() {
@@ -313,7 +338,12 @@ async function main() {
   let filter = 'all';
   let query = '';
   let category = 'all';
+  let region = HOME_REGION.id;
   let shown = trees;
+  const byId = new Map(trees.map((t) => [t.id, t]));
+  // 附近的樹算距離的起點：在預設地點是你的位置，在別的區域是那一區的中心（卡片不顯示距離）
+  let regionCenter = null;
+  const origin = () => regionCenter ?? here;
 
   // 框選範圍時避開蓋在地圖上的東西：手機是上方搜尋列和底部卡片；電腦版左右欄不蓋地圖
   const mapPadding = (topLeft, bottomExtra) => (DESKTOP.matches
@@ -321,20 +351,23 @@ async function main() {
     : { paddingTopLeft: topLeft, paddingBottomRight: [topLeft[0], bottom.offsetHeight + bottomExtra] });
 
   const syncNearby = () => {
-    if (DESKTOP.matches) renderNearby(nearby, shown, selected, here, pick);
+    if (DESKTOP.matches) renderNearby(nearby, shown, selected, origin(), pick);
   };
   DESKTOP.addEventListener('change', syncNearby);
 
   const markers = new Map();
-  for (const tree of trees) {
-    const m = L.marker([tree.lat, tree.lng], {
-      icon: iconFor(tree, false),
-      zIndexOffset: zFor(tree),
-      title: tree.beast?.name ?? tree.species,
-    });
-    m.on('click', () => select(tree));
-    markers.set(tree.id, m);
+  function addMarkers(list) {
+    for (const tree of list) {
+      const m = L.marker([tree.lat, tree.lng], {
+        icon: iconFor(tree, false),
+        zIndexOffset: zFor(tree),
+        title: tree.beast?.name ?? tree.species,
+      });
+      m.on('click', () => select(tree));
+      markers.set(tree.id, m);
+    }
   }
+  addMarkers(trees);
 
   function select(tree) {
     if (selected) {
@@ -346,7 +379,7 @@ async function main() {
     const m = markers.get(tree.id);
     m.setIcon(iconFor(tree, true));
     m.setZIndexOffset(Z_SELECTED);
-    renderCard(card, tree, here);
+    renderCard(card, tree, regionCenter ? null : here);
     syncNearby();
   }
 
@@ -360,7 +393,7 @@ async function main() {
     shown = [];
     for (const tree of trees) {
       const m = markers.get(tree.id);
-      if (matches(tree, filter, query, category)) {
+      if (matches(tree, region, filter, query, category)) {
         m.addTo(map);
         shown.push(tree);
       } else {
@@ -383,23 +416,16 @@ async function main() {
     });
   });
 
-  // 樹種類別選單：棵數從資料算，沒有樹的類別不列
-  const catCount = {};
-  for (const tree of trees) catCount[tree.category.id] = (catCount[tree.category.id] ?? 0) + 1;
-  const catItems = [
-    { id: 'all', emoji: '', name: '所有樹種', count: trees.length },
-    ...CATEGORIES.filter((c) => catCount[c.id]).map((c) => ({ ...c, count: catCount[c.id] })),
-  ];
-  const closeCatMenu = setupCategoryMenu(
+  const catMenu = setupCategoryMenu(
     document.getElementById('category'),
     document.getElementById('category-menu'),
-    catItems,
+    categoryItems(trees),
     (id) => {
       category = id;
       applyFilter();
     },
   );
-  map.on('movestart', closeCatMenu);
+  map.on('movestart', catMenu.close);
 
   const q = document.getElementById('q');
   q.addEventListener('input', () => {
@@ -408,7 +434,9 @@ async function main() {
   });
 
   // 定位只用來畫出你的位置、算距離，不保存
-  document.getElementById('locate').addEventListener('click', () => {
+  document.getElementById('locate').addEventListener('click', async () => {
+    // 在別的區域按定位：先切回預設地點
+    if (region !== HOME_REGION.id) await (await regionSheet)?.choose(HOME_REGION.id);
     const back = () => map.setView(here, Math.max(map.getZoom(), 17));
     if (!navigator.geolocation) return back();
     navigator.geolocation.getCurrentPosition(
@@ -417,7 +445,7 @@ async function main() {
         if (L.latLng(p).distanceTo(HOME) < NEAR_LIMIT_M) {
           here = p;
           meMarker.setLatLng(here);
-          if (selected) renderCard(card, selected, here);
+          if (selected && !regionCenter) renderCard(card, selected, here);
           syncNearby();
         }
         back();
@@ -430,13 +458,47 @@ async function main() {
   applyFilter();
   // 一打開就選 Demo 主角，地圖把所有神獸和你的位置一起框進畫面
   const hero = trees.find((t) => t.beast?.slug === 'xuxugong') ?? trees[0];
-  select(hero);
   const beastSpots = trees.filter((t) => t.beast).map((t) => [t.lat, t.lng]);
-  map.fitBounds(L.latLngBounds([HOME, ...beastSpots]), { ...mapPadding([40, 160], 60), maxZoom: 18 });
+  function showHome() {
+    select(hero);
+    map.fitBounds(L.latLngBounds([HOME, ...beastSpots]), { ...mapPadding([40, 160], 60), maxZoom: 18 });
+  }
+  showHome();
+
+  // 切換區域：第一次切過去才下載那一區的樹，篩選和搜尋都清掉重來
+  async function switchRegion(r) {
+    if (r.id !== HOME_REGION.id) {
+      const list = (await loadRegionTrees(r.id)).filter((t) => !markers.has(t.id));
+      trees.push(...list);
+      // 之前用分享連結打開過的同一棵樹（findOutsideTree 查的），換成有守護人數的版本
+      for (const t of list) byId.set(t.id, t);
+      addMarkers(list);
+    }
+    region = r.id;
+    regionCenter = r.center ? [r.center.lat, r.center.lng] : null;
+    filter = 'all';
+    document.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.filter === 'all')));
+    query = '';
+    q.value = '';
+    category = 'all';
+    const inRegion = trees.filter((t) => t.region === region);
+    catMenu.setItems(categoryItems(inRegion));
+    applyFilter();
+    if (region === HOME_REGION.id) return showHome();
+    // 選這一區最粗的樹，地圖框住整區
+    select(inRegion.reduce((a, b) => ((b.dbh ?? 0) > (a.dbh ?? 0) ? b : a)));
+    map.fitBounds(L.latLngBounds(inRegion.map((t) => [t.lat, t.lng])), { ...mapPadding([24, 140], 24), maxZoom: 18 });
+  }
+  const regionBtn = document.getElementById('region');
+  const regionSheet = setupRegionSheet(regionBtn, document.getElementById('region-sheet'), switchRegion)
+    .catch((err) => {
+      // 讀不到區域清單就不顯示按鈕，地圖照常用
+      console.error(err);
+      regionBtn.hidden = true;
+    });
 
   // 路由：依 PAGES 把畫面畫進同一個全螢幕的 #page，蓋在地圖上面
   const page = document.getElementById('page');
-  const byId = new Map(trees.map((t) => [t.id, t]));
   const behindPage = [...app.children].filter((c) => c !== page);
   function showPage(on, name) {
     const nav = on && WITH_NAV.includes(name);

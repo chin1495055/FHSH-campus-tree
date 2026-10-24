@@ -33,6 +33,7 @@
 <link rel="stylesheet" href="css/share.css">
 <link rel="stylesheet" href="css/me.css">
 <link rel="stylesheet" href="css/myevents.css">
+<link rel="stylesheet" href="css/regions.css">
 </head>
 <body class="dsh-root">
 <!-- 電腦版的頂部導覽，取代底部導覽列；電腦上沒有掃描 -->
@@ -53,10 +54,17 @@
 
   <!-- 搜尋與篩選 -->
   <div class="topbar">
-    <label class="search" for="q">
-      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="#26231f" stroke-width="2.5"/><path d="M13 13 L18 18" stroke="#26231f" stroke-width="2.5" stroke-linecap="round"/></svg>
-      <input id="q" type="search" placeholder="搜尋樹名、樹種或地點" autocomplete="off">
-    </label>
+    <div class="search-row">
+      <label class="search" for="q">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="#26231f" stroke-width="2.5"/><path d="M13 13 L18 18" stroke="#26231f" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <input id="q" type="search" placeholder="搜尋樹名、樹種或地點" autocomplete="off">
+      </label>
+      <!-- 切換區域（js/regions.js）：按鈕上寫現在看的區域 -->
+      <button type="button" class="rg-btn" id="region" aria-haspopup="dialog" aria-expanded="false" aria-controls="region-sheet">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15 C8 15 2.5 9.5 2.5 6 a5.5 5.5 0 0 1 11 0 C13.5 9.5 8 15 8 15 Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="6" r="1.8" fill="currentColor"/></svg>
+        <span class="rg-btn__name">北平東路</span>
+      </button>
+    </div>
     <div class="filters" role="group" aria-label="篩選">
       <button type="button" class="cat-select" id="category" aria-haspopup="listbox" aria-expanded="false" aria-controls="category-menu" aria-label="樹種類別">所有樹種</button>
       <button type="button" class="chip" data-filter="all" aria-pressed="true">全部</button>
@@ -98,6 +106,9 @@
     <p class="loading__hint">第一次打開要讀將近兩千棵樹，大約需要幾秒</p>
     <button type="button" class="dsh-btn dsh-btn--primary loading__retry" hidden onclick="location.reload()">重新整理</button>
   </div>
+
+  <!-- 切換區域的底部選單，內容由 js/regions.js 畫 -->
+  <div class="rg-sheet" id="region-sheet" hidden></div>
 
   <!-- 蓋在地圖上的全螢幕畫面：樹木頁、回報頁、通知頁…都畫在這裡，見 js/map.js 的 PAGES -->
   <section class="tree-page" id="page" hidden></section>

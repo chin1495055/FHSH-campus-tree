@@ -7,7 +7,7 @@
 //
 // 改了下面的 PRECACHE 清單就把 VERSION 加一號，舊快取會在新版啟用時清掉。
 
-const VERSION = 'dsh-v11';
+const VERSION = 'dsh-v12';
 const NETWORK_TIMEOUT_MS = 4000;
 const CDN_HOSTS = ['cdnjs.cloudflare.com', 'unpkg.com', 'fonts.googleapis.com', 'fonts.gstatic.com'];
 
@@ -26,6 +26,7 @@ const PRECACHE = [
   'css/share.css',
   'css/me.css',
   'css/myevents.css',
+  'css/regions.css',
   'about.html',
   'js/map.js',
   'js/categories.js',
@@ -42,6 +43,7 @@ const PRECACHE = [
   'js/me.js',
   'js/myevents.js',
   'js/lookup.js',
+  'js/regions.js',
   'design-system/tokens.css',
   'design-system/components.css',
   'design-system/desktop.css',
@@ -52,6 +54,7 @@ const PRECACHE = [
   'data/mock/mock_notices.json',
   'data/mock/mock_reports.json',
   'data/mock/mock_events.json',
+  'data/regions/index.json',
 ];
 
 self.addEventListener('install', (event) => {

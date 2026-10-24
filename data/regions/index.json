@@ -1,0 +1,47 @@
+{
+  "meta": {
+    "note": "comments 是「市長，你給我聽好了」種樹相關留言裡提到這個地點的則數，來自 01_種樹痛點儀表板.html；樹木是臺北市行道樹開放資料。",
+    "generatedAt": "2026-10-24"
+  },
+  "regions": [
+    {
+      "id": "meilun",
+      "name": "美崙公園",
+      "district": "士林區",
+      "comments": 41,
+      "note": "地下停車場工程規劃中",
+      "center": {
+        "lat": 25.097642,
+        "lng": 121.517564
+      },
+      "radiusM": 300,
+      "count": 1160
+    },
+    {
+      "id": "minsheng",
+      "name": "民生社區",
+      "district": "松山區",
+      "comments": 40,
+      "note": "民生公園與富錦街一帶",
+      "center": {
+        "lat": 25.057414,
+        "lng": 121.558056
+      },
+      "radiusM": 300,
+      "count": 1122
+    },
+    {
+      "id": "dunhua",
+      "name": "敦化南路一段",
+      "district": "大安區・松山區",
+      "comments": 37,
+      "note": "樟樹與臺灣欒樹的林蔭大道",
+      "match": "敦化南路一段",
+      "center": {
+        "lat": 25.040833,
+        "lng": 121.548852
+      },
+      "count": 1135
+    }
+  ]
+}

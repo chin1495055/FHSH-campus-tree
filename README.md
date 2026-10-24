@@ -69,9 +69,10 @@
 
 | 資料 | 來源 | 檔案 |
 |---|---|---|
-| 樹木位置、樹種、樹號、胸徑、樹高 | [臺北市行道樹及公園樹木分布圖](https://data.gov.tw/dataset/128274)（data.gov.tw） | [data/trees.json](data/trees.json)（總部周邊，畫在地圖上）、[data/trees-all/](data/trees-all/)（全臺北 16 萬棵分成 256 個檔，掃到範圍外的樹牌時才讀） |
+| 樹木位置、樹種、樹號、胸徑、樹高 | [臺北市行道樹及公園樹木分布圖](https://data.gov.tw/dataset/128274)（data.gov.tw） | [data/trees.json](data/trees.json)（總部周邊，畫在地圖上）、[data/trees-all/](data/trees-all/)（全臺北 16 萬棵分成 256 個檔，掃到範圍外的樹牌時才讀）、[data/regions/](data/regions/)（「切換區域」的三個地點，切過去才讀） |
 
 - 只取競選總部（中正區北平東路 30-1 號）半徑 800 公尺內的 1,878 棵樹，座標由 TWD97 轉成 WGS84。前處理腳本是 [scripts/build_data.py](scripts/build_data.py)。
+- 「切換區域」收錄市民留言最常點名的三個地點：美崙公園（半徑 300 公尺，1,160 棵）、民生社區（民生公園半徑 300 公尺，1,122 棵）、敦化南路一段的行道樹（1,135 棵），從 `data/trees-all/` 切出來，腳本是 [scripts/build_regions.py](scripts/build_regions.py)。留言數（41、40、37 則）來自 [01_種樹痛點儀表板.html](01_種樹痛點儀表板.html)。
 - `ageEstimated`（樹齡）是用胸徑粗估的，`managerEstimated`（管理單位）是依資料集推定的，都不是原始欄位，畫面上會標「推估」「推定」。
 - 授權：[政府資料開放授權條款](https://data.gov.tw/license)。
 - 全市原始檔不進 repo。要重新產生時，從 data.gov.tw 下載後放到 `data/source/open-data/`，在 repo 根目錄執行 `python scripts/build_data.py`。
@@ -84,6 +85,7 @@
 |---|---|
 | [mock_beasts.json](data/mock/mock_beasts.json) | 神獸的名字、個性、故事、狀態、元氣（**團隊創作**，不是樹的真實歷史或專業健康診斷） |
 | [mock_guardians.json](data/mock/mock_guardians.json) | 每棵樹的守護人數 |
+| [mock_guardians_regions.json](data/mock/mock_guardians_regions.json) | 「切換區域」三個地點的樹的守護人數 |
 | [mock_reports.json](data/mock/mock_reports.json) | 過去的市民回報 |
 | [mock_notices.json](data/mock/mock_notices.json) | 移除公示事件（虛構的「華山公園步道整修工程（模擬）」，不使用真實爭議案例） |
 | [mock_events.json](data/mock/mock_events.json) | 社區樹下活動 |
