@@ -1,7 +1,7 @@
 // 地圖首頁（關鍵畫面 ①）：真實樹木位置＋模擬的神獸、樹況、守護人數。
 // 也負責 hash 路由：#/tree/樹號 打開樹木頁，其他網址回到地圖。
 // 負責人：Saori。兩人共用（新增畫面要在 PAGES 加一行），要改先在 Discord 講一聲。
-import { STATUS, DESKTOP, esc, statusTag, loadJson } from './shared.js';
+import { STATUS, DESKTOP, HOME, esc, statusTag, loadJson } from './shared.js';
 import { guardiansOf, totalOf } from './store.js';
 import { renderTreePage } from './tree.js';
 import { renderReportPage } from './report.js';
@@ -12,6 +12,7 @@ import { renderCollectionPage } from './collection.js';
 import { renderSharePage } from './share.js';
 import { renderMePage } from './me.js';
 import { renderMyEventsPage } from './myevents.js';
+import { renderGoalsPage } from './goals.js';
 import { CATEGORIES, categoryOf } from './categories.js';
 import { treeIdFrom, findOutsideTree } from './lookup.js';
 import { HOME_REGION, loadRegionTrees, setupRegionSheet } from './regions.js';
@@ -29,13 +30,13 @@ const PAGES = {
   share: { render: renderSharePage, needsTree: true },
   me: { render: renderMePage },
   myevents: { render: renderMyEventsPage },
+  goals: { render: renderGoalsPage },
 };
 
 // 這幾頁蓋在地圖上時，手機版底部導覽列照常顯示；樹木頁、回報、掃描這類內容頁不顯示（底部有自己的按鈕）
-const WITH_NAV = ['collection', 'notices', 'me', 'myevents'];
+const WITH_NAV = ['collection', 'notices', 'me', 'myevents', 'goals'];
 
-// Demo 用的「你的位置」：總部（中正區北平東路 30-1 號）附近。真實定位離太遠時退回這裡。
-const HOME = [25.0459, 121.5243];
+// Demo 用的「你的位置」是 shared.js 的 HOME，真實定位離太遠時退回這裡。
 const NEAR_LIMIT_M = 2000;
 // 比這個近才畫完整的屋簷標記；拉遠時一般樹縮成小圓點，神獸和選取中的樹照常顯示
 const FAR_ZOOM = 19;
@@ -510,7 +511,7 @@ async function main() {
   // 底部導覽列和電腦版頂部導覽，標出現在在哪一頁（沒有對應的畫面都算地圖）
   const navLinks = document.querySelectorAll('.dsh-nav__item[href], .dsh-topnav__item');
   function syncNav(name) {
-    const current = Object.hasOwn(PAGES, name) && !['tree', 'report', 'board', 'share'].includes(name) ? `#/${name}` : '#/';
+    const current = Object.hasOwn(PAGES, name) && !['tree', 'report', 'board', 'share', 'goals'].includes(name) ? `#/${name}` : '#/';
     navLinks.forEach((a) => {
       if (a.getAttribute('href') === current) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');

@@ -227,6 +227,8 @@ body { background: var(--surface-sunken); }
 .tp-lanterns .dsh-lanterns__grid { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); justify-items: center; gap: var(--space-2) 0; }
 .tp-lantern { width: 20px; height: 30px; display: block; --lantern-body: var(--honor); --lantern-tassel: var(--action); }
 .tp-lantern--off { --lantern-body: var(--green-700); --lantern-tassel: var(--green-400); }
+.tp-lanterns__goals { align-self: flex-start; font-size: 14px; line-height: 20px; font-weight: 700; color: var(--green-100); text-underline-offset: 3px; }
+.tp-lanterns__goals:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
 
 /* 剛守護：新的一盞燈亮起、人數跳一下 */
 @keyframes tp-light { 0% { opacity: 0.3; transform: scale(0.6); } 60% { opacity: 1; transform: scale(1.3); } 100% { transform: scale(1); } }

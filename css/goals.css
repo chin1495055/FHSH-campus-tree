@@ -1,0 +1,26 @@
+/* 社區共同目標（js/goals.js）。class 用 gl- 開頭。
+   燈海沿用樹木頁的 .tp-lanterns（燈籠造型、每排 10 盞）；樹的清單沿用 design-system 的 .dsh-treelist，
+   它只在 desktop.css 的電腦版有樣式，手機版在這裡補上同樣的外觀。 */
+
+.gl-scroll > * { flex: none; }
+.gl-sub { margin: 0; font-size: 15px; line-height: 22px; font-weight: 700; color: var(--brand-text); }
+.gl-cols, .gl-col { display: flex; flex-direction: column; gap: var(--space-4); }
+.gl-fair { margin: 0; text-align: center; }
+.gl-h { margin: 0; }
+.gl-done { margin: 0; padding-left: 1.2em; font-size: 15px; line-height: 24px; }
+.gl-map { text-decoration: none; box-sizing: border-box; }
+
+.gl-list { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-md); background: var(--surface-raised); overflow: hidden; }
+.gl-list .dsh-treelist__item { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: var(--space-3); align-items: center; padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--line); color: var(--text); text-decoration: none; }
+.gl-list li:last-child .dsh-treelist__item { border-bottom: none; }
+.gl-list .dsh-treelist__item:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: -3px; }
+.gl-list .dsh-treelist__item img { width: 48px; height: 48px; display: block; }
+.gl-list .dsh-treelist__name { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 18px; line-height: 24px; }
+.gl-list .dsh-treelist__meta { margin: 0; font-size: 13px; line-height: 20px; color: var(--text-muted); }
+.gl-list .dsh-treelist__count { font-size: 14px; font-weight: 900; color: var(--brand-text); }
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .tree-page[data-page="goals"] { --page-max: var(--content-max); }
+  .gl-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--desk-gap); align-items: start; }
+  .gl-lanterns .tp-lantern { width: 26px; height: 39px; }
+}

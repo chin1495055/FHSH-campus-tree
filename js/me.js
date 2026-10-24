@@ -35,6 +35,7 @@ export function renderMePage(el) {
         <div class="me-actions">
           <a class="dsh-btn dsh-btn--secondary dsh-btn--block" href="#/myevents">看我參加的活動</a>
           <a class="dsh-btn dsh-btn--secondary dsh-btn--block" href="#/collection">看我的守護圖鑑</a>
+          <a class="dsh-btn dsh-btn--secondary dsh-btn--block" href="#/goals">看我們這區的共同目標</a>
         </div>
       </section>
 

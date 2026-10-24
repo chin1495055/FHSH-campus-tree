@@ -130,7 +130,7 @@ export function vitalHtml(tree, reportCount) {
 }
 
 // 燈籠造型：圓燈身、上下燈帽、燈骨、垂穗。顏色由 CSS 變數決定（點亮／未點亮）
-const LANTERN_SHAPE = `
+export const LANTERN_SHAPE = `
   <svg width="0" height="0" class="tp-defs" aria-hidden="true"><symbol id="tp-lantern-shape" viewBox="0 0 24 36">
     <rect x="8" y="3" width="8" height="4" rx="1" style="fill: var(--outline)"/>
     <ellipse cx="12" cy="17" rx="10" ry="10" style="fill: var(--lantern-body); stroke: var(--outline)" stroke-width="2"/>
@@ -164,6 +164,7 @@ function lanternsHtml(g, justGuarded) {
       </div>
       <div class="dsh-lanterns__grid" aria-hidden="true">${lamps}</div>
       <p class="dsh-lanterns__note">${note}</p>
+      <a class="tp-lanterns__goals" href="#/goals">看我們這區的共同目標 →</a>
     </section>`;
 }
 

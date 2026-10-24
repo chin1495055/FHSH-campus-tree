@@ -16,6 +16,8 @@
 .me-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
 /* 手機上一顆按鈕只有半寬，字多時換行而不是被切掉 */
 .me-actions .dsh-btn { padding-inline: var(--space-2); white-space: normal; text-align: center; }
+/* 第三顆（共同目標）自己佔一整排 */
+.me-actions .dsh-btn:nth-child(3) { grid-column: 1 / -1; }
 .me-sub { margin: 0; font-size: 15px; line-height: 22px; font-weight: 700; }
 
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
