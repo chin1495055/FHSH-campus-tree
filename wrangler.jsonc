@@ -14,5 +14,7 @@
     { "name": "FEEDBACK_LIMIT", "namespace_id": "1001", "simple": { "limit": 5, "period": 60 } }
   ],
   // 一天（台灣時間）最多收幾則。Turnstile 密鑰不寫在這裡，用 npx wrangler secret put TURNSTILE_SECRET
-  "vars": { "DAILY_CAP": "300" }
+  "vars": { "DAILY_CAP": "300" },
+  // 打開記錄，Cloudflare 後台 Worker 的 Logs 才看得到 worker.js 的 console 訊息
+  "observability": { "enabled": true }
 }

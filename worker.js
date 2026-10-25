@@ -27,6 +27,8 @@ async function verifyTurnstile(token, ip, secret) {
   if (ip) form.append('remoteip', ip);
   const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: form });
   const data = await res.json();
+  // 沒通過時把原因記下來（Cloudflare 後台 Worker 的 Logs 看得到），例如 invalid-input-secret 代表密鑰設錯
+  if (data.success !== true) console.log('Turnstile 沒通過', JSON.stringify(data['error-codes']));
   return data.success === true;
 }
 
@@ -53,6 +55,11 @@ async function handleFeedback(request, env) {
   const { success: underLimit } = await env.FEEDBACK_LIMIT.limit({ key: ip });
   if (!underLimit) return json({ ok: false, error: 'too_fast' }, 429);
 
+  // 忘了用 wrangler secret put 或後台設定密鑰時，跟「驗證沒通過」分開，比較好查
+  if (!env.TURNSTILE_SECRET) {
+    console.error('沒有設定 TURNSTILE_SECRET');
+    return json({ ok: false, error: 'not_configured' }, 500);
+  }
   if (!(await verifyTurnstile(token, ip, env.TURNSTILE_SECRET))) {
     return json({ ok: false, error: 'not_verified' }, 403);
   }
