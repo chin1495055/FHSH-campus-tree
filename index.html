@@ -96,6 +96,8 @@
   <button type="button" class="locate" id="locate" aria-label="回到我的位置">
     <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="6" fill="none" stroke="#26231f" stroke-width="2.5"/><circle cx="11" cy="11" r="2.2" fill="#3f7a4a"/><path d="M11 1 V4 M11 18 V21 M1 11 H4 M18 11 H21" stroke="#26231f" stroke-width="2.5" stroke-linecap="round"/></svg>
   </button>
+  <!-- 定位沒被採用時的提示（不在收錄範圍、沒拿到位置） -->
+  <p class="locate-hint" id="locate-hint" role="status" aria-live="polite" hidden></p>
 
   <!-- 底部：樹卡＋導覽列 -->
   <div class="bottom">

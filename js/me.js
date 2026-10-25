@@ -44,6 +44,7 @@ export function renderMePage(el) {
       <section class="tp-box" aria-labelledby="me-privacy">
         <h2 class="tp-h" id="me-privacy">你的資料</h2>
         <p class="tp-p">守護了哪些樹、送出的回報，都只存在這台裝置，不會上傳，也不會記住你家的地址。別人只看得到守護人數，看不到是誰。</p>
+        <p class="tp-p">定位只在你按地圖上的定位鈕時用一次，用來標出你在哪、算離樹多遠，不會存起來，也不會上傳。</p>
       </section>
 
       <section class="tp-box" aria-labelledby="me-data">

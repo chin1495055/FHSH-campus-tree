@@ -40,6 +40,8 @@ const WITH_NAV = ['collection', 'notices', 'me', 'myevents', 'goals', 'feedback'
 
 // Demo 用的「你的位置」是 shared.js 的 HOME，真實定位離太遠時退回這裡。
 const NEAR_LIMIT_M = 2000;
+// 定位提示泡泡顯示多久
+const LOCATE_HINT_MS = 6000;
 // 比這個近才畫完整的屋簷標記；拉遠時一般樹縮成小圓點，神獸和選取中的樹照常顯示
 const FAR_ZOOM = 19;
 
@@ -443,12 +445,30 @@ async function main() {
     applyFilter();
   });
 
+  // 定位沒被採用時告訴使用者為什麼，手機版順便提可以掃樹牌（掃描查的是全臺北的樹；電腦版沒有掃描）
+  const hintEl = document.getElementById('locate-hint');
+  let hintTimer = 0;
+  const hideHint = () => { hintEl.hidden = true; };
+  hintEl.addEventListener('click', hideHint);
+  const hint = (text) => {
+    const scan = DESKTOP.matches ? '' : '在臺北看到樹上的 QR code，也可以<a href="#/scan">掃描看祂的資料</a>。';
+    hintEl.innerHTML = `${text}${scan}`;
+    hintEl.hidden = false;
+    clearTimeout(hintTimer);
+    hintTimer = setTimeout(hideHint, LOCATE_HINT_MS);
+  };
+  const NO_POSITION = '沒拿到你的位置，先帶你看總部附近的樹。';
+
   // 定位只用來畫出你的位置、算距離，不保存
   document.getElementById('locate').addEventListener('click', async () => {
     // 在別的區域按定位：先切回預設地點
     if (region !== HOME_REGION.id) await (await regionSheet)?.choose(HOME_REGION.id);
     const back = () => map.setView(here, Math.max(map.getZoom(), 17));
-    if (!navigator.geolocation) return back();
+    const fail = () => {
+      hint(NO_POSITION);
+      back();
+    };
+    if (!navigator.geolocation) return fail();
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const p = [pos.coords.latitude, pos.coords.longitude];
@@ -457,10 +477,12 @@ async function main() {
           meMarker.setLatLng(here);
           if (selected && !regionCenter) renderCard(card, selected, here);
           syncNearby();
+        } else {
+          hint('你不在目前收錄的範圍內，先帶你看總部附近的樹。');
         }
         back();
       },
-      back,
+      fail,
       { enableHighAccuracy: true, timeout: 5000 },
     );
   });
