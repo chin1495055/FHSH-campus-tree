@@ -1,7 +1,7 @@
 // 回報頁（關鍵畫面 ③）：#/report/樹號。負責人：Saori
 // 在地守護者三步驟：1 拍照 → 2 健康檢查 → 3 完成，送出後元氣值跟著更新。
 // 回報存在這台裝置（store.js），不會真的送到市府。
-import { DESKTOP, esc, pageBarHtml } from './shared.js';
+import { DESKTOP, camTipHtml, esc, pageBarHtml } from './shared.js';
 import { getGuard, getMyReports, addReport, problemsOf, vitalityOf } from './store.js';
 import { vitalHtml } from './tree.js';
 
@@ -144,6 +144,7 @@ export async function renderReportPage(el, { tree }) {
         <div class="rp-frame" aria-hidden="true"></div>
         <p class="rp-finder__hint">把整棵樹放進框裡，樹根也要拍到</p>
       </div>
+      ${desk ? '' : camTipHtml()}
       <div class="rp-controls" data-mode="loading">
         <button type="button" class="rp-shutter" data-show="live" aria-label="拍照"></button>
         <label class="dsh-btn dsh-btn--secondary dsh-btn--block rp-file" data-show="loading nocam">

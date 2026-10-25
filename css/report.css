@@ -45,8 +45,8 @@
 }
 .rp-nocam p { margin: 0; }
 /* 有照片或沒相機時，框和提示字就不用了 */
-.rp-finder:has(+ .rp-controls:not([data-mode="live"])) .rp-frame,
-.rp-finder:has(+ .rp-controls:not([data-mode="live"])) .rp-finder__hint { display: none; }
+.rp-finder:has(~ .rp-controls:not([data-mode="live"])) .rp-frame,
+.rp-finder:has(~ .rp-controls:not([data-mode="live"])) .rp-finder__hint { display: none; }
 
 .rp-controls { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
 .rp-controls > .dsh-btn--block { width: 100%; }

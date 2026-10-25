@@ -3,7 +3,7 @@
 // 市府樹牌的 QR code 是 http://trees.gov.taipei/show/?treeid=樹號，我們只在手機上從文字裡讀出樹號，
 // 不會連到市府網站。用手機內建相機掃，還是會開到市府網站，要用這頁的掃描器才會開到神獸頁。
 // 相機打不開、或在電腦上錄 Demo 時，可以手動輸入樹號、從照片讀，或點 Demo 樹牌。
-import { esc, pageBarHtml } from './shared.js';
+import { camTipHtml, esc, pageBarHtml } from './shared.js';
 import { markScanned } from './store.js';
 import { treeIdFrom } from './lookup.js';
 
@@ -39,6 +39,7 @@ export async function renderScanPage(el, { trees }) {
           <p>這裡打不開相機。可以輸入樹牌上的編號，或從照片讀取。</p>
         </div>
       </div>
+      ${camTipHtml()}
       <p class="sc-msg" role="status" aria-live="polite"></p>
 
       <form class="sc-form">

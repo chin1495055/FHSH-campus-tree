@@ -31,6 +31,29 @@ export const pageBarHtml = (title, back = '#/') => `
     <h1 class="tp-bar__title">${esc(title)}</h1>
   </header>`;
 
+// 加到主畫面的 PWA 每次重新打開，手機都會再問一次相機權限。在開相機的畫面放一行小提示，按「知道了」就不再出現
+const CAM_TIP_KEY = 'camTipDismissed';
+const STANDALONE = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+
+export function camTipHtml() {
+  if (!STANDALONE) return '';
+  try {
+    if (localStorage.getItem(CAM_TIP_KEY)) return '';
+  } catch { /* 讀不到就照樣顯示 */ }
+  return `
+    <p class="tp-camtip">
+      <span>每次重新打開 App，手機都會再問一次能不能用相機，按「允許」就可以了。</span>
+      <button type="button" class="tp-camtip__ok" data-camtip-ok>知道了</button>
+    </p>`;
+}
+
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-camtip-ok]');
+  if (!btn) return;
+  try { localStorage.setItem(CAM_TIP_KEY, '1'); } catch { /* 存不了就只關這一次 */ }
+  btn.closest('.tp-camtip').remove();
+});
+
 export async function loadJson(path) {
   const res = await fetch(path);
   if (!res.ok) throw new Error(`讀不到 ${path}`);
