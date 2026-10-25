@@ -52,8 +52,15 @@ const NEARBY_MAX = 20;
 // 載入畫面（index.html 的 #loading）：樹資料和底圖都好了才收起。
 // 底圖卡住時，樹資料讀完後最多再等這麼久就先收起，地圖讓它自己慢慢畫。
 const LOADING_MAP_WAIT_MS = 8000;
+// 等超過這麼久還沒好，提示改成說明為什麼慢（網路快的人不會看到）
+const LOADING_SLOW_MS = 3000;
+const LOADING_SLOW_HINT = '這是黑客松兩天做出來的市政 MVP，地圖用免費的開源圖資，第一次打開會慢一點。未來有機會正式上線，會換成更快的地圖與主機。';
 const loadingEl = document.getElementById('loading');
 const loadingPending = new Set(['trees', 'map']);
+setTimeout(() => {
+  if (loadingEl.classList.contains('is-done') || loadingEl.classList.contains('is-error')) return;
+  loadingEl.querySelector('.loading__hint').textContent = LOADING_SLOW_HINT;
+}, LOADING_SLOW_MS);
 
 function hideLoading() {
   if (loadingEl.classList.contains('is-done') || loadingEl.classList.contains('is-error')) return;

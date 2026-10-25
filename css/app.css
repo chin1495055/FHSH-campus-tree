@@ -349,7 +349,7 @@ body { background: var(--surface-sunken); }
 }
 @keyframes loading-spin { to { transform: rotate(360deg); } }
 .loading__retry[hidden] { display: none; }
-.loading__hint { margin: 0; max-width: 280px; font-size: 14px; line-height: 20px; color: var(--text-muted); }
+.loading__hint { margin: 0; max-width: 300px; font-size: 14px; line-height: 20px; color: var(--text-muted); }
 .loading.is-error .loading__beast { animation: none; filter: grayscale(0.6); }
 .loading.is-error .loading__steps { display: none; }
 @media (prefers-reduced-motion: reduce) {
