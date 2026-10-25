@@ -1,0 +1,33 @@
+/* 意見回饋（js/feedback.js）。class 用 fb- 開頭。顏色、字體、元件都用 design-system 的 token 與 class。 */
+
+.fb-scroll > * { flex: none; }
+.fb-form, .fb-done { display: flex; flex-direction: column; gap: var(--space-3); }
+/* display: flex 會蓋掉 hidden，要自己寫回去 */
+.fb-form[hidden], .fb-done[hidden], .fb-msg[hidden] { display: none; }
+.fb-form .tp-h, .fb-form .tp-small, .fb-done .tp-h, .fb-done .tp-p { margin: 0; }
+.fb-done .dsh-btn { text-decoration: none; box-sizing: border-box; }
+
+.fb-label { padding: 0; font-size: 15px; line-height: 22px; font-weight: 900; }
+.fb-kinds { margin: 0; padding: 0; border: none; display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); }
+.fb-kinds legend { margin-bottom: var(--space-1); }
+.fb-kinds label { display: flex; align-items: center; gap: var(--space-2); min-height: 40px; font-size: 15px; cursor: pointer; }
+.fb-kinds input[type="radio"] { width: 20px; height: 20px; margin: 0; accent-color: var(--brand); }
+
+.fb-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.fb-input {
+  width: 100%; min-width: 0; padding: 10px var(--space-3); box-sizing: border-box;
+  background: var(--surface-raised); border: var(--stroke-ui) solid var(--outline); border-radius: var(--radius-sm);
+  font-family: inherit; font-size: 16px; line-height: 24px; color: var(--text); resize: vertical;
+}
+.fb-input:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+.fb-count { align-self: flex-end; font-size: 13px; line-height: 20px; color: var(--text-muted); }
+
+/* 陷阱欄位：移出畫面，真人看不到也不會用 Tab 跳進去 */
+.fb-trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+
+.fb-turnstile { min-height: 65px; }
+.fb-msg { margin: 0; font-size: 15px; line-height: 22px; font-weight: 700; color: var(--state-watch-text); }
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .tree-page[data-page="feedback"] { --page-max: var(--content-max); }
+}

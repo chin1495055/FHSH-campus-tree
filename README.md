@@ -62,6 +62,7 @@
 - 公開畫面只顯示守護人數，不顯示是誰在守護。
 - 不記錄位置與散步路線；上傳照片前移除照片裡的位置資訊。
 - 所有操作只存在自己手機的瀏覽器（localStorage、IndexedDB），不會上傳。
+- 唯一會上傳的是「我的 → 給我們意見」的意見回饋：只存類型、內容、從哪一頁送出和瀏覽器版本，不收姓名、Email，也不存 IP。
 
 ## 資料來源：真實開放資料與模擬資料
 
@@ -99,13 +100,14 @@
 
 ## 技術
 
-純前端靜態網站，不做後端、不用建置工具。
+前端是靜態網站，不用建置工具。只有意見回饋有一支很小的後端（[worker.js](worker.js)）。
 
 - 原生 JavaScript（ES modules）＋ hash 路由（`#/tree/樹號`）
 - Leaflet 地圖 ＋ OpenFreeMap 向量底圖
 - 資料放靜態 JSON，使用者操作存 localStorage，照片存 IndexedDB
 - PWA：[manifest.json](manifest.json)、[sw.js](sw.js)，可以加到手機主畫面
 - 部署：Cloudflare Workers（https://2026-debugwithpuma.tree-god.workers.dev/ ，設定在 [wrangler.jsonc](wrangler.jsonc)）
+- 意見回饋：`POST /api/feedback` 由 [worker.js](worker.js) 處理，存進 Cloudflare D1（[schema/feedback.sql](schema/feedback.sql)）。防灌水用 Cloudflare Turnstile、每個 IP 每分鐘 5 則的限流、每天 300 則的總量上限，以及一個看不見的陷阱欄位
 
 ### 本機執行
 
@@ -114,6 +116,8 @@ python -m http.server 8000
 ```
 
 打開 http://localhost:8000/ 。不能直接雙擊 index.html，瀏覽器會讀不到 JSON。
+
+要測意見回饋，改用 `npx wrangler dev`（python 的伺服器沒有 API），打開 http://localhost:8787/#/feedback 。第一次要先建本機的資料表：`npx wrangler d1 execute dsh-feedback --local --file=schema/feedback.sql`，並在 `.dev.vars` 放 Turnstile 的測試密鑰 `TURNSTILE_SECRET=1x0000000000000000000000000000000AA`。
 
 ### 目錄
 
@@ -141,6 +145,7 @@ python -m http.server 8000
 | [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) | 1.4.4 | 產生 Demo 用的 QR code | MIT |
 | [OpenFreeMap](https://openfreemap.org/) | — | 地圖圖磚（免金鑰） | 地圖資料 © [OpenStreetMap](https://www.openstreetmap.org/copyright) 貢獻者，ODbL |
 | [Noto Sans TC、Noto Serif TC](https://fonts.google.com/) | — | 字型（Google Fonts） | SIL Open Font License |
+| [Cloudflare D1、Turnstile](https://developers.cloudflare.com/) | — | 存意見回饋、防止機器人灌水 | Cloudflare 服務條款（免費方案） |
 
 資料前處理腳本只用 Python 標準函式庫。
 

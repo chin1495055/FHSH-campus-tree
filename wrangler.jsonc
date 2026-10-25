@@ -1,6 +1,18 @@
 // Cloudflare 部署設定：整個 repo 根目錄就是網站（跟 GitHub Pages 一樣），不要上傳的檔案寫在 .assetsignore
+// 只有 /api/* 交給 worker.js（意見回饋），其他網址直接回靜態檔
 {
   "name": "2026-debugwithpuma",
   "compatibility_date": "2026-10-19",
-  "assets": { "directory": "." }
+  "main": "worker.js",
+  "assets": { "directory": ".", "run_worker_first": ["/api/*"] },
+  // 意見回饋的資料庫，建法見 schema/feedback.sql
+  "d1_databases": [
+    { "binding": "DB", "database_name": "dsh-feedback", "database_id": "be9a1afa-887d-4a4c-8cb4-e4a5208932fd" }
+  ],
+  // 每個 IP 每 60 秒最多送 5 則
+  "ratelimits": [
+    { "name": "FEEDBACK_LIMIT", "namespace_id": "1001", "simple": { "limit": 5, "period": 60 } }
+  ],
+  // 一天（台灣時間）最多收幾則。Turnstile 密鑰不寫在這裡，用 npx wrangler secret put TURNSTILE_SECRET
+  "vars": { "DAILY_CAP": "300" }
 }

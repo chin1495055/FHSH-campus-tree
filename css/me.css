@@ -24,6 +24,9 @@
   .tree-page[data-page="me"] { --page-max: var(--content-max); }
 }
 
+/* 意見回饋入口（10/25） */
+.me-feedback { margin-top: var(--space-3); text-decoration: none; }
+
 /* 票選入口（10/24） */
 .me-vote { margin-top: var(--space-3); text-decoration: none; }
 .me-vote__note { margin: var(--space-2) 0 0; text-align: center; font-size: 14px; line-height: 20px; color: var(--text-muted); }

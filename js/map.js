@@ -13,6 +13,7 @@ import { renderSharePage } from './share.js';
 import { renderMePage } from './me.js';
 import { renderMyEventsPage } from './myevents.js';
 import { renderGoalsPage } from './goals.js';
+import { renderFeedbackPage } from './feedback.js';
 import { CATEGORIES, categoryOf } from './categories.js';
 import { treeIdFrom, findOutsideTree } from './lookup.js';
 import { HOME_REGION, loadRegionTrees, setupRegionSheet } from './regions.js';
@@ -31,10 +32,11 @@ const PAGES = {
   me: { render: renderMePage },
   myevents: { render: renderMyEventsPage },
   goals: { render: renderGoalsPage },
+  feedback: { render: renderFeedbackPage },
 };
 
 // 這幾頁蓋在地圖上時，手機版底部導覽列照常顯示；樹木頁、回報、掃描這類內容頁不顯示（底部有自己的按鈕）
-const WITH_NAV = ['collection', 'notices', 'me', 'myevents', 'goals'];
+const WITH_NAV = ['collection', 'notices', 'me', 'myevents', 'goals', 'feedback'];
 
 // Demo 用的「你的位置」是 shared.js 的 HOME，真實定位離太遠時退回這裡。
 const NEAR_LIMIT_M = 2000;

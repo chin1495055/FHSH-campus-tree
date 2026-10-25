@@ -54,6 +54,7 @@ export function renderMePage(el) {
       </section>
 
       <a class="dsh-btn dsh-btn--primary dsh-btn--block me-about" href="about.html">關於大樹神獸</a>
+      <a class="dsh-btn dsh-btn--secondary dsh-btn--block me-feedback" href="#/feedback">給我們意見</a>
       <a class="dsh-btn dsh-btn--secondary dsh-btn--block me-vote" href="${VOTE}" target="_blank" rel="noopener">幫大樹神獸投一票</a>
       <p class="me-vote__note">線上票選到 10/31（六）18:00，用 Google 或 LINE 登入就能投。</p>
     </div>`;

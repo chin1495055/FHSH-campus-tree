@@ -7,3 +7,7 @@
 wrangler.jsonc
 node_modules
 data/source/open-data
+worker.js
+schema
+.dev.vars
+.wrangler

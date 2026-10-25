@@ -6,3 +6,6 @@
 data/source/open-data/
 
 AGENTS.md
+# 本機測試用的 Turnstile 測試密鑰（wrangler dev 會讀），不進 repo
+.dev.vars
+.wrangler
