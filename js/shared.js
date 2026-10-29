@@ -15,7 +15,7 @@ const STATUS_ICON = {
 export const DESKTOP = matchMedia('(min-width: 1024px) and (hover: hover) and (pointer: fine)');
 
 // Demo 用的「你的位置」：總部（中正區北平東路 30-1 號）附近。地圖和共同目標頁的「附近」都從這裡算。
-export const HOME = [25.0459, 121.5243];
+export const HOME = [25.143352, 121.502462];
 
 export const esc = (s) => dshEscape(s ?? '');
 
