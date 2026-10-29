@@ -1,32 +1,26 @@
-{
-  "meta": {
-    "dataType": "模擬資料",
-    "description": "復興高中中正堂杉樹神獸設定"
+[
+  {
+    "id": "fuxing-shan-1",
+    "treeNo": "FX-001",
+    "species": "杉樹",
+    "lat": 25.143450,
+    "lng": 121.502500,
+    "zone": "zhongzheng",
+    "name": "杉杉｜中正堂左護法",
+    "chestGirth": 120,
+    "height": 15.2,
+    "manager": "總務處/園藝"
   },
-  "beasts": {
-    "fuxing-shan-1": {
-      "name": "杉杉",
-      "title": "中正堂左護法",
-      "species": "杉樹",
-      "avatar": "🌲",
-      "mood": "😊 心情：聽著社團練習覺得熱血",
-      "energy": 85,
-      "carbonData": "年吸收約 18kg CO2（相當於抵銷中正堂冷氣 1.5 小時排碳）",
-      "colorPalette": ["#2E5A44", "#B5654D", "#8C6239"],
-      "story": "站在中正堂左前方的高挑神獸！看過無數屆學長姐的集合與成發。頭頂掉落的小毬果是自然的數學幾何藝術。",
-      "badge": "校園護樹達人"
-    },
-    "fuxing-shan-2": {
-      "name": "木木",
-      "title": "中正堂右護法",
-      "species": "杉樹",
-      "avatar": "🎄",
-      "mood": "🥺 狀態：樹下有點落葉，求鄰居拍拍",
-      "energy": 60,
-      "carbonData": "年吸收約 16kg CO2（約等於抵銷 30 個福利社御飯糰碳足跡）",
-      "colorPalette": ["#3B6E53", "#C2785C", "#A47551"],
-      "story": "杉樹雙胞胎弟弟，個性安靜。最近午後陣雨後需要鄰居同學經過幫忙注意樹根周圍狀況！",
-      "badge": "細心觀察家"
-    }
+  {
+    "id": "fuxing-shan-2",
+    "treeNo": "FX-002",
+    "species": "杉樹",
+    "lat": 25.143520,
+    "lng": 121.502600,
+    "zone": "zhongzheng",
+    "name": "木木｜中正堂右護法",
+    "chestGirth": 115,
+    "height": 14.8,
+    "manager": "總務處/園藝"
   }
-}
+]
