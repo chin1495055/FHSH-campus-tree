@@ -1,89 +1,32 @@
 {
   "meta": {
     "dataType": "模擬資料",
-    "note": "樹號、樹種、位置是真實開放資料；神獸名字、個性、故事、狀態、元氣值、守護人數都是團隊創作或模擬。角色設定見 docs/design/神獸角色設定.md。",
-    "statusValues": "normal 正常｜watch 需關注｜notice 公示中｜keep 保留｜transplant 移植"
+    "description": "復興高中中正堂杉樹神獸設定"
   },
-  "beasts": [
-    {
-      "treeId": "JS0155103034",
-      "slug": "xuxugong",
-      "name": "鬚鬚公",
-      "species": "榕樹",
-      "rarity": "傳說",
-      "personality": "慢條斯理、愛講古，記得整條街幾十年來發生的事。長輩們最喜歡在祂底下下棋聊天。",
-      "catchphrase": "慢慢來，樹仔是一年一年大的。",
-      "story": "社區還是一片稻田的時候祂就在這裡了。附近的孩子都給祂做過契子，每年有人來向祂報告考試成績。（創作故事）",
-      "funFact": "榕樹的氣根垂到地面後會變粗，變成支撐的「柱子」，所以一棵老榕樹可能看起來像一片小樹林。",
-      "status": "notice",
-      "vitality": 82,
-      "guardians": { "local": 32, "remote": 96 },
-      "images": {
-        "healthy": "design-system/assets/character/beasts/xuxugong/healthy.webp",
-        "sad": "design-system/assets/character/beasts/xuxugong/sad.webp",
-        "icon": "design-system/assets/character/beasts/xuxugong/healthy-icon.webp"
-      },
-      "demoRole": "Demo 主角：被公告移除 → 守護者發聲"
+  "beasts": {
+    "fuxing-shan-1": {
+      "name": "杉杉",
+      "title": "中正堂左護法",
+      "species": "杉樹",
+      "avatar": "🌲",
+      "mood": "😊 心情：聽著社團練習覺得熱血",
+      "energy": 85,
+      "carbonData": "年吸收約 18kg CO2（相當於抵銷中正堂冷氣 1.5 小時排碳）",
+      "colorPalette": ["#2E5A44", "#B5654D", "#8C6239"],
+      "story": "站在中正堂左前方的高挑神獸！看過無數屆學長姐的集合與成發。頭頂掉落的小毬果是自然的數學幾何藝術。",
+      "badge": "校園護樹達人"
     },
-    {
-      "treeId": "JS0155100001",
-      "slug": "gadang",
-      "name": "茄苳仔",
-      "species": "茄苳",
-      "rarity": "稀有",
-      "personality": "熱心、愛照顧人，是社區的大姊頭。看到有人經過就想招呼對方吃飯。",
-      "catchphrase": "呷飽未？",
-      "story": "以前的人說茄苳很「好養」，老一輩會用茄苳葉燉雞。祂最喜歡聽大家講家裡的事。（創作故事）",
-      "funFact": "茄苳的一片葉子由三片小葉組成，叫做三出複葉。",
-      "status": "normal",
-      "vitality": 90,
-      "guardians": { "local": 18, "remote": 41 },
-      "images": {
-        "healthy": "design-system/assets/character/beasts/gadang/healthy.webp",
-        "sad": "design-system/assets/character/beasts/gadang/sad.webp",
-        "icon": "design-system/assets/character/beasts/gadang/healthy-icon.webp"
-      },
-      "demoRole": "元氣滿滿的對照組"
-    },
-    {
-      "treeId": "JS0155503095",
-      "slug": "queque",
-      "name": "雀雀",
-      "species": "雀榕",
-      "rarity": "稀有",
-      "personality": "熱鬧、好客、交遊廣闊，是社區的交際花。最喜歡介紹守護者互相認識。",
-      "catchphrase": "來來來，我介紹朋友給你認識！",
-      "story": "附近的白頭翁、綠繡眼都是祂的老朋友，每到結果的季節，樹上熱鬧得像夜市。（創作故事）",
-      "funFact": "雀榕的種子被鳥吃下後，常常在別的樹或牆縫裡發芽，所以有時候會在奇怪的地方看到雀榕長出來。",
-      "status": "watch",
-      "vitality": 55,
-      "guardians": { "local": 12, "remote": 35 },
-      "images": {
-        "healthy": "design-system/assets/character/beasts/queque/healthy.webp",
-        "sad": "design-system/assets/character/beasts/queque/sad.webp",
-        "icon": "design-system/assets/character/beasts/queque/sad-icon.webp"
-      },
-      "demoRole": "回報出現病徵、需要關心的情境"
-    },
-    {
-      "treeId": "JJ0205003001",
-      "slug": "luan",
-      "name": "欒四季",
-      "species": "臺灣欒樹",
-      "rarity": "普通",
-      "personality": "愛打扮、愛拍照，每一季都要換新造型。",
-      "catchphrase": "你看我今天這套怎麼樣？",
-      "story": "祂還是棵年輕的樹，每年秋天都換上黃花和紅褐色的小燈籠，等著散步的人停下來幫祂拍照。（創作故事）",
-      "funFact": "臺灣欒樹是台灣特有種，台北很多行道樹都是祂，秋天整條路會變成黃色和紅褐色。",
-      "status": "normal",
-      "vitality": 88,
-      "guardians": { "local": 9, "remote": 27 },
-      "images": {
-        "healthy": "design-system/assets/character/beasts/luan/healthy.webp",
-        "sad": "design-system/assets/character/beasts/luan/sad.webp",
-        "icon": "design-system/assets/character/beasts/luan/healthy-icon.webp"
-      },
-      "demoRole": "離你最近的年輕神獸"
+    "fuxing-shan-2": {
+      "name": "木木",
+      "title": "中正堂右護法",
+      "species": "杉樹",
+      "avatar": "🎄",
+      "mood": "🥺 狀態：樹下有點落葉，求鄰居拍拍",
+      "energy": 60,
+      "carbonData": "年吸收約 16kg CO2（約等於抵銷 30 個福利社御飯糰碳足跡）",
+      "colorPalette": ["#3B6E53", "#C2785C", "#A47551"],
+      "story": "杉樹雙胞胎弟弟，個性安靜。最近午後陣雨後需要鄰居同學經過幫忙注意樹根周圍狀況！",
+      "badge": "細心觀察家"
     }
-  ]
+  }
 }
