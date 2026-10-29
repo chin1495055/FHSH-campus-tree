@@ -491,10 +491,10 @@ async function main() {
   // 一打開就選 Demo 主角，地圖把所有神獸和你的位置一起框進畫面
   const hero = trees.find((t) => t.beast?.slug === 'xuxugong') ?? trees[0];
   const beastSpots = trees.filter((t) => t.beast).map((t) => [t.lat, t.lng]);
-  function showHome() {
-    select(hero);
-    map.fitBounds(L.latLngBounds([HOME, ...beastSpots]), { ...mapPadding([40, 160], 60), maxZoom: 18 });
-  }
+ function showHome() {
+  select(hero);
+  map.setView([25.143352, 121.502462], 17);
+}
   showHome();
 
   // 切換區域：第一次切過去才下載那一區的樹，篩選和搜尋都清掉重來
