@@ -1,26 +1,28 @@
-[
-  {
-    "id": "fuxing-shan-1",
-    "treeNo": "FX-001",
-    "species": "杉樹",
-    "lat": 25.143450,
-    "lng": 121.502500,
-    "zone": "zhongzheng",
-    "name": "杉杉｜中正堂左護法",
-    "chestGirth": 120,
-    "height": 15.2,
-    "manager": "總務處/園藝"
-  },
-  {
-    "id": "fuxing-shan-2",
-    "treeNo": "FX-002",
-    "species": "杉樹",
-    "lat": 25.143520,
-    "lng": 121.502600,
-    "zone": "zhongzheng",
-    "name": "木木｜中正堂右護法",
-    "chestGirth": 115,
-    "height": 14.8,
-    "manager": "總務處/園藝"
-  }
-]
+{
+  "trees": [
+    {
+      "id": "fuxing-shan-1",
+      "treeNo": "FX-001",
+      "species": "杉樹",
+      "lat": 25.143450,
+      "lng": 121.502500,
+      "zone": "zhongzheng",
+      "name": "杉杉｜中正堂左護法",
+      "chestGirth": 120,
+      "height": 15.2,
+      "manager": "總務處/園藝"
+    },
+    {
+      "id": "fuxing-shan-2",
+      "treeNo": "FX-002",
+      "species": "杉樹",
+      "lat": 25.143520,
+      "lng": 121.502600,
+      "zone": "zhongzheng",
+      "name": "木木｜中正堂右護法",
+      "chestGirth": 115,
+      "height": 14.8,
+      "manager": "總務處/園藝"
+    }
+  ]
+}
